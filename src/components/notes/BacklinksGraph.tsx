@@ -1,0 +1,82 @@
+import React from 'react';
+import { Share2 } from 'lucide-react';
+import { Note } from '../../types';
+
+interface BacklinksGraphProps {
+  notes: Note[];
+  selectedNoteId: string;
+  onSelectNote: (id: string) => void;
+}
+
+export const BacklinksGraph: React.FC<BacklinksGraphProps> = ({ notes, selectedNoteId, onSelectNote }) => {
+  // Compute positions for SVG nodes in a circle layout
+  const radius = 90;
+  const centerX = 130;
+  const centerY = 130;
+
+  const nodePositions = notes.map((note, idx) => {
+    const angle = (idx / notes.length) * 2 * Math.PI;
+    const x = centerX + radius * Math.cos(angle);
+    const y = centerY + radius * Math.sin(angle);
+    return { note, x, y };
+  });
+
+  return (
+    <div className="glass-card rounded-2xl p-4 border border-white/10 flex flex-col items-center justify-center text-center">
+      <div className="flex items-center space-x-2 text-xs font-bold text-white mb-2 self-start">
+        <Share2 className="w-4 h-4 text-indigo-400" />
+        <span>Bi-Directional Knowledge Graph</span>
+      </div>
+
+      <div className="relative w-64 h-64">
+        <svg className="w-full h-full">
+          {/* Lines connecting nodes */}
+          {nodePositions.map((n1, idx1) =>
+            nodePositions.map((n2, idx2) => {
+              if (idx1 >= idx2) return null;
+              return (
+                <line
+                  key={`${idx1}-${idx2}`}
+                  x1={n1.x}
+                  y1={n1.y}
+                  x2={n2.x}
+                  y2={n2.y}
+                  stroke="currentColor"
+                  strokeWidth="1"
+                  className="text-indigo-500/30"
+                />
+              );
+            })
+          )}
+
+          {/* Node circles */}
+          {nodePositions.map((pos) => {
+            const isSelected = pos.note.id === selectedNoteId;
+            return (
+              <g
+                key={pos.note.id}
+                onClick={() => onSelectNote(pos.note.id)}
+                className="cursor-pointer group"
+              >
+                <circle
+                  cx={pos.x}
+                  cy={pos.y}
+                  r={isSelected ? '10' : '7'}
+                  className={isSelected ? 'fill-emerald-400 stroke-emerald-300 stroke-2' : 'fill-indigo-500 hover:fill-cyan-400 transition-colors'}
+                />
+                <text
+                  x={pos.x}
+                  y={pos.y + 18}
+                  textAnchor="middle"
+                  className="text-[9px] fill-gray-400 font-mono group-hover:fill-white transition-colors"
+                >
+                  {pos.note.title.slice(0, 14)}...
+                </text>
+              </g>
+            );
+          })}
+        </svg>
+      </div>
+    </div>
+  );
+};
