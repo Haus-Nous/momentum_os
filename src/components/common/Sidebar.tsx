@@ -24,7 +24,7 @@ export const Sidebar: React.FC = () => {
   const pendingAssignmentsCount = assignments.filter((a) => a.status === 'pending').length;
 
   const navItems: NavItem[] = [
-    { id: 'mission_control', label: 'Mission Control', icon: Compass, badge: 'NASA', badgeVariant: 'emerald' },
+    { id: 'mission_control', label: 'Home Base', icon: Compass },
     { id: 'dashboard', label: 'Dashboard', icon: LayoutDashboard },
     { id: 'tasks', label: 'Tasks', icon: CheckSquare, badge: pendingTasksCount > 0 ? `${pendingTasksCount}` : undefined, badgeVariant: 'indigo' },
     { id: 'systems', label: 'Systems & Routines', icon: Layers },

@@ -34,7 +34,7 @@ export const NASAMissionControlView: React.FC = () => {
           <div>
             <div className="flex items-center space-x-2 text-xs font-bold text-emerald-400 font-mono tracking-widest uppercase">
               <Compass className="w-4 h-4 animate-spin-slow text-emerald-400" />
-              <span>NASA MISSION CONTROL COMMAND CENTER • REAL-TIME FLIGHT DATA</span>
+              <span>HOME BASE COMMAND CENTER • REAL-TIME TELEMETRY</span>
             </div>
             <h1 className="text-2xl font-black text-gray-900 dark:text-white mt-1 flex items-center space-x-3">
               <span>SYSTEM ORBITAL TELEMETRY</span>
@@ -160,7 +160,7 @@ export const NASAMissionControlView: React.FC = () => {
             <div className="text-[10px] text-gray-400 mt-1">POMODORO FOCUS BLOCK</div>
           </div>
 
-          <Button onClick={() => startFocusTimer('Mission Control Sprint', 50)} variant="emerald" size="md" className="w-full justify-center">
+          <Button onClick={() => startFocusTimer('Home Base Focus Sprint', 50)} variant="emerald" size="md" className="w-full justify-center">
             <Play className="w-4 h-4 mr-1.5 fill-white" /> Initiate Deep Focus Block
           </Button>
         </Card>
