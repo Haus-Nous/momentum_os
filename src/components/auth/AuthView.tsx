@@ -21,26 +21,28 @@ export const AuthView: React.FC = () => {
   const { login, register } = useAuthStore();
   const { updateSettings } = useMomentumStore();
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setError(null);
     setIsLoading(true);
 
-    setTimeout(() => {
+    try {
       if (mode === 'login') {
-        const res = login(email, password);
+        const res = await login(email, password);
         if (!res.success) {
           setError(res.error || 'Failed to authenticate.');
-          setIsLoading(false);
         }
       } else {
-        const res = register(name, email, password, role);
+        const res = await register(name, email, password, role);
         if (!res.success) {
           setError(res.error || 'Failed to create account.');
-          setIsLoading(false);
         }
       }
-    }, 400);
+    } catch {
+      setError('An unexpected authentication error occurred.');
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   return (

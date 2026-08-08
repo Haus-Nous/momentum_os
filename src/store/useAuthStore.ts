@@ -1,5 +1,5 @@
 import { create } from 'zustand';
-import { persist } from 'zustand/middleware';
+import { supabase, isSupabaseConfigured } from '../lib/supabase';
 
 export interface AuthUser {
   id: string;
@@ -10,129 +10,190 @@ export interface AuthUser {
   createdAt: string;
 }
 
-interface StoredAccount {
-  passwordHash: string;
-  user: AuthUser;
-}
-
 interface AuthState {
   currentUser: AuthUser | null;
   isAuthenticated: boolean;
-  registeredUsers: Record<string, StoredAccount>; // Keyed by email.toLowerCase()
+  isLoading: boolean;
 
-  register: (name: string, email: string, password: string, role?: string) => { success: boolean; error?: string };
-  login: (email: string, password: string) => { success: boolean; error?: string };
-  logout: () => void;
+  register: (name: string, email: string, password: string, role?: string) => Promise<{ success: boolean; error?: string }>;
+  login: (email: string, password: string) => Promise<{ success: boolean; error?: string }>;
+  logout: () => Promise<void>;
   updateProfile: (updates: Partial<AuthUser>) => void;
+  initializeAuth: () => Promise<void>;
 }
 
-// Simple deterministic string hash for local password storage security
-const simpleHash = (str: string): string => {
-  let hash = 0;
-  for (let i = 0; i < str.length; i++) {
-    const char = str.charCodeAt(i);
-    hash = (hash << 5) - hash + char;
-    hash |= 0;
-  }
-  return 'h_' + Math.abs(hash).toString(36);
-};
+export const useAuthStore = create<AuthState>()((set, get) => ({
+  currentUser: null,
+  isAuthenticated: false,
+  isLoading: true,
 
-export const useAuthStore = create<AuthState>()(
-  persist(
-    (set, get) => ({
-      currentUser: null,
-      isAuthenticated: false,
-      registeredUsers: {},
+  initializeAuth: async () => {
+    if (!isSupabaseConfigured) {
+      set({ isLoading: false });
+      return;
+    }
 
-      register: (name, email, password, role = 'Architect / Engineer') => {
-        const cleanEmail = email.trim().toLowerCase();
-        if (!cleanEmail || !password || !name) {
-          return { success: false, error: 'All fields are required.' };
+    try {
+      const { data: { session } } = await supabase.auth.getSession();
+      if (session?.user) {
+        const user = session.user;
+        const name = user.user_metadata?.name || user.email?.split('@')[0] || 'User';
+        const role = user.user_metadata?.role || 'Systems Architect';
+        
+        set({
+          currentUser: {
+            id: user.id,
+            email: user.email || '',
+            name,
+            role,
+            createdAt: user.created_at || new Date().toISOString(),
+          },
+          isAuthenticated: true,
+          isLoading: false,
+        });
+      } else {
+        set({ currentUser: null, isAuthenticated: false, isLoading: false });
+      }
+
+      supabase.auth.onAuthStateChange((_event, session) => {
+        if (session?.user) {
+          const user = session.user;
+          const name = user.user_metadata?.name || user.email?.split('@')[0] || 'User';
+          const role = user.user_metadata?.role || 'Systems Architect';
+
+          set({
+            currentUser: {
+              id: user.id,
+              email: user.email || '',
+              name,
+              role,
+              createdAt: user.created_at || new Date().toISOString(),
+            },
+            isAuthenticated: true,
+            isLoading: false,
+          });
+        } else {
+          set({ currentUser: null, isAuthenticated: false, isLoading: false });
         }
+      });
+    } catch {
+      set({ isLoading: false });
+    }
+  },
 
-        const { registeredUsers } = get();
-        if (registeredUsers[cleanEmail]) {
-          return { success: false, error: 'An account with this email already exists. Please log in.' };
-        }
+  register: async (name, email, password, role = 'Architect / Engineer') => {
+    const cleanEmail = email.trim().toLowerCase();
+    if (!cleanEmail || !password || !name) {
+      return { success: false, error: 'All fields are required.' };
+    }
 
+    if (!isSupabaseConfigured) {
+      // Fallback for unconfigured demo environment
+      const newUser: AuthUser = {
+        id: 'user_' + Date.now(),
+        email: cleanEmail,
+        name: name.trim(),
+        role: role.trim() || 'Systems Designer',
+        createdAt: new Date().toISOString(),
+      };
+      set({ currentUser: newUser, isAuthenticated: true });
+      return { success: true };
+    }
+
+    try {
+      const { data, error } = await supabase.auth.signUp({
+        email: cleanEmail,
+        password,
+        options: {
+          data: {
+            name: name.trim(),
+            role: role.trim() || 'Systems Architect',
+          },
+        },
+      });
+
+      if (error) {
+        return { success: false, error: error.message };
+      }
+
+      if (data.user) {
         const newUser: AuthUser = {
-          id: 'user_' + Date.now() + '_' + Math.random().toString(36).substr(2, 4),
+          id: data.user.id,
           email: cleanEmail,
           name: name.trim(),
-          role: role.trim() || 'Systems Designer',
-          createdAt: new Date().toISOString(),
+          role: role.trim() || 'Systems Architect',
+          createdAt: data.user.created_at || new Date().toISOString(),
         };
+        set({ currentUser: newUser, isAuthenticated: true });
+      }
 
-        const newAccount: StoredAccount = {
-          passwordHash: simpleHash(password),
-          user: newUser,
-        };
-
-        set({
-          registeredUsers: {
-            ...registeredUsers,
-            [cleanEmail]: newAccount,
-          },
-          currentUser: newUser,
-          isAuthenticated: true,
-        });
-
-        return { success: true };
-      },
-
-      login: (email, password) => {
-        const cleanEmail = email.trim().toLowerCase();
-        if (!cleanEmail || !password) {
-          return { success: false, error: 'Email and password are required.' };
-        }
-
-        const { registeredUsers } = get();
-        const account = registeredUsers[cleanEmail];
-
-        if (!account) {
-          return { success: false, error: 'No account found with this email. Please sign up.' };
-        }
-
-        if (account.passwordHash !== simpleHash(password)) {
-          return { success: false, error: 'Incorrect password. Please try again.' };
-        }
-
-        set({
-          currentUser: account.user,
-          isAuthenticated: true,
-        });
-
-        return { success: true };
-      },
-
-      logout: () => {
-        set({
-          currentUser: null,
-          isAuthenticated: false,
-        });
-      },
-
-      updateProfile: (updates) => {
-        const { currentUser, registeredUsers } = get();
-        if (!currentUser) return;
-
-        const updatedUser = { ...currentUser, ...updates };
-        const cleanEmail = currentUser.email;
-
-        const updatedAccount = registeredUsers[cleanEmail]
-          ? { ...registeredUsers[cleanEmail], user: updatedUser }
-          : undefined;
-
-        set({
-          currentUser: updatedUser,
-          registeredUsers: updatedAccount
-            ? { ...registeredUsers, [cleanEmail]: updatedAccount }
-            : registeredUsers,
-        });
-      },
-    }),
-    {
-      name: 'momentum_os_auth_registry_v1',
+      return { success: true };
+    } catch (err: any) {
+      return { success: false, error: err.message || 'An error occurred during registration.' };
     }
-  )
-);
+  },
+
+  login: async (email, password) => {
+    const cleanEmail = email.trim().toLowerCase();
+    if (!cleanEmail || !password) {
+      return { success: false, error: 'Email and password are required.' };
+    }
+
+    if (!isSupabaseConfigured) {
+      // Fallback for demo mode
+      const newUser: AuthUser = {
+        id: 'user_demo',
+        email: cleanEmail,
+        name: cleanEmail.split('@')[0],
+        role: 'Systems Architect',
+        createdAt: new Date().toISOString(),
+      };
+      set({ currentUser: newUser, isAuthenticated: true });
+      return { success: true };
+    }
+
+    try {
+      const { data, error } = await supabase.auth.signInWithPassword({
+        email: cleanEmail,
+        password,
+      });
+
+      if (error) {
+        return { success: false, error: error.message };
+      }
+
+      if (data.user) {
+        const name = data.user.user_metadata?.name || cleanEmail.split('@')[0];
+        const role = data.user.user_metadata?.role || 'Systems Architect';
+
+        set({
+          currentUser: {
+            id: data.user.id,
+            email: cleanEmail,
+            name,
+            role,
+            createdAt: data.user.created_at || new Date().toISOString(),
+          },
+          isAuthenticated: true,
+        });
+      }
+
+      return { success: true };
+    } catch (err: any) {
+      return { success: false, error: err.message || 'An error occurred during sign in.' };
+    }
+  },
+
+  logout: async () => {
+    if (isSupabaseConfigured) {
+      await supabase.auth.signOut();
+    }
+    set({ currentUser: null, isAuthenticated: false });
+  },
+
+  updateProfile: (updates) => {
+    const { currentUser } = get();
+    if (!currentUser) return;
+    set({ currentUser: { ...currentUser, ...updates } });
+  },
+}));

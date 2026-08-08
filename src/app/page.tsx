@@ -28,7 +28,7 @@ import { AchievementCenterView } from '../components/achievements/AchievementCen
 import { SettingsView } from '../components/settings/SettingsView';
 
 export default function Home() {
-  const { isAuthenticated, currentUser } = useAuthStore();
+  const { isAuthenticated, currentUser, initializeAuth } = useAuthStore();
   const { 
     activeTab, 
     tickFocusTimer, 
@@ -43,6 +43,11 @@ export default function Home() {
     setNotificationsOpen,
     syncUserProfile
   } = useMomentumStore();
+
+  // Initialize Supabase Auth session
+  useEffect(() => {
+    initializeAuth();
+  }, [initializeAuth]);
 
   // Clear legacy mock data cache if present
   useEffect(() => {
