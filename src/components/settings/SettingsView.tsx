@@ -8,7 +8,7 @@ import { Button } from '../ui/Button';
 import { ThemeToggle } from '../ui/ThemeToggle';
 
 export const SettingsView: React.FC = () => {
-  const { settings, updateSettings, exportDataJSON, exportDataCSV, importDataJSON, clearAllUserData } = useMomentumStore();
+  const { profile, syncUserProfile, settings, updateSettings, exportDataJSON, exportDataCSV, importDataJSON, clearAllUserData } = useMomentumStore();
   const fileInputRef = useRef<HTMLInputElement>(null);
 
   const handleClearWorkspace = () => {
@@ -48,6 +48,54 @@ export const SettingsView: React.FC = () => {
               Configure global operating preferences, themes, sound effects, and JSON/CSV database backups.
             </p>
           </div>
+        </div>
+      </Card>
+
+      {/* Life Areas Module System */}
+      <Card className="p-5 border-black/10 dark:border-white/10 space-y-4">
+        <div className="flex items-center justify-between border-b border-black/5 dark:border-white/5 pb-3">
+          <div>
+            <h3 className="text-sm font-bold text-gray-900 dark:text-white">Life Areas & Workspace Modules</h3>
+            <p className="text-[11px] text-gray-500">Enable or disable modules to customize your navigation and focus areas.</p>
+          </div>
+        </div>
+
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+          {[
+            { id: 'academic', label: 'Academic & Coursework', desc: 'Semester Hub, Courses, Assignments' },
+            { id: 'career', label: 'Career & Growth', desc: 'Career Hub, Internships, Hackathons, Research' },
+            { id: 'fitness', label: 'Fitness & Health', desc: 'Fitness habits and health tracking' },
+            { id: 'finance', label: 'Finance & Budgeting', desc: 'Financial goals and habit trackers' },
+            { id: 'creative', label: 'Creative & Projects', desc: 'Design, side projects, second brain notes' },
+          ].map((mod) => {
+            const enabledModules = profile.enabledModules || ['academic', 'career', 'fitness', 'finance', 'creative'];
+            const isEnabled = enabledModules.includes(mod.id as any);
+
+            const toggleModule = () => {
+              const updated = isEnabled
+                ? enabledModules.filter((m) => m !== mod.id)
+                : [...enabledModules, mod.id as any];
+              syncUserProfile(profile.name, profile.role);
+              useMomentumStore.setState((state) => ({
+                profile: { ...state.profile, enabledModules: updated }
+              }));
+            };
+
+            return (
+              <div key={mod.id} className="p-3 rounded-2xl bg-black/20 border border-white/5 flex items-center justify-between">
+                <div>
+                  <div className="text-xs font-semibold text-gray-200">{mod.label}</div>
+                  <div className="text-[10px] text-gray-400">{mod.desc}</div>
+                </div>
+                <input
+                  type="checkbox"
+                  checked={isEnabled}
+                  onChange={toggleModule}
+                  className="rounded text-indigo-500 cursor-pointer w-4 h-4"
+                />
+              </div>
+            );
+          })}
         </div>
       </Card>
 

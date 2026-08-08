@@ -139,6 +139,8 @@ export interface CalendarEvent {
   taskId?: string;
 }
 
+export type LifeModule = 'academic' | 'career' | 'fitness' | 'finance' | 'creative';
+
 export interface UserProfile {
   name: string;
   role: string;
@@ -149,6 +151,8 @@ export interface UserProfile {
   streakDays: number;
   freezeTokens: number;
   momentumScore: number;
+  enabledModules?: LifeModule[];
+  customModuleLabels?: Record<string, string>;
 }
 
 export interface Course {

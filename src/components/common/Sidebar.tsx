@@ -23,7 +23,10 @@ export const Sidebar: React.FC = () => {
   const activeHabitsCount = habits.filter((h) => h.status === 'active').length;
   const pendingAssignmentsCount = assignments.filter((a) => a.status === 'pending').length;
 
-  const navItems: NavItem[] = [
+  const enabledModules = profile.enabledModules || ['academic', 'career', 'fitness', 'finance', 'creative'];
+  const labels = profile.customModuleLabels || {};
+
+  const allNavItems: (NavItem & { module?: string })[] = [
     { id: 'mission_control', label: 'Home Base', icon: Compass },
     { id: 'dashboard', label: 'Dashboard', icon: LayoutDashboard },
     { id: 'tasks', label: 'Tasks', icon: CheckSquare, badge: pendingTasksCount > 0 ? `${pendingTasksCount}` : undefined, badgeVariant: 'indigo' },
@@ -33,12 +36,14 @@ export const Sidebar: React.FC = () => {
     { id: 'focus', label: 'Focus Sanctuary', icon: Clock },
     { id: 'notes', label: 'Second Brain', icon: BookOpen },
     { id: 'analytics', label: 'Analytics', icon: BarChart2 },
-    { id: 'semester', label: 'Semester Hub', icon: GraduationCap, badge: pendingAssignmentsCount > 0 ? `${pendingAssignmentsCount}` : undefined, badgeVariant: 'rose' },
-    { id: 'career', label: 'Career Hub', icon: Briefcase },
+    { id: 'semester', label: labels.semester || 'Semester Hub', icon: GraduationCap, badge: pendingAssignmentsCount > 0 ? `${pendingAssignmentsCount}` : undefined, badgeVariant: 'rose', module: 'academic' },
+    { id: 'career', label: labels.career || 'Career Hub', icon: Briefcase, module: 'career' },
     { id: 'goals', label: 'Goals', icon: Target },
     { id: 'achievements', label: 'Achievements', icon: Award },
     { id: 'settings', label: 'Settings', icon: Settings },
   ];
+
+  const navItems = allNavItems.filter((item) => !item.module || enabledModules.includes(item.module as any));
 
   return (
     <aside

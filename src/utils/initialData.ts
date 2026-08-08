@@ -14,6 +14,12 @@ export const initialUserProfile: UserProfile = {
   streakDays: 0,
   freezeTokens: 1,
   momentumScore: 0,
+  enabledModules: ['academic', 'career', 'fitness', 'finance', 'creative'],
+  customModuleLabels: {
+    semester: 'Academic Hub',
+    career: 'Career Hub',
+    internships: 'Career Opportunities',
+  },
 };
 
 export const initialProjects: Project[] = [];
