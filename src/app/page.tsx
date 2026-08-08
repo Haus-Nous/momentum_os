@@ -41,13 +41,15 @@ export default function Home() {
     setDailyReviewOpen,
     isNotificationsOpen,
     setNotificationsOpen,
-    syncUserProfile
+    syncUserProfile,
+    loadDexieState
   } = useMomentumStore();
 
-  // Initialize Supabase Auth session
+  // Initialize Supabase Auth & Dexie state
   useEffect(() => {
     initializeAuth();
-  }, [initializeAuth]);
+    loadDexieState();
+  }, [initializeAuth, loadDexieState]);
 
   // Clear legacy mock data cache if present
   useEffect(() => {

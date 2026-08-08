@@ -1,5 +1,4 @@
 import { create } from 'zustand';
-import { persist } from 'zustand/middleware';
 import confetti from 'canvas-confetti';
 import type { 
   Task, Habit, SystemRoutine, Note, CalendarEvent, UserProfile, Project, FocusSession, FocusMode,
@@ -14,12 +13,17 @@ import {
 } from '../utils/initialData';
 import { calculateMomentumScore, getTodayDateString, exportToCSV } from '../utils/analyticsHelpers';
 import { soundEngine } from '../utils/soundEngine';
+import { loadStateFromDexie, saveCollectionToDexie, processSyncQueue } from '../lib/db';
+import { isSupabaseConfigured } from '../lib/supabase';
 
 export type TabType = 
   | 'mission_control' | 'dashboard' | 'tasks' | 'systems' | 'habits' | 'calendar' | 'focus' | 'notes' | 'analytics'
   | 'semester' | 'career' | 'goals' | 'settings' | 'achievements';
 
 interface MomentumState {
+  isDexieLoaded: boolean;
+  loadDexieState: () => Promise<void>;
+  saveToDexie: (collection: string, data: any[]) => Promise<void>;
   // Navigation & Modals
   activeTab: TabType;
   setActiveTab: (tab: TabType) => void;
@@ -158,14 +162,52 @@ interface MomentumState {
   clearAllUserData: () => void;
 }
 
-export const useMomentumStore = create<MomentumState>()(
-  persist(
-    (set, get) => ({
-      activeTab: 'mission_control',
-      setActiveTab: (tab) => {
-        soundEngine.playClick();
-        set({ activeTab: tab });
-      },
+export const useMomentumStore = create<MomentumState>()((set, get) => ({
+  isDexieLoaded: false,
+
+  loadDexieState: async () => {
+    try {
+      const dexieData = await loadStateFromDexie();
+      if (dexieData) {
+        set((state) => ({
+          ...state,
+          tasks: dexieData.tasks.length > 0 ? dexieData.tasks : state.tasks,
+          habits: dexieData.habits.length > 0 ? dexieData.habits : state.habits,
+          routines: dexieData.routines.length > 0 ? dexieData.routines : state.routines,
+          notes: dexieData.notes.length > 0 ? dexieData.notes : state.notes,
+          calendarEvents: dexieData.calendarEvents.length > 0 ? dexieData.calendarEvents : state.calendarEvents,
+          focusSessions: dexieData.focusSessions.length > 0 ? dexieData.focusSessions : state.focusSessions,
+          courses: dexieData.courses.length > 0 ? dexieData.courses : state.courses,
+          assignments: dexieData.assignments.length > 0 ? dexieData.assignments : state.assignments,
+          internships: dexieData.internships.length > 0 ? dexieData.internships : state.internships,
+          hackathons: dexieData.hackathons.length > 0 ? dexieData.hackathons : state.hackathons,
+          competitions: dexieData.competitions.length > 0 ? dexieData.competitions : state.competitions,
+          researchPapers: dexieData.researchPapers.length > 0 ? dexieData.researchPapers : state.researchPapers,
+          certifications: dexieData.certifications.length > 0 ? dexieData.certifications : state.certifications,
+          goals: dexieData.goals.length > 0 ? dexieData.goals : state.goals,
+          achievements: dexieData.achievements.length > 0 ? dexieData.achievements : state.achievements,
+          notifications: dexieData.notifications.length > 0 ? dexieData.notifications : state.notifications,
+          projects: dexieData.projects.length > 0 ? dexieData.projects : state.projects,
+          profile: dexieData.profile ? dexieData.profile : state.profile,
+          isDexieLoaded: true,
+        }));
+      } else {
+        set({ isDexieLoaded: true });
+      }
+    } catch {
+      set({ isDexieLoaded: true });
+    }
+  },
+
+  saveToDexie: async (collection, data) => {
+    await saveCollectionToDexie(collection as any, data);
+  },
+
+  activeTab: 'mission_control',
+  setActiveTab: (tab) => {
+    soundEngine.playClick();
+    set({ activeTab: tab });
+  },
 
       isCommandPaletteOpen: false,
       setCommandPaletteOpen: (isOpen) => set({ isCommandPaletteOpen: isOpen }),
@@ -912,10 +954,5 @@ export const useMomentumStore = create<MomentumState>()(
           notifications: [],
         }));
       },
-    }),
-    {
-      name: 'momentum_os_user_workspace_v2',
-    }
-  )
-);
+}));
 
