@@ -15,10 +15,22 @@ interface AIGoalBreakdownModalProps {
 
 export const AIGoalBreakdownModal: React.FC<AIGoalBreakdownModalProps> = ({ goal, isOpen, onClose }) => {
   const { addTask } = useMomentumStore();
+  const [taskDrafts, setTaskDrafts] = React.useState<{ title: string; timeEstimateMinutes: number; priority: any }[]>([]);
+  const [isLoading, setIsLoading] = React.useState(false);
+
+  React.useEffect(() => {
+    if (isOpen && goal) {
+      setIsLoading(true);
+      Promise.resolve(defaultAIProvider.breakdownGoalIntoTasks(goal))
+        .then((drafts) => {
+          setTaskDrafts(drafts);
+        })
+        .catch(() => setTaskDrafts([]))
+        .finally(() => setIsLoading(false));
+    }
+  }, [isOpen, goal]);
 
   if (!isOpen || !goal) return null;
-
-  const taskDrafts = defaultAIProvider.breakdownGoalIntoTasks(goal);
 
   const handleGenerateAll = () => {
     taskDrafts.forEach((draft) => {

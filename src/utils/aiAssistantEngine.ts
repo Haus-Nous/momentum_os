@@ -28,10 +28,10 @@ export interface RecommendedHabit {
 }
 
 export interface AIProvider {
-  parseNaturalLanguageCommand(text: string): ParsedCommand;
-  predictDeadlineRisks(assignments: Assignment[], hackathons: Hackathon[], internships: Internship[]): RiskReport[];
-  breakdownGoalIntoTasks(goal: Goal): { title: string; timeEstimateMinutes: number; priority: Priority }[];
-  answerConversationalQuery(query: string, context: { tasks: Task[]; assignments: Assignment[]; hackathons: Hackathon[]; habits: Habit[] }): string;
+  parseNaturalLanguageCommand(text: string): Promise<ParsedCommand> | ParsedCommand;
+  predictDeadlineRisks(assignments: Assignment[], hackathons: Hackathon[], internships: Internship[]): Promise<RiskReport[]> | RiskReport[];
+  breakdownGoalIntoTasks(goal: Goal): Promise<{ title: string; timeEstimateMinutes: number; priority: Priority }[]> | { title: string; timeEstimateMinutes: number; priority: Priority }[];
+  answerConversationalQuery(query: string, context: { tasks: Task[]; assignments: Assignment[]; hackathons: Hackathon[]; habits: Habit[] }): Promise<string> | string;
 }
 
 export class LocalHeuristicAIProvider implements AIProvider {
@@ -182,4 +182,116 @@ export class LocalHeuristicAIProvider implements AIProvider {
   }
 }
 
-export const defaultAIProvider = new LocalHeuristicAIProvider();
+export class GroqAIProvider implements AIProvider {
+  private fallbackProvider = new LocalHeuristicAIProvider();
+
+  async parseNaturalLanguageCommand(text: string): Promise<ParsedCommand> {
+    try {
+      const res = await fetch('/api/ai', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ action: 'parseCommand', payload: { text } }),
+      });
+      if (!res.ok) {
+        throw new Error(`HTTP error ${res.status}`);
+      }
+      const data = await res.json();
+      if (data.fallback || !data.title) {
+        throw new Error(data.error || 'Invalid Groq response format');
+      }
+      return data as ParsedCommand;
+    } catch (err: any) {
+      console.warn('[GroqAIProvider] Falling back to LocalHeuristicAIProvider due to:', err.message);
+      return this.fallbackProvider.parseNaturalLanguageCommand(text);
+    }
+  }
+
+  async predictDeadlineRisks(assignments: Assignment[], hackathons: Hackathon[], internships: Internship[]): Promise<RiskReport[]> {
+    try {
+      const res = await fetch('/api/ai', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ action: 'predictRisks', payload: { assignments, hackathons, internships } }),
+      });
+      if (!res.ok) throw new Error(`HTTP error ${res.status}`);
+      const data = await res.json();
+      if (data.fallback || !Array.isArray(data)) {
+        throw new Error(data.error || 'Invalid Groq response format');
+      }
+      return data as RiskReport[];
+    } catch (err: any) {
+      console.warn('[GroqAIProvider] Falling back to LocalHeuristicAIProvider due to:', err.message);
+      return this.fallbackProvider.predictDeadlineRisks(assignments, hackathons, internships);
+    }
+  }
+
+  async breakdownGoalIntoTasks(goal: Goal): Promise<{ title: string; timeEstimateMinutes: number; priority: Priority }[]> {
+    try {
+      const res = await fetch('/api/ai', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ action: 'breakdownGoal', payload: { goal } }),
+      });
+      if (!res.ok) throw new Error(`HTTP error ${res.status}`);
+      const data = await res.json();
+      if (data.fallback || !Array.isArray(data)) {
+        throw new Error(data.error || 'Invalid Groq response format');
+      }
+      return data;
+    } catch (err: any) {
+      console.warn('[GroqAIProvider] Falling back to LocalHeuristicAIProvider due to:', err.message);
+      return this.fallbackProvider.breakdownGoalIntoTasks(goal);
+    }
+  }
+
+  async answerConversationalQuery(query: string, context: { tasks: Task[]; assignments: Assignment[]; hackathons: Hackathon[]; habits: Habit[] }): Promise<string> {
+    try {
+      const res = await fetch('/api/ai', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ action: 'answerQuery', payload: { query, context } }),
+      });
+      if (!res.ok) throw new Error(`HTTP error ${res.status}`);
+      const data = await res.json();
+      if (data.fallback || !data.answer) {
+        throw new Error(data.error || 'Invalid Groq response format');
+      }
+      return data.answer;
+    } catch (err: any) {
+      console.warn('[GroqAIProvider] Falling back to LocalHeuristicAIProvider due to:', err.message);
+      return this.fallbackProvider.answerConversationalQuery(query, context);
+    }
+  }
+}
+
+export const localHeuristicAIProvider = new LocalHeuristicAIProvider();
+export const groqAIProvider = new GroqAIProvider();
+
+export class DynamicAIProvider implements AIProvider {
+  private getProvider(): AIProvider {
+    try {
+      const mode = (window as any)?.__MOMENTUM_AI_MODE__ || 'groq';
+      return mode === 'heuristic' ? localHeuristicAIProvider : groqAIProvider;
+    } catch {
+      return groqAIProvider;
+    }
+  }
+
+  parseNaturalLanguageCommand(text: string) {
+    return this.getProvider().parseNaturalLanguageCommand(text);
+  }
+
+  predictDeadlineRisks(assignments: Assignment[], hackathons: Hackathon[], internships: Internship[]) {
+    return this.getProvider().predictDeadlineRisks(assignments, hackathons, internships);
+  }
+
+  breakdownGoalIntoTasks(goal: Goal) {
+    return this.getProvider().breakdownGoalIntoTasks(goal);
+  }
+
+  answerConversationalQuery(query: string, context: { tasks: Task[]; assignments: Assignment[]; hackathons: Hackathon[]; habits: Habit[] }) {
+    return this.getProvider().answerConversationalQuery(query, context);
+  }
+}
+
+export const defaultAIProvider: AIProvider = new DynamicAIProvider();

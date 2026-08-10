@@ -300,4 +300,5 @@ export interface SystemSettings {
   dailyFocusGoalMins: number;
   dailyTaskGoalCount: number;
   autoBackup: boolean;
+  aiProviderMode?: 'groq' | 'heuristic';
 }

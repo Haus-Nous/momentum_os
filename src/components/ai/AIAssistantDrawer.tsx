@@ -37,7 +37,7 @@ export const AIAssistantDrawer: React.FC = () => {
 
   if (!isAIAssistantOpen) return null;
 
-  const handleSend = () => {
+  const handleSend = async () => {
     if (!inputText.trim()) return;
 
     const userMsg: Message = { id: 'msg_' + Date.now(), sender: 'user', text: inputText };
@@ -45,24 +45,34 @@ export const AIAssistantDrawer: React.FC = () => {
     const currentInput = inputText;
     setInputText('');
 
-    // Check if input is a natural language command or conversational query
-    if (currentInput.toLowerCase().includes('remind me') || currentInput.toLowerCase().includes('create') || currentInput.toLowerCase().includes('task')) {
-      const parsed = defaultAIProvider.parseNaturalLanguageCommand(currentInput);
-      const aiResponse: Message = {
-        id: 'msg_' + (Date.now() + 1),
-        sender: 'ai',
-        text: `I parsed your command into a structured ${parsed.type.toUpperCase()} draft. Check the preview below:`,
-        commandPreview: parsed,
-      };
-      setMessages((prev) => [...prev, aiResponse]);
-    } else {
-      const answer = defaultAIProvider.answerConversationalQuery(currentInput, { tasks, assignments, hackathons, habits });
-      const aiResponse: Message = {
-        id: 'msg_' + (Date.now() + 1),
-        sender: 'ai',
-        text: answer,
-      };
-      setMessages((prev) => [...prev, aiResponse]);
+    try {
+      if (currentInput.toLowerCase().includes('remind me') || currentInput.toLowerCase().includes('create') || currentInput.toLowerCase().includes('task')) {
+        const parsed = await defaultAIProvider.parseNaturalLanguageCommand(currentInput);
+        const aiResponse: Message = {
+          id: 'msg_' + (Date.now() + 1),
+          sender: 'ai',
+          text: `I parsed your command into a structured ${parsed.type.toUpperCase()} draft. Check the preview below:`,
+          commandPreview: parsed,
+        };
+        setMessages((prev) => [...prev, aiResponse]);
+      } else {
+        const answer = await defaultAIProvider.answerConversationalQuery(currentInput, { tasks, assignments, hackathons, habits });
+        const aiResponse: Message = {
+          id: 'msg_' + (Date.now() + 1),
+          sender: 'ai',
+          text: answer,
+        };
+        setMessages((prev) => [...prev, aiResponse]);
+      }
+    } catch {
+      setMessages((prev) => [
+        ...prev,
+        {
+          id: 'msg_' + (Date.now() + 1),
+          sender: 'ai',
+          text: 'An error occurred while processing your request. Please try again.',
+        },
+      ]);
     }
   };
 

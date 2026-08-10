@@ -42,7 +42,8 @@ export default function Home() {
     isNotificationsOpen,
     setNotificationsOpen,
     syncUserProfile,
-    loadDexieState
+    loadDexieState,
+    settings
   } = useMomentumStore();
 
   // Initialize Supabase Auth & Dexie state
@@ -50,6 +51,12 @@ export default function Home() {
     initializeAuth();
     loadDexieState();
   }, [initializeAuth, loadDexieState]);
+
+  useEffect(() => {
+    if (typeof window !== 'undefined') {
+      (window as any).__MOMENTUM_AI_MODE__ = settings?.aiProviderMode || 'groq';
+    }
+  }, [settings?.aiProviderMode]);
 
   // Clear legacy mock data cache if present
   useEffect(() => {

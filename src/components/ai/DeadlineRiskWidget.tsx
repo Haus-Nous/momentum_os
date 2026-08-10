@@ -9,7 +9,13 @@ import { Badge } from '../ui/Badge';
 
 export const DeadlineRiskWidget: React.FC = () => {
   const { assignments, hackathons, internships, setActiveTab } = useMomentumStore();
-  const risks = defaultAIProvider.predictDeadlineRisks(assignments, hackathons, internships);
+  const [risks, setRisks] = React.useState<any[]>([]);
+
+  React.useEffect(() => {
+    Promise.resolve(defaultAIProvider.predictDeadlineRisks(assignments, hackathons, internships))
+      .then((data) => setRisks(data || []))
+      .catch(() => setRisks([]));
+  }, [assignments, hackathons, internships]);
 
   return (
     <Card className="p-5 border-rose-500/30 space-y-4">

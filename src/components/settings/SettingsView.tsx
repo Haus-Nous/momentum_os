@@ -51,6 +51,38 @@ export const SettingsView: React.FC = () => {
         </div>
       </Card>
 
+      {/* AI Intelligence Provider Setting */}
+      <Card className="p-5 border-indigo-500/30 space-y-4">
+        <div className="flex items-center justify-between">
+          <div>
+            <h3 className="text-sm font-bold text-gray-900 dark:text-white">AI Intelligence Engine</h3>
+            <p className="text-[11px] text-gray-500">Switch between server-backed Groq Llama-3.3-70b and Local Heuristic provider.</p>
+          </div>
+          <div className="flex bg-slate-950 p-1 rounded-xl border border-slate-800 text-xs font-semibold">
+            <button
+              onClick={() => updateSettings({ aiProviderMode: 'groq' })}
+              className={`px-3 py-1.5 rounded-lg transition-colors ${
+                (settings.aiProviderMode || 'groq') === 'groq'
+                  ? 'bg-indigo-600 text-white font-bold'
+                  : 'text-gray-400 hover:text-white'
+              }`}
+            >
+              Groq (Llama 3.3 70B)
+            </button>
+            <button
+              onClick={() => updateSettings({ aiProviderMode: 'heuristic' })}
+              className={`px-3 py-1.5 rounded-lg transition-colors ${
+                settings.aiProviderMode === 'heuristic'
+                  ? 'bg-indigo-600 text-white font-bold'
+                  : 'text-gray-400 hover:text-white'
+              }`}
+            >
+              Local Heuristic
+            </button>
+          </div>
+        </div>
+      </Card>
+
       {/* Life Areas Module System */}
       <Card className="p-5 border-black/10 dark:border-white/10 space-y-4">
         <div className="flex items-center justify-between border-b border-black/5 dark:border-white/5 pb-3">
