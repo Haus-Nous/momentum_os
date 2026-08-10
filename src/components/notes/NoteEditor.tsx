@@ -1,6 +1,7 @@
 import React from 'react';
 import { Save, Trash2, Tag, BookOpen, Link2 } from 'lucide-react';
 import { Note } from '../../types';
+import { VoiceRecorderButton } from './VoiceRecorderButton';
 
 interface NoteEditorProps {
   note: Note;
@@ -40,13 +41,22 @@ export const NoteEditor: React.FC<NoteEditorProps> = ({ note, onUpdate, onDelete
           className="bg-transparent text-lg font-bold text-white focus:outline-none flex-1 mr-4"
         />
 
-        <button
-          onClick={onDelete}
-          className="p-1.5 rounded-lg text-gray-500 hover:text-rose-400 hover:bg-white/10 transition-colors"
-          title="Delete Note"
-        >
-          <Trash2 className="w-4 h-4" />
-        </button>
+        <div className="flex items-center space-x-2">
+          <VoiceRecorderButton
+            onTranscribeComplete={(text) => {
+              const updatedContent = `${note.content}\n\n### 🎙️ Voice Transcription (${new Date().toLocaleTimeString()})\n${text}`;
+              onUpdate({ content: updatedContent });
+            }}
+          />
+
+          <button
+            onClick={onDelete}
+            className="p-1.5 rounded-lg text-gray-500 hover:text-rose-400 hover:bg-white/10 transition-colors"
+            title="Delete Note"
+          >
+            <Trash2 className="w-4 h-4" />
+          </button>
+        </div>
       </div>
 
       {/* Tags Input */}
