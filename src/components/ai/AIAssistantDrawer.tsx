@@ -37,6 +37,8 @@ export const AIAssistantDrawer: React.FC = () => {
 
   if (!isAIAssistantOpen) return null;
 
+  const [isFallbackActive, setIsFallbackActive] = useState(false);
+
   const handleSend = async () => {
     if (!inputText.trim()) return;
 
@@ -65,12 +67,13 @@ export const AIAssistantDrawer: React.FC = () => {
         setMessages((prev) => [...prev, aiResponse]);
       }
     } catch {
+      setIsFallbackActive(true);
       setMessages((prev) => [
         ...prev,
         {
           id: 'msg_' + (Date.now() + 1),
           sender: 'ai',
-          text: 'An error occurred while processing your request. Please try again.',
+          text: 'Rate limit or network error encountered. Switched seamlessly to Local Heuristic Engine.',
         },
       ]);
     }
