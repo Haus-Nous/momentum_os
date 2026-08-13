@@ -6,6 +6,7 @@ import {
   GraduationCap, Briefcase, Target, Award, Settings, ChevronLeft, ChevronRight, Sparkles 
 } from 'lucide-react';
 import { useMomentumStore, TabType } from '../../store/useMomentumStore';
+import { MomentumLogo } from './MomentumLogo';
 
 interface NavItem {
   id: TabType;
@@ -54,16 +55,10 @@ export const Sidebar: React.FC = () => {
       {/* Brand Header */}
       <div>
         <div className="h-16 px-5 flex items-center justify-between border-b border-black/10 dark:border-white/10">
-          {!isCollapsed && (
-            <div className="flex items-center space-x-2.5">
-              <div className="w-9 h-9 rounded-xl bg-gradient-to-tr from-emerald-500 via-indigo-600 to-purple-600 flex items-center justify-center text-white shadow-lg shadow-emerald-500/20">
-                <Sparkles className="w-5 h-5" />
-              </div>
-              <div>
-                <h1 className="text-sm font-black tracking-tight text-white font-mono">MOMENTUM OS</h1>
-                <p className="text-[10px] text-emerald-400 font-semibold tracking-wider uppercase">Systems &gt; Motivation</p>
-              </div>
-            </div>
+          {!isCollapsed ? (
+            <MomentumLogo size={28} showText={true} />
+          ) : (
+            <MomentumLogo size={28} showText={false} />
           )}
 
           <button
