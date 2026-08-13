@@ -10,6 +10,7 @@ import { Button } from '../ui/Button';
 import { Badge } from '../ui/Badge';
 import { ProgressBar } from '../ui/ProgressBar';
 import { LifeScoreGauge } from './LifeScoreGauge';
+import { WeeklyBestCard } from './WeeklyBestCard';
 import { ProjectHealthView } from '../projects/ProjectHealthView';
 import { DeadlineRiskWidget } from '../ai/DeadlineRiskWidget';
 import { TaskItem } from '../tasks/TaskItem';
@@ -62,6 +63,9 @@ export const NASAMissionControlView: React.FC = () => {
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
         {/* Dynamic Life Score Gauge */}
         <LifeScoreGauge />
+
+        {/* Weekly Personal Best Comparison Card */}
+        <WeeklyBestCard />
 
         {/* Priority Matrix & Critical Deadlines */}
         <Card className="p-5 border-rose-500/30 space-y-4">

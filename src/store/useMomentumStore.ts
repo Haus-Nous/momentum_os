@@ -846,9 +846,33 @@ export const useMomentumStore = create<MomentumState>()((set, get) => ({
       },
 
       recalculateMomentum: () => {
-        const { tasks, habits, routines, focusSessions } = get();
+        const { tasks, habits, routines, focusSessions, profile } = get();
         const score = calculateMomentumScore(tasks, habits, routines, focusSessions);
-        set((state) => ({ profile: { ...state.profile, momentumScore: score } }));
+        const todayStr = getTodayDateString();
+
+        const history = profile.weeklyHistory || [];
+        const existingIdx = history.findIndex((h) => h.date === todayStr);
+
+        let updatedHistory = [...history];
+        if (existingIdx >= 0) {
+          updatedHistory[existingIdx] = { date: todayStr, score };
+        } else {
+          updatedHistory = [...updatedHistory, { date: todayStr, score }].slice(-7);
+        }
+
+        const avgScore = Math.round(
+          updatedHistory.reduce((acc, curr) => acc + curr.score, 0) / Math.max(1, updatedHistory.length)
+        );
+        const newBest = Math.max(profile.bestWeeklyMomentumScore || 0, avgScore, score);
+
+        set((state) => ({
+          profile: {
+            ...state.profile,
+            momentumScore: score,
+            bestWeeklyMomentumScore: newBest,
+            weeklyHistory: updatedHistory,
+          },
+        }));
       },
 
       checkDailyStreakAndFreeze: () => {
