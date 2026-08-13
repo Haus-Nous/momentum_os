@@ -11,6 +11,7 @@ import { Badge } from '../ui/Badge';
 import { ProgressBar } from '../ui/ProgressBar';
 import { LifeScoreGauge } from './LifeScoreGauge';
 import { WeeklyBestCard } from './WeeklyBestCard';
+import { MascotCompanion } from '../common/MascotCompanion';
 import { ProjectHealthView } from '../projects/ProjectHealthView';
 import { DeadlineRiskWidget } from '../ai/DeadlineRiskWidget';
 import { TaskItem } from '../tasks/TaskItem';
@@ -58,6 +59,9 @@ export const NASAMissionControlView: React.FC = () => {
           </div>
         </div>
       </Card>
+
+      {/* Mascot Companion Element */}
+      <MascotCompanion />
 
       {/* Orbit Telemetry Matrix: 3 Column Grid */}
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
