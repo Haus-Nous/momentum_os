@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useState } from 'react';
+import { motion } from 'framer-motion';
 import { 
   Flame, Check, MoreVertical, Edit, Pause, Play, Archive, Copy, Trash2, FastForward, Sparkles 
 } from 'lucide-react';
@@ -175,7 +176,10 @@ export const HabitCard: React.FC<HabitCardProps> = ({ habit }) => {
               Skipped Today
             </span>
           ) : (
-            <button
+            <motion.button
+              whileTap={{ scale: 0.92 }}
+              animate={isCompletedToday ? { scale: [1, 1.12, 1] } : {}}
+              transition={{ duration: 0.2 }}
               onClick={() => logHabitCompletion(habit.id)}
               disabled={habit.status === 'paused' || habit.status === 'archived'}
               className={`px-3.5 py-1.5 rounded-xl text-xs font-bold flex items-center space-x-1.5 transition-all shadow-md cursor-pointer ${
@@ -186,7 +190,7 @@ export const HabitCard: React.FC<HabitCardProps> = ({ habit }) => {
             >
               <Check className="w-4 h-4" />
               <span>{isCompletedToday ? 'Done Today' : `Log +${habit.xpValue}XP`}</span>
-            </button>
+            </motion.button>
           )}
         </div>
       </Card>

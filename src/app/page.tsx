@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useEffect } from 'react';
+import { AnimatePresence, motion } from 'framer-motion';
 import { useMomentumStore } from '../store/useMomentumStore';
 import { useAuthStore } from '../store/useAuthStore';
 import { AuthView } from '../components/auth/AuthView';
@@ -126,22 +127,32 @@ export default function Home() {
         {/* Header Bar */}
         <Header />
 
-        {/* Dynamic View Route Container */}
+        {/* Dynamic View Route Container with Snappy Page Transitions */}
         <main className="flex-1 overflow-y-auto p-6 md:p-8 space-y-6">
-          {activeTab === 'mission_control' && <NASAMissionControlView />}
-          {activeTab === 'dashboard' && <PremiumDashboardView />}
-          {activeTab === 'tasks' && <TasksView />}
-          {activeTab === 'systems' && <SystemsView />}
-          {activeTab === 'habits' && <HabitsView />}
-          {activeTab === 'calendar' && <CalendarView />}
-          {activeTab === 'focus' && <FocusView />}
-          {activeTab === 'notes' && <NotesView />}
-          {activeTab === 'analytics' && <AnalyticsView />}
-          {activeTab === 'semester' && <SemesterDashboardView />}
-          {activeTab === 'career' && <CareerDashboardView />}
-          {activeTab === 'goals' && <GoalsView />}
-          {activeTab === 'achievements' && <AchievementCenterView />}
-          {activeTab === 'settings' && <SettingsView />}
+          <AnimatePresence mode="wait">
+            <motion.div
+              key={activeTab}
+              initial={{ opacity: 0, y: 6 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: -6 }}
+              transition={{ duration: 0.18, ease: 'easeInOut' }}
+            >
+              {activeTab === 'mission_control' && <NASAMissionControlView />}
+              {activeTab === 'dashboard' && <PremiumDashboardView />}
+              {activeTab === 'tasks' && <TasksView />}
+              {activeTab === 'systems' && <SystemsView />}
+              {activeTab === 'habits' && <HabitsView />}
+              {activeTab === 'calendar' && <CalendarView />}
+              {activeTab === 'focus' && <FocusView />}
+              {activeTab === 'notes' && <NotesView />}
+              {activeTab === 'analytics' && <AnalyticsView />}
+              {activeTab === 'semester' && <SemesterDashboardView />}
+              {activeTab === 'career' && <CareerDashboardView />}
+              {activeTab === 'goals' && <GoalsView />}
+              {activeTab === 'achievements' && <AchievementCenterView />}
+              {activeTab === 'settings' && <SettingsView />}
+            </motion.div>
+          </AnimatePresence>
         </main>
       </div>
 

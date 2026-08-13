@@ -1,11 +1,14 @@
 "use client";
 
 import React from 'react';
+import { motion } from 'framer-motion';
+import confetti from 'canvas-confetti';
+import { soundEngine } from '../../utils/soundEngine';
 import { useMomentumStore } from '../../store/useMomentumStore';
 import { Card } from '../ui/Card';
 import { Badge } from '../ui/Badge';
 import { ProgressBar } from '../ui/ProgressBar';
-import { Award, Zap, Coins, Sparkles, Trophy, Code, Flame, Briefcase } from 'lucide-react';
+import { Award } from 'lucide-react';
 
 export const AchievementCenterView: React.FC = () => {
   const { profile, achievements } = useMomentumStore();
@@ -16,6 +19,13 @@ export const AchievementCenterView: React.FC = () => {
     { title: "Q3 Engineering Sprint 🚀", description: "Complete 100 deep focus hours before October 1", progress: 68, xpReward: 1500, coinsReward: 250 },
     { title: "Habit Streak Master 👑", description: "Maintain a 30-day streak on Deep Work habit", progress: 80, xpReward: 1000, coinsReward: 150 },
   ];
+
+  const handleCelebrateAchievement = (ach: any) => {
+    if (ach.unlocked) {
+      soundEngine.playComplete();
+      confetti({ particleCount: 80, spread: 80, origin: { y: 0.6 } });
+    }
+  };
 
   return (
     <div className="space-y-6 pb-12">
@@ -73,31 +83,38 @@ export const AchievementCenterView: React.FC = () => {
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
           {achievements.map((ach) => (
-            <Card
+            <motion.div
               key={ach.id}
-              className={`p-4 border transition-all ${
-                ach.unlocked
-                  ? 'border-emerald-500/40 bg-emerald-500/5'
-                  : 'border-black/5 dark:border-white/5 opacity-50'
-              }`}
+              whileHover={{ scale: ach.unlocked ? 1.03 : 1.01 }}
+              whileTap={{ scale: ach.unlocked ? 0.97 : 1 }}
+              onClick={() => handleCelebrateAchievement(ach)}
+              className="cursor-pointer"
             >
-              <div className="flex items-start justify-between">
-                <div className="p-2.5 rounded-xl bg-black/10 dark:bg-white/10 text-emerald-400">
-                  <Award className="w-5 h-5" />
+              <Card
+                className={`p-4 border transition-all ${
+                  ach.unlocked
+                    ? 'border-emerald-500/40 bg-emerald-500/5 shadow-md shadow-emerald-500/10'
+                    : 'border-black/5 dark:border-white/5 opacity-50'
+                }`}
+              >
+                <div className="flex items-start justify-between">
+                  <div className="p-2.5 rounded-xl bg-black/10 dark:bg-white/10 text-emerald-400">
+                    <Award className="w-5 h-5" />
+                  </div>
+                  <Badge variant={ach.unlocked ? 'emerald' : 'gray'}>
+                    {ach.unlocked ? 'UNLOCKED' : 'LOCKED'}
+                  </Badge>
                 </div>
-                <Badge variant={ach.unlocked ? 'emerald' : 'gray'}>
-                  {ach.unlocked ? 'UNLOCKED' : 'LOCKED'}
-                </Badge>
-              </div>
 
-              <h4 className="text-sm font-bold text-gray-900 dark:text-white mt-3">{ach.title}</h4>
-              <p className="text-xs text-gray-500 mt-1">{ach.description}</p>
+                <h4 className="text-sm font-bold text-gray-900 dark:text-white mt-3">{ach.title}</h4>
+                <p className="text-xs text-gray-500 mt-1">{ach.description}</p>
 
-              <div className="mt-3 pt-2 border-t border-black/5 dark:border-white/5 flex items-center justify-between text-xs">
-                <span className="text-emerald-500 font-mono font-bold">+{ach.xpReward} XP</span>
-                {ach.unlockedAt && <span className="text-[10px] text-gray-400 font-mono">{ach.unlockedAt}</span>}
-              </div>
-            </Card>
+                <div className="mt-3 pt-2 border-t border-black/5 dark:border-white/5 flex items-center justify-between text-xs">
+                  <span className="text-emerald-500 font-mono font-bold">+{ach.xpReward} XP</span>
+                  {ach.unlockedAt && <span className="text-[10px] text-gray-400 font-mono">{ach.unlockedAt}</span>}
+                </div>
+              </Card>
+            </motion.div>
           ))}
         </div>
       </div>
