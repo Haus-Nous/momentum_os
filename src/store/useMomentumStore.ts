@@ -160,6 +160,7 @@ interface MomentumState {
   resetToDemoData: () => void;
   syncUserProfile: (name: string, role: string) => void;
   clearAllUserData: () => void;
+  checkDailyStreakAndFreeze: () => void;
 }
 
 export const useMomentumStore = create<MomentumState>()((set, get) => ({
@@ -848,6 +849,61 @@ export const useMomentumStore = create<MomentumState>()((set, get) => ({
         const { tasks, habits, routines, focusSessions } = get();
         const score = calculateMomentumScore(tasks, habits, routines, focusSessions);
         set((state) => ({ profile: { ...state.profile, momentumScore: score } }));
+      },
+
+      checkDailyStreakAndFreeze: () => {
+        const { profile, notifications } = get();
+        const todayStr = getTodayDateString();
+        const lastActive = profile.lastActiveDate || todayStr;
+
+        if (lastActive === todayStr) return;
+
+        const lastDateObj = new Date(lastActive);
+        const todayObj = new Date(todayStr);
+        const diffTime = Math.abs(todayObj.getTime() - lastDateObj.getTime());
+        const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+
+        if (diffDays === 1) {
+          // Exactly 1 day gap — normal continuous active streak
+          set((state) => ({ profile: { ...state.profile, lastActiveDate: todayStr } }));
+        } else if (diffDays === 2) {
+          // Missed 1 day
+          const tokens = profile.freezeTokens || 0;
+          if (tokens > 0) {
+            const newTokens = tokens - 1;
+            const newNotification: SystemNotification = {
+              id: 'not_freeze_' + Date.now(),
+              title: '🧊 Streak Freeze Activated',
+              message: `Streak Freeze auto-consumed! Your ${profile.streakDays}-day streak was protected for yesterday. (${newTokens} token${newTokens === 1 ? '' : 's'} left)`,
+              timestamp: new Date().toISOString(),
+              read: false,
+              type: 'system',
+            };
+            soundEngine.playTimerBell();
+            set((state) => ({
+              profile: { ...state.profile, freezeTokens: newTokens, lastActiveDate: todayStr },
+              notifications: [newNotification, ...state.notifications],
+            }));
+          } else {
+            const newNotification: SystemNotification = {
+              id: 'not_reset_' + Date.now(),
+              title: '🔥 Streak Reset',
+              message: `Your daily streak reset to 0 days due to inactivity. Complete a task or habit to rebuild your streak!`,
+              timestamp: new Date().toISOString(),
+              read: false,
+              type: 'system',
+            };
+            set((state) => ({
+              profile: { ...state.profile, streakDays: 0, lastActiveDate: todayStr },
+              notifications: [newNotification, ...state.notifications],
+            }));
+          }
+        } else if (diffDays > 2) {
+          // Missed multiple days
+          set((state) => ({
+            profile: { ...state.profile, streakDays: 0, lastActiveDate: todayStr },
+          }));
+        }
       },
 
       exportDataJSON: () => {

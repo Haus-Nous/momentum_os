@@ -74,10 +74,17 @@ export const Header: React.FC = () => {
           <span className="hidden sm:inline">AI Assistant</span>
         </button>
 
-        {/* Active Habit Streak Badge */}
-        <div className="flex items-center space-x-1 bg-amber-500/10 border border-amber-500/20 px-2.5 py-1 rounded-xl text-amber-500 font-mono text-xs font-bold">
-          <Flame className="w-3.5 h-3.5 fill-amber-500" />
-          <span>{profile.streakDays}d</span>
+        {/* Active Habit Streak & Freeze Token Badges */}
+        <div className="flex items-center space-x-1.5">
+          <div className="flex items-center space-x-1 bg-amber-500/10 border border-amber-500/20 px-2.5 py-1 rounded-xl text-amber-500 font-mono text-xs font-bold" title="Active Daily Streak">
+            <Flame className="w-3.5 h-3.5 fill-amber-500" />
+            <span>{profile.streakDays}d</span>
+          </div>
+
+          <div className="flex items-center space-x-1 bg-cyan-500/10 border border-cyan-500/20 px-2.5 py-1 rounded-xl text-cyan-400 font-mono text-xs font-bold" title="Streak Freeze Tokens (Max 3)">
+            <span>🧊</span>
+            <span>{profile.freezeTokens ?? 2}</span>
+          </div>
         </div>
 
         {/* Notification Bell with Badge */}

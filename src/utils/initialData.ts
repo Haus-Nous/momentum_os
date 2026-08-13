@@ -12,8 +12,11 @@ export const initialUserProfile: UserProfile = {
   xpToNextLevel: 1000,
   coins: 100,
   streakDays: 0,
-  freezeTokens: 1,
+  freezeTokens: 2,
   momentumScore: 0,
+  lastActiveDate: new Date().toISOString().split('T')[0],
+  bestWeeklyMomentumScore: 0,
+  weeklyHistory: [],
   enabledModules: ['academic', 'career', 'fitness', 'finance', 'creative'],
   customModuleLabels: {
     semester: 'Academic Hub',

@@ -151,6 +151,9 @@ export interface UserProfile {
   streakDays: number;
   freezeTokens: number;
   momentumScore: number;
+  lastActiveDate?: string;
+  bestWeeklyMomentumScore?: number;
+  weeklyHistory?: { date: string; score: number }[];
   enabledModules?: LifeModule[];
   customModuleLabels?: Record<string, string>;
 }

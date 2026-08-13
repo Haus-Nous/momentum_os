@@ -43,14 +43,17 @@ export default function Home() {
     setNotificationsOpen,
     syncUserProfile,
     loadDexieState,
+    checkDailyStreakAndFreeze,
     settings
   } = useMomentumStore();
 
-  // Initialize Supabase Auth & Dexie state
+  // Initialize Supabase Auth & Dexie state & check streak freeze
   useEffect(() => {
     initializeAuth();
-    loadDexieState();
-  }, [initializeAuth, loadDexieState]);
+    loadDexieState().then(() => {
+      checkDailyStreakAndFreeze();
+    });
+  }, [initializeAuth, loadDexieState, checkDailyStreakAndFreeze]);
 
   useEffect(() => {
     if (typeof window !== 'undefined') {
