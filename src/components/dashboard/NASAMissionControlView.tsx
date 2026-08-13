@@ -12,6 +12,8 @@ import { ProgressBar } from '../ui/ProgressBar';
 import { LifeScoreGauge } from './LifeScoreGauge';
 import { WeeklyBestCard } from './WeeklyBestCard';
 import { MascotCompanion } from '../common/MascotCompanion';
+import { SolarSystemHero } from './SolarSystemHero';
+import { SolarSystemMobileView } from './SolarSystemMobileView';
 import { ProjectHealthView } from '../projects/ProjectHealthView';
 import { DeadlineRiskWidget } from '../ai/DeadlineRiskWidget';
 import { TaskItem } from '../tasks/TaskItem';
@@ -62,6 +64,14 @@ export const NASAMissionControlView: React.FC = () => {
 
       {/* Mascot Companion Element */}
       <MascotCompanion />
+
+      {/* Solar System Orbital Visualization (Desktop >= 768px vs Mobile < 768px Fallback) */}
+      <div className="hidden md:block">
+        <SolarSystemHero />
+      </div>
+      <div className="block md:hidden">
+        <SolarSystemMobileView />
+      </div>
 
       {/* Orbit Telemetry Matrix: 3 Column Grid */}
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
