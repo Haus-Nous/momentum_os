@@ -2,17 +2,39 @@ import { NextRequest, NextResponse } from 'next/server';
 import Groq from 'groq-sdk';
 
 export async function POST(req: NextRequest) {
+  console.log('[API/AI] Request received. GROQ_API_KEY present:', Boolean(process.env.GROQ_API_KEY));
+
   try {
     const apiKey = process.env.GROQ_API_KEY;
     if (!apiKey) {
+      console.warn('[API/AI] GROQ_API_KEY is not configured in process.env');
       return NextResponse.json(
         { error: 'GROQ_API_KEY is not configured on the server.', fallback: true },
         { status: 400 }
       );
     }
 
-    const body = await req.json();
-    const { action, payload } = body;
+    let body: any;
+    try {
+      body = await req.json();
+    } catch (jsonErr: any) {
+      console.error('[API/AI] Failed to parse request JSON body:', jsonErr?.stack || jsonErr?.message || jsonErr);
+      return NextResponse.json(
+        { error: 'Invalid or empty JSON body in request.', fallback: true },
+        { status: 400 }
+      );
+    }
+
+    const { action, payload } = body || {};
+    console.log('[API/AI] Processing action:', action);
+
+    if (!payload) {
+      console.error('[API/AI] Missing payload in request body for action:', action);
+      return NextResponse.json(
+        { error: 'Missing payload in request body.', fallback: true },
+        { status: 400 }
+      );
+    }
 
     const groq = new Groq({ apiKey });
     const model = 'llama-3.3-70b-versatile';
@@ -37,7 +59,7 @@ Parse the user's natural language input and extract structured JSON matching thi
 }
 Return ONLY valid JSON with no extra markdown wrapping.`
           },
-          { role: 'user', content: payload.text }
+          { role: 'user', content: payload.text || '' }
         ],
         temperature: 0.1,
         response_format: { type: 'json_object' }
@@ -96,7 +118,7 @@ Break down the user's high-level goal into 3-5 actionable task steps. Return JSO
 ]
 Return ONLY valid JSON array with no markdown.`
           },
-          { role: 'user', content: JSON.stringify(payload.goal) }
+          { role: 'user', content: JSON.stringify(payload.goal || payload) }
         ],
         temperature: 0.3,
         response_format: { type: 'json_object' }
@@ -118,7 +140,7 @@ Return ONLY valid JSON array with no markdown.`
           },
           {
             role: 'user',
-            content: `Workspace Context: ${JSON.stringify(payload.context)}\n\nUser Question: ${payload.query}`
+            content: `Workspace Context: ${JSON.stringify(payload.context || {})}\n\nUser Question: ${payload.query || ''}`
           }
         ],
         temperature: 0.5,
@@ -128,8 +150,10 @@ Return ONLY valid JSON array with no markdown.`
       return NextResponse.json({ answer });
     }
 
-    return NextResponse.json({ error: 'Unknown action specified.' }, { status: 400 });
+    console.warn('[API/AI] Unknown action specified:', action);
+    return NextResponse.json({ error: `Unknown action specified: ${action}` }, { status: 400 });
   } catch (err: any) {
+    console.error('[API/AI Route Error]:', err?.stack || err?.message || err);
     const isRateLimit = err?.status === 429 || err?.message?.includes('429') || err?.message?.includes('rate limit');
     return NextResponse.json(
       {
