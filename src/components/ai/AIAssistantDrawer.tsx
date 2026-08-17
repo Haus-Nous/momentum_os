@@ -24,6 +24,8 @@ export const AIAssistantDrawer: React.FC = () => {
     },
   ]);
 
+  const [isFallbackActive, setIsFallbackActive] = useState(false);
+
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
       if ((e.metaKey || e.ctrlKey) && e.shiftKey && e.key.toLowerCase() === 'a') {
@@ -36,8 +38,6 @@ export const AIAssistantDrawer: React.FC = () => {
   }, [isAIAssistantOpen, setAIAssistantOpen]);
 
   if (!isAIAssistantOpen) return null;
-
-  const [isFallbackActive, setIsFallbackActive] = useState(false);
 
   const handleSend = async () => {
     if (!inputText.trim()) return;
