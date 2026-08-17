@@ -157,8 +157,9 @@ interface MomentumState {
   exportDataJSON: () => void;
   exportDataCSV: () => void;
   importDataJSON: (jsonString: string) => boolean;
-  resetToDemoData: () => void;
-  syncUserProfile: (name: string, role: string) => void;
+  toggleModule: (module: LifeModule) => void;
+  setCustomModuleLabel: (key: string, label: string) => void;
+  setPersona: (persona: UserPersona) => void;
   clearAllUserData: () => void;
   checkDailyStreakAndFreeze: () => void;
 }
@@ -1004,6 +1005,14 @@ export const useMomentumStore = create<MomentumState>()((set, get) => ({
             role: role || state.profile.role,
           },
         }));
+      },
+
+      setPersona: (persona) => {
+        set((state) => {
+          const updatedProfile = { ...state.profile, persona };
+          saveCollectionToDexie('profile', [updatedProfile]);
+          return { profile: updatedProfile };
+        });
       },
 
       clearAllUserData: () => {

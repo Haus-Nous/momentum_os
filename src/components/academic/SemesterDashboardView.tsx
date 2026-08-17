@@ -11,8 +11,11 @@ import { Badge } from '../ui/Badge';
 import { ProgressBar } from '../ui/ProgressBar';
 import { GithubHeatmap } from '../habits/GithubHeatmap';
 
+import { getPersonaLabels } from '../../utils/personaHelpers';
+
 export const SemesterDashboardView: React.FC = () => {
-  const { courses, assignments, habits } = useMomentumStore();
+  const { profile, courses, assignments, habits } = useMomentumStore();
+  const labels = getPersonaLabels(profile.persona);
 
   const pendingAsgs = assignments.filter((a) => a.status === 'pending');
   const gradedAsgs = assignments.filter((a) => a.status === 'graded' || a.status === 'submitted');
@@ -46,9 +49,9 @@ export const SemesterDashboardView: React.FC = () => {
               <GraduationCap className="w-7 h-7" />
             </div>
             <div>
-              <h2 className="text-xl font-black text-gray-900 dark:text-white">Academic & Semester Command Center</h2>
+              <h2 className="text-xl font-black text-gray-900 dark:text-white">{labels.academicHubTitle}</h2>
               <p className="text-xs text-gray-600 dark:text-gray-300 mt-0.5">
-                Target CGPA: <span className="font-bold text-emerald-400">{calculatedCgpa === '--' ? 'Set Grade Goals' : `${calculatedCgpa} / 4.0`}</span> • Submission Rate: <span className="font-bold text-rose-400">{asgRate}%</span>
+                {labels.academicSubtitle} • Completion Rate: <span className="font-bold text-rose-400">{asgRate}%</span>
               </p>
             </div>
           </div>

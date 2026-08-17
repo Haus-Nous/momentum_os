@@ -140,6 +140,7 @@ export interface CalendarEvent {
 }
 
 export type LifeModule = 'academic' | 'career' | 'fitness' | 'finance' | 'creative';
+export type UserPersona = 'student' | 'professional' | 'builder';
 
 export interface UserProfile {
   name: string;
@@ -156,6 +157,7 @@ export interface UserProfile {
   weeklyHistory?: { date: string; score: number }[];
   enabledModules?: LifeModule[];
   customModuleLabels?: Record<string, string>;
+  persona?: UserPersona;
 }
 
 export interface Course {

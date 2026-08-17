@@ -12,10 +12,14 @@ import { InternshipModal } from './InternshipModal';
 import { HackathonModal } from './HackathonModal';
 import type { InternshipStatus } from '../../types';
 
+import { getPersonaLabels } from '../../utils/personaHelpers';
+
 export const CareerDashboardView: React.FC = () => {
-  const { internships, hackathons, researchPapers, certifications, deleteInternship, deleteHackathon } = useMomentumStore();
+  const { profile, internships, hackathons, researchPapers, certifications, deleteInternship, deleteHackathon } = useMomentumStore();
   const [isInternshipModalOpen, setIsInternshipModalOpen] = useState(false);
   const [isHackathonModalOpen, setIsHackathonModalOpen] = useState(false);
+
+  const labels = getPersonaLabels(profile.persona);
 
   const pipelineStages: { id: InternshipStatus; label: string; color: string }[] = [
     { id: 'wishlist', label: 'Wishlist', color: 'border-slate-500/30' },
@@ -46,19 +50,19 @@ export const CareerDashboardView: React.FC = () => {
               <Briefcase className="w-7 h-7" />
             </div>
             <div>
-              <h2 className="text-xl font-black text-gray-900 dark:text-white">Career & Placement Command Center</h2>
+              <h2 className="text-xl font-black text-gray-900 dark:text-white">{labels.careerHubTitle}</h2>
               <p className="text-xs text-gray-600 dark:text-gray-300 mt-0.5">
-                Active Internship Pipeline: <span className="font-bold text-emerald-400">{internships.length} Companies</span> • Career Velocity Score: <span className="font-bold text-indigo-400">{careerVelocity}/100</span>
+                {labels.careerSubtitle}: <span className="font-bold text-emerald-400">{internships.length} Entries</span> • Career Velocity Score: <span className="font-bold text-indigo-400">{careerVelocity}/100</span>
               </p>
             </div>
           </div>
 
           <div className="flex items-center space-x-2">
             <Button onClick={() => setIsInternshipModalOpen(true)} variant="emerald" size="md">
-              <Plus className="w-4 h-4 mr-1.5" /> Log Internship
+              <Plus className="w-4 h-4 mr-1.5" /> {labels.internshipButton}
             </Button>
             <Button onClick={() => setIsHackathonModalOpen(true)} variant="secondary" size="md">
-              <Trophy className="w-4 h-4 mr-1.5 text-purple-400" /> Log Hackathon
+              <Trophy className="w-4 h-4 mr-1.5 text-purple-400" /> {labels.hackathonButton}
             </Button>
           </div>
         </div>
@@ -66,7 +70,7 @@ export const CareerDashboardView: React.FC = () => {
 
       {/* Internship 6-Stage Kanban Pipeline */}
       <div className="space-y-3">
-        <h3 className="text-xs font-bold text-gray-500 uppercase tracking-wider">6-Stage Internship Pipeline Kanban</h3>
+        <h3 className="text-xs font-bold text-gray-500 uppercase tracking-wider">{labels.pipelineTitle}</h3>
 
         <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-6 gap-3">
           {pipelineStages.map((stage) => {

@@ -8,7 +8,7 @@ import { Button } from '../ui/Button';
 import { ThemeToggle } from '../ui/ThemeToggle';
 
 export const SettingsView: React.FC = () => {
-  const { profile, syncUserProfile, settings, updateSettings, exportDataJSON, exportDataCSV, importDataJSON, clearAllUserData } = useMomentumStore();
+  const { profile, setPersona, syncUserProfile, settings, updateSettings, exportDataJSON, exportDataCSV, importDataJSON, clearAllUserData } = useMomentumStore();
   const fileInputRef = useRef<HTMLInputElement>(null);
 
   const handleClearWorkspace = () => {
@@ -51,35 +51,39 @@ export const SettingsView: React.FC = () => {
         </div>
       </Card>
 
-      {/* AI Intelligence Provider Setting */}
+      {/* User Persona & Framing Settings */}
       <Card className="p-5 border-indigo-500/30 space-y-4">
-        <div className="flex items-center justify-between">
-          <div>
-            <h3 className="text-sm font-bold text-gray-900 dark:text-white">AI Intelligence Engine</h3>
-            <p className="text-[11px] text-gray-500">Switch between server-backed Groq Llama-3.3-70b and Local Heuristic provider.</p>
-          </div>
-          <div className="flex bg-slate-950 p-1 rounded-xl border border-slate-800 text-xs font-semibold">
-            <button
-              onClick={() => updateSettings({ aiProviderMode: 'groq' })}
-              className={`px-3 py-1.5 rounded-lg transition-colors ${
-                (settings.aiProviderMode || 'groq') === 'groq'
-                  ? 'bg-indigo-600 text-white font-bold'
-                  : 'text-gray-400 hover:text-white'
-              }`}
-            >
-              Groq (Llama 3.3 70B)
-            </button>
-            <button
-              onClick={() => updateSettings({ aiProviderMode: 'heuristic' })}
-              className={`px-3 py-1.5 rounded-lg transition-colors ${
-                settings.aiProviderMode === 'heuristic'
-                  ? 'bg-indigo-600 text-white font-bold'
-                  : 'text-gray-400 hover:text-white'
-              }`}
-            >
-              Local Heuristic
-            </button>
-          </div>
+        <div>
+          <h3 className="text-sm font-bold text-gray-900 dark:text-white">User Persona & Framing Mode</h3>
+          <p className="text-[11px] text-gray-500">Adapts workspace terminology and terminology across Career, Upskilling, and Life Areas.</p>
+        </div>
+
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
+          {[
+            { id: 'student', title: '🎓 Student / Academic', desc: 'Framed around Semester Hub, Courses, Assignments, and Internships.' },
+            { id: 'professional', title: '💼 Professional / Industry', desc: 'Framed around Career Growth, Industry Events, Deliverables, and Upskilling.' },
+            { id: 'builder', title: '🚀 Builder / Founder', desc: 'Framed around Venture Funnel, Leads, Client Deliverables, and R&D Hub.' },
+          ].map((p) => {
+            const isSelected = (profile.persona || 'student') === p.id;
+            return (
+              <button
+                key={p.id}
+                type="button"
+                onClick={() => setPersona(p.id as any)}
+                className={`p-4 rounded-xl border text-left transition-all cursor-pointer space-y-1 ${
+                  isSelected
+                    ? 'bg-indigo-600/20 border-indigo-500 text-white shadow-md'
+                    : 'bg-black/5 dark:bg-white/5 border-black/10 dark:border-white/10 text-gray-400 hover:border-gray-500'
+                }`}
+              >
+                <div className="text-xs font-bold text-gray-900 dark:text-white flex items-center justify-between">
+                  <span>{p.title}</span>
+                  {isSelected && <span className="text-[10px] bg-indigo-500 text-white px-1.5 py-0.5 rounded font-mono font-bold">ACTIVE</span>}
+                </div>
+                <p className="text-[11px] text-gray-400 leading-relaxed">{p.desc}</p>
+              </button>
+            );
+          })}
         </div>
       </Card>
 

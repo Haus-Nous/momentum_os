@@ -16,9 +16,13 @@ interface NavItem {
   badgeVariant?: 'emerald' | 'indigo' | 'amber' | 'rose';
 }
 
+import { getPersonaLabels } from '../../utils/personaHelpers';
+
 export const Sidebar: React.FC = () => {
   const { activeTab, setActiveTab, profile, tasks, habits, assignments } = useMomentumStore();
   const [isCollapsed, setIsCollapsed] = React.useState(false);
+
+  const personaLabels = getPersonaLabels(profile.persona);
 
   const pendingTasksCount = tasks.filter((t) => t.status !== 'completed').length;
   const activeHabitsCount = habits.filter((h) => h.status === 'active').length;
@@ -37,8 +41,8 @@ export const Sidebar: React.FC = () => {
     { id: 'focus', label: 'Focus Sanctuary', icon: Clock },
     { id: 'notes', label: 'Second Brain', icon: BookOpen },
     { id: 'analytics', label: 'Analytics', icon: BarChart2 },
-    { id: 'semester', label: labels.semester || 'Semester Hub', icon: GraduationCap, badge: pendingAssignmentsCount > 0 ? `${pendingAssignmentsCount}` : undefined, badgeVariant: 'rose', module: 'academic' },
-    { id: 'career', label: labels.career || 'Career Hub', icon: Briefcase, module: 'career' },
+    { id: 'semester', label: labels.semester || personaLabels.semesterNavLabel, icon: GraduationCap, badge: pendingAssignmentsCount > 0 ? `${pendingAssignmentsCount}` : undefined, badgeVariant: 'rose', module: 'academic' },
+    { id: 'career', label: labels.career || personaLabels.careerNavLabel, icon: Briefcase, module: 'career' },
     { id: 'goals', label: 'Goals', icon: Target },
     { id: 'achievements', label: 'Achievements', icon: Award },
     { id: 'settings', label: 'Settings', icon: Settings },
