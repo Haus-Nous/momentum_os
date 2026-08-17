@@ -114,11 +114,12 @@ export const calculateAggregateAnalytics = (
     : 0;
 
   const hasActivity = tasks.length > 0 || habits.length > 0 || focusSessions.length > 0;
+  const currentMomentum = calculateMomentumScore(tasks, habits, [], focusSessions);
 
   return {
-    weeklyProductivityScore: hasActivity ? 80 : 0,
-    monthlyProductivityScore: hasActivity ? 75 : 0,
-    yearlyProductivityScore: hasActivity ? 80 : 0,
+    weeklyProductivityScore: hasActivity ? currentMomentum : 0,
+    monthlyProductivityScore: hasActivity ? Math.min(100, Math.round(currentMomentum * 0.95)) : 0,
+    yearlyProductivityScore: hasActivity ? Math.min(100, Math.round(currentMomentum * 0.9)) : 0,
     taskCompletionRate: taskRate,
     habitCompletionRate: habitAvgSuccess,
     goalProgressAvg: 0,

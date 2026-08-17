@@ -5,11 +5,25 @@ import { Card } from '../ui/Card';
 import { Badge } from '../ui/Badge';
 import { Sparkles, ShieldAlert, Award, TrendingUp, CheckCircle2 } from 'lucide-react';
 
+import { useMomentumStore } from '../../store/useMomentumStore';
+
 interface PeriodSummaryReportsProps {
   timeframe: 'weekly' | 'monthly' | 'yearly';
 }
 
 export const PeriodSummaryReports: React.FC<PeriodSummaryReportsProps> = ({ timeframe }) => {
+  const { profile, focusSessions, tasks, habits } = useMomentumStore();
+
+  const totalFocusHrs = (focusSessions.reduce((acc, s) => acc + s.durationMinutes, 0) / 60).toFixed(1);
+  const completedTasks = tasks.filter((t) => t.status === 'completed').length;
+  const taskRate = tasks.length > 0 ? Math.round((completedTasks / tasks.length) * 100) : 0;
+  const activeHabits = habits.filter((h) => h.status === 'active');
+  const avgHabitSuccess = activeHabits.length > 0
+    ? Math.round(activeHabits.reduce((acc, h) => acc + h.successPercent, 0) / activeHabits.length)
+    : 0;
+
+  const burnoutRiskText = profile.momentumScore > 70 ? 'LOW' : profile.momentumScore > 40 ? 'MODERATE' : 'HIGH';
+
   return (
     <Card className="p-6 border-indigo-500/30 space-y-6">
       <div className="flex items-center justify-between pb-4 border-b border-black/5 dark:border-white/5">
@@ -36,7 +50,7 @@ export const PeriodSummaryReports: React.FC<PeriodSummaryReportsProps> = ({ time
             <span>Productivity Velocity</span>
           </div>
           <p className="text-xs text-gray-700 dark:text-gray-300">
-            Productivity score increased by <span className="font-bold text-emerald-400">+6.4%</span> over previous period with 24-day continuous habit streak.
+            Task completion rate is <span className="font-bold text-emerald-400">{taskRate}%</span> with habit execution rate at <span className="font-bold text-emerald-400">{avgHabitSuccess}%</span>.
           </p>
         </div>
 
@@ -44,10 +58,10 @@ export const PeriodSummaryReports: React.FC<PeriodSummaryReportsProps> = ({ time
         <div className="p-4 rounded-xl bg-black/5 dark:bg-white/5 border border-black/5 dark:border-white/5 space-y-2">
           <div className="flex items-center space-x-2 text-indigo-400 text-xs font-bold">
             <Award className="w-4 h-4" />
-            <span>Focus & Sleep Architecture</span>
+            <span>Focus Architecture</span>
           </div>
           <p className="text-xs text-gray-700 dark:text-gray-300">
-            Maintained <span className="font-bold text-indigo-400">7.8 hrs avg sleep</span> alongside <span className="font-bold text-indigo-400">28.5 deep focus hrs</span>. Zero fatigue detected.
+            Accumulated <span className="font-bold text-indigo-400">{totalFocusHrs} deep focus hrs</span> across workspace focus sessions.
           </p>
         </div>
 
@@ -58,7 +72,7 @@ export const PeriodSummaryReports: React.FC<PeriodSummaryReportsProps> = ({ time
             <span>Burnout Mitigation Engine</span>
           </div>
           <p className="text-xs text-amber-600 dark:text-amber-300">
-            Burnout risk is <span className="font-bold text-emerald-400">LOW (12%)</span>. Recovery protocols and ambient soundscapes are maintaining CNS balance.
+            Burnout risk level is <span className="font-bold text-emerald-400">{burnoutRiskText}</span> based on momentum score ({profile.momentumScore}%).
           </p>
         </div>
       </div>

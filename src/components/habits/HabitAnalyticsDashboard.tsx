@@ -24,28 +24,29 @@ export const HabitAnalyticsDashboard: React.FC<HabitAnalyticsDashboardProps> = (
     });
   });
 
-  // 1. Weekly / Monthly Completion Velocity Data
+  const activeHabitsCount = habits.filter((h) => h.status === 'active').length;
+  const avgSuccessRate = activeHabitsCount > 0
+    ? Math.round(habits.filter((h) => h.status === 'active').reduce((acc, h) => acc + h.successPercent, 0) / activeHabitsCount)
+    : 0;
+
+  // 1. Dynamic Completion Velocity Data
   const velocityData = [
-    { period: 'Wk 1', rate: 75, streak: 12 },
-    { period: 'Wk 2', rate: 82, streak: 16 },
-    { period: 'Wk 3', rate: 88, streak: 20 },
-    { period: 'Wk 4', rate: 94, streak: 24 },
+    { period: 'Baseline', rate: 0, streak: 0 },
+    { period: 'Current Track', rate: avgSuccessRate, streak: Math.max(...habits.map((h) => h.currentStreak || 0), 0) },
   ];
 
-  // 2. Category Radar Data (Life balance evaluation across 10 categories)
-  const categoryCounts: Record<string, number> = {};
-  habits.forEach((h) => {
-    categoryCounts[h.category] = (categoryCounts[h.category] || 0) + 1;
+  // 2. Category Radar Data (Real category completion evaluations)
+  const categoriesList = ['coding', 'fitness', 'reading', 'meditation', 'health', 'sleep'];
+  const radarData = categoriesList.map((cat) => {
+    const catHabits = habits.filter((h) => h.category === cat);
+    const catRate = catHabits.length > 0
+      ? Math.round(catHabits.reduce((acc, h) => acc + h.successPercent, 0) / catHabits.length)
+      : 0;
+    return {
+      subject: cat.charAt(0).toUpperCase() + cat.slice(1),
+      A: catRate,
+    };
   });
-
-  const radarData = [
-    { subject: 'Coding', A: (categoryCounts['coding'] || 0) * 25 + 50 },
-    { subject: 'Fitness', A: (categoryCounts['fitness'] || 0) * 25 + 40 },
-    { subject: 'Reading', A: (categoryCounts['reading'] || 0) * 25 + 60 },
-    { subject: 'Meditation', A: (categoryCounts['meditation'] || 0) * 25 + 30 },
-    { subject: 'Health', A: (categoryCounts['health'] || 0) * 25 + 50 },
-    { subject: 'Sleep', A: (categoryCounts['sleep'] || 0) * 25 + 45 },
-  ];
 
   // 3. Category Distribution Pie Data
   const pieData = Object.entries(categoryCounts).map(([cat, count]) => ({

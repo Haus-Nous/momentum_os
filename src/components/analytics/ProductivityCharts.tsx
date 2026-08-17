@@ -7,61 +7,59 @@ import {
 } from 'recharts';
 import { Card } from '../ui/Card';
 
+import { useMomentumStore } from '../../store/useMomentumStore';
+
 interface ProductivityChartsProps {
   timeframe: 'weekly' | 'monthly' | 'yearly';
 }
 
 export const ProductivityCharts: React.FC<ProductivityChartsProps> = ({ timeframe }) => {
-  // Line Data: Productivity Trajectory
-  const lineData = timeframe === 'weekly'
-    ? [
-        { period: 'Mon', score: 85 },
-        { period: 'Tue', score: 88 },
-        { period: 'Wed', score: 92 },
-        { period: 'Thu', score: 90 },
-        { period: 'Fri', score: 95 },
-        { period: 'Sat', score: 86 },
-        { period: 'Sun', score: 94 },
-      ]
-    : timeframe === 'monthly'
-    ? [
-        { period: 'Wk 1', score: 82 },
-        { period: 'Wk 2', score: 86 },
-        { period: 'Wk 3', score: 90 },
-        { period: 'Wk 4', score: 94 },
-      ]
-    : [
-        { period: 'Q1', score: 80 },
-        { period: 'Q2', score: 85 },
-        { period: 'Q3', score: 91 },
-        { period: 'Q4', score: 95 },
-      ];
+  const { profile, tasks, habits, assignments, projects, focusSessions } = useMomentumStore();
 
-  // Area Data: Focus, Study & Coding Hours
+  const completedTasks = tasks.filter((t) => t.status === 'completed').length;
+  const completedAsgs = assignments.filter((a) => a.status === 'graded' || a.status === 'submitted').length;
+  const activeHabits = habits.filter((h) => h.status === 'active');
+  const completedHabitsToday = activeHabits.filter((h) => h.successPercent > 50).length;
+  const completedProjects = projects.filter((p) => p.progressPercent === 100).length;
+
+  const currentScore = profile.momentumScore || 0;
+
+  // 1. Line Data: Productivity Trajectory
+  const lineData = [
+    { period: 'Baseline', score: 0 },
+    { period: 'Current Track', score: currentScore },
+  ];
+
+  // 2. Area Data: Focus, Study & Coding Hours
+  const totalFocusHrs = Math.round(focusSessions.reduce((acc, s) => acc + s.durationMinutes, 0) / 60);
   const areaData = [
-    { period: 'P1', focus: 6, coding: 4, study: 3 },
-    { period: 'P2', focus: 8, coding: 5, study: 4 },
-    { period: 'P3', focus: 7, coding: 6, study: 2 },
-    { period: 'P4', focus: 9, coding: 7, study: 4 },
-    { period: 'P5', focus: 10, coding: 8, study: 5 },
+    { period: 'Start', focus: 0, coding: 0, study: 0 },
+    { period: 'Accumulated', focus: totalFocusHrs, coding: Math.round(totalFocusHrs * 0.6), study: Math.round(totalFocusHrs * 0.4) },
   ];
 
-  // Bar Data: Task & Assignment Velocity
+  // 3. Bar Data: Task & Assignment Velocity
   const barData = [
-    { name: 'Tasks', completed: 28, target: 30 },
-    { name: 'Assignments', completed: 6, target: 6 },
-    { name: 'Habits', completed: 42, target: 45 },
-    { name: 'Projects', completed: 4, target: 4 },
+    { name: 'Tasks', completed: completedTasks, target: tasks.length },
+    { name: 'Assignments', completed: completedAsgs, target: assignments.length },
+    { name: 'Habits', completed: completedHabitsToday, target: habits.length },
+    { name: 'Projects', completed: completedProjects, target: projects.length },
   ];
 
-  // Radar Data: 6 Life Pillars
+  // 4. Radar Data: 6 Life Pillars
+  const getCategorySuccess = (cat: string) => {
+    const catHabits = habits.filter((h) => h.category === cat);
+    return catHabits.length > 0
+      ? Math.round(catHabits.reduce((acc, h) => acc + h.successPercent, 0) / catHabits.length)
+      : (tasks.length > 0 ? 30 : 0);
+  };
+
   const radarData = [
-    { subject: 'Coding', A: 95 },
-    { subject: 'Study', A: 88 },
-    { subject: 'Health', A: 90 },
-    { subject: 'Sleep', A: 85 },
-    { subject: 'Meditation', A: 80 },
-    { subject: 'Fitness', A: 86 },
+    { subject: 'Coding', A: getCategorySuccess('coding') },
+    { subject: 'Study', A: getCategorySuccess('study') },
+    { subject: 'Health', A: getCategorySuccess('health') },
+    { subject: 'Sleep', A: getCategorySuccess('sleep') },
+    { subject: 'Meditation', A: getCategorySuccess('meditation') },
+    { subject: 'Fitness', A: getCategorySuccess('fitness') },
   ];
 
   // Pie Data: Time Allocation

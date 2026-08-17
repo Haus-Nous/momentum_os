@@ -63,7 +63,9 @@ export const PremiumDashboardView: React.FC = () => {
           <div className="flex items-center space-x-4">
             <div className="text-right">
               <div className="text-2xl font-black font-mono text-indigo-400">{timeString || '09:41:00 AM'}</div>
-              <div className="text-[10px] text-gray-400 uppercase tracking-widest font-mono">SAN FRANCISCO • GMT-7</div>
+              <div className="text-[10px] text-gray-400 uppercase tracking-widest font-mono">
+                {typeof window !== 'undefined' ? Intl.DateTimeFormat().resolvedOptions().timeZone.toUpperCase() : 'LOCAL TIME'}
+              </div>
             </div>
           </div>
         </div>

@@ -5,25 +5,42 @@ import { Sparkles, TrendingUp, Lightbulb, AlertTriangle, CheckCircle2 } from 'lu
 import { Card } from '../ui/Card';
 import { Badge } from '../ui/Badge';
 
+import { useMomentumStore } from '../../store/useMomentumStore';
+
 export const AIInsightsWidget: React.FC = () => {
+  const { tasks, focusSessions, assignments } = useMomentumStore();
+
+  const completedTasksCount = tasks.filter((t) => t.status === 'completed').length;
+  const taskRate = tasks.length > 0 ? Math.round((completedTasksCount / tasks.length) * 100) : 0;
+
+  const totalFocusHrs = Math.round(focusSessions.reduce((acc, s) => acc + s.durationMinutes, 0) / 60);
+
+  const pendingAsgs = assignments.filter((a) => a.status === 'pending').length;
+
   const insights = [
     {
-      title: "Peak Velocity Pattern",
-      description: "You complete 85% more tasks on Mondays and Tuesdays. Schedule high-leverage architectural sprints early in the week.",
+      title: "Task Completion Velocity",
+      description: tasks.length > 0
+        ? `Task execution rate is currently ${taskRate}% across ${tasks.length} active tasks.`
+        : "No tasks created yet. Add tasks to initialize behavioral execution tracking.",
       badge: "BEHAVIORAL INSIGHT",
       variant: "indigo" as const,
     },
     {
-      title: "Focus Window Optimization",
-      description: "Your peak cognitive focus hours occur between 09:00 AM - 11:30 AM with zero fatigue detected.",
+      title: "Focus Sanctuary Hours",
+      description: totalFocusHrs > 0
+        ? `Accumulated ${totalFocusHrs} deep focus hours in high-leverage work sprints.`
+        : "Zero focus hours logged. Start a 50-minute Pomodoro sprint to record focus metrics.",
       badge: "OPTIMAL STATE",
       variant: "emerald" as const,
     },
     {
-      title: "Weekend Procrastination Risk",
-      description: "Assignment completion drops by 42% on weekends. Try completing academic submissions by Friday 6 PM.",
-      badge: "RISK WARNING",
-      variant: "rose" as const,
+      title: "Deadline & Academic Risk",
+      description: pendingAsgs > 0
+        ? `${pendingAsgs} pending deadline submissions require attention this week.`
+        : "Zero pending deadlines detected. All submissions are current!",
+      badge: pendingAsgs > 0 ? "RISK WARNING" : "ALL CLEAR",
+      variant: pendingAsgs > 0 ? "rose" as const : "emerald" as const,
     },
   ];
 

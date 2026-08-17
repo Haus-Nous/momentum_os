@@ -26,6 +26,16 @@ export const CareerDashboardView: React.FC = () => {
     { id: 'rejected', label: 'Archived', color: 'border-rose-500/30' },
   ];
 
+  const careerVelocity = Math.min(
+    100,
+    Math.round(
+      (internships.length * 15) +
+      (hackathons.length * 20) +
+      (certifications.length * 15) +
+      (researchPapers.length * 20)
+    )
+  );
+
   return (
     <div className="space-y-6 pb-12">
       {/* Header Banner */}
@@ -38,7 +48,7 @@ export const CareerDashboardView: React.FC = () => {
             <div>
               <h2 className="text-xl font-black text-gray-900 dark:text-white">Career & Placement Command Center</h2>
               <p className="text-xs text-gray-600 dark:text-gray-300 mt-0.5">
-                Active Internship Pipeline: <span className="font-bold text-emerald-400">{internships.length} Companies</span> • Career Velocity Score: <span className="font-bold text-indigo-400">96/100</span>
+                Active Internship Pipeline: <span className="font-bold text-emerald-400">{internships.length} Companies</span> • Career Velocity Score: <span className="font-bold text-indigo-400">{careerVelocity}/100</span>
               </p>
             </div>
           </div>

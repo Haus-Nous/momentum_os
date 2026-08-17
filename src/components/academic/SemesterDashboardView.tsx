@@ -16,7 +16,16 @@ export const SemesterDashboardView: React.FC = () => {
 
   const pendingAsgs = assignments.filter((a) => a.status === 'pending');
   const gradedAsgs = assignments.filter((a) => a.status === 'graded' || a.status === 'submitted');
-  const asgRate = assignments.length > 0 ? Math.round((gradedAsgs.length / assignments.length) * 100) : 92;
+  const asgRate = assignments.length > 0 ? Math.round((gradedAsgs.length / assignments.length) * 100) : 0;
+
+  // Calculate CGPA from graded courses/assignments
+  const gradedCourses = courses.filter((c) => c.grade);
+  const calculatedCgpa = gradedCourses.length > 0
+    ? (gradedCourses.reduce((acc, c) => {
+        const gradeMap: Record<string, number> = { 'A+': 4.0, 'A': 4.0, 'A-': 3.7, 'B+': 3.3, 'B': 3.0, 'B-': 2.7, 'C+': 2.3, 'C': 2.0, 'D': 1.0, 'F': 0.0 };
+        return acc + (gradeMap[c.grade!] || 3.5);
+      }, 0) / gradedCourses.length).toFixed(2)
+    : '--';
 
   // Study habit completion history for study heatmap
   const studyHabits = habits.filter((h) => h.category === 'study' || h.category === 'coding');
@@ -39,15 +48,15 @@ export const SemesterDashboardView: React.FC = () => {
             <div>
               <h2 className="text-xl font-black text-gray-900 dark:text-white">Academic & Semester Command Center</h2>
               <p className="text-xs text-gray-600 dark:text-gray-300 mt-0.5">
-                Target CGPA: <span className="font-bold text-emerald-400">3.95 / 4.0</span> • Current Semester Completion: <span className="font-bold text-rose-400">68%</span>
+                Target CGPA: <span className="font-bold text-emerald-400">{calculatedCgpa === '--' ? 'Set Grade Goals' : `${calculatedCgpa} / 4.0`}</span> • Submission Rate: <span className="font-bold text-rose-400">{asgRate}%</span>
               </p>
             </div>
           </div>
 
           <div className="flex items-center space-x-3 text-xs font-mono">
             <div className="p-3 rounded-xl bg-black/20 border border-white/10 text-center">
-              <span className="text-gray-400 block text-[10px]">CGPA GOAL</span>
-              <span className="text-xl font-bold text-emerald-400">3.95</span>
+              <span className="text-gray-400 block text-[10px]">CGPA SCORE</span>
+              <span className="text-xl font-bold text-emerald-400">{calculatedCgpa}</span>
             </div>
             <div className="p-3 rounded-xl bg-black/20 border border-white/10 text-center">
               <span className="text-gray-400 block text-[10px]">SUBMISSION RATE</span>
@@ -70,10 +79,10 @@ export const SemesterDashboardView: React.FC = () => {
                   <h4 className="text-base font-bold text-gray-900 dark:text-white mt-1">{crs.name}</h4>
                   <p className="text-xs text-gray-500">{crs.professor || 'Faculty Professor'} • {crs.credits} Credits</p>
                 </div>
-                <Badge variant="emerald">{crs.grade || 'A'}</Badge>
+                <Badge variant={crs.grade ? 'emerald' : 'secondary'}>{crs.grade || '--'}</Badge>
               </div>
 
-              <ProgressBar progress={crs.attendancePercent || 95} label="Class Attendance Rate" />
+              <ProgressBar progress={crs.attendancePercent ?? 0} label="Class Attendance Rate" />
             </Card>
           ))}
         </div>

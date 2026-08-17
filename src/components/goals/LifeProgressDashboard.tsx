@@ -26,13 +26,15 @@ export const LifeProgressDashboard: React.FC<LifeProgressDashboardProps> = ({ go
     return { ...h, count: hGoals.length, avgProgress };
   });
 
-  // Recharts Completion Velocity Data
+  // Dynamic Goal Completion Velocity Data
+  const completedGoals = goals.filter((g) => g.progressPercent === 100).length;
+  const goalCompletionRate = goals.length > 0 ? Math.round((completedGoals / goals.length) * 100) : 0;
+  const avgOverallProgress = goals.length > 0 ? Math.round(goals.reduce((acc, g) => acc + g.progressPercent, 0) / goals.length) : 0;
+
   const velocityData = [
-    { month: 'Jan', completedPct: 40 },
-    { month: 'Feb', completedPct: 55 },
-    { month: 'Mar', completedPct: 65 },
-    { month: 'Apr', completedPct: 75 },
-    { month: 'May', completedPct: 88 },
+    { month: 'Baseline', completedPct: 0 },
+    { month: 'Current Track', completedPct: avgOverallProgress },
+    { month: 'Target', completedPct: Math.min(100, Math.max(goalCompletionRate, avgOverallProgress)) },
   ];
 
   return (
