@@ -39,13 +39,13 @@ export const MascotCompanion: React.FC = () => {
           badge: 'Pacing Needed ⚑',
           variant: 'rose' as const,
           bgColor: 'bg-[#F3EFE6] dark:bg-[#1C1A18]',
-          borderColor: 'border-[#B84A39]/40 dark:border-[#E05A47]/40',
-          textColor: 'text-[#B84A39] dark:text-[#E05A47]',
-          badgeBg: 'bg-[#B84A39]/10 text-[#B84A39] dark:text-[#E05A47]',
+          borderColor: 'border-[#D93829]/40 dark:border-[#ED4B3B]/40',
+          textColor: 'text-[#D93829] dark:text-[#ED4B3B]',
+          badgeBg: 'bg-[#D93829]/10 text-[#D93829] dark:text-[#ED4B3B]',
           expression: '( ⊙ _ ⊙ )',
           title: 'Sparky Companion',
           message: `Momentum has slowed (${momentumScore}/100). Completing a quick task or habit will restore your momentum.`,
-          icon: <AlertTriangle className="w-4 h-4 text-[#B84A39] dark:text-[#E05A47]" />,
+          icon: <AlertTriangle className="w-4 h-4 text-[#D93829] dark:text-[#ED4B3B]" />,
         };
       case 'neutral':
       default:

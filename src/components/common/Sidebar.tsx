@@ -85,7 +85,7 @@ export const Sidebar: React.FC = () => {
                 onClick={() => setActiveTab(item.id)}
                 className={`w-full flex items-center justify-between px-3 py-2.5 rounded-xl transition-all cursor-pointer ${
                   isActive
-                    ? 'bg-[#C85A32] dark:bg-[#D96B43] text-white font-bold shadow-sm'
+                    ? 'bg-[#D85A2A] dark:bg-[#E56B3A] text-white font-bold shadow-sm'
                     : 'text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white hover:bg-black/5 dark:hover:bg-white/5'
                 }`}
                 title={isCollapsed ? item.label : undefined}

@@ -201,7 +201,7 @@ export const SolarSystemHero: React.FC = () => {
           <span>Steady ⚡</span>
         </div>
         <div className="flex items-center space-x-1.5">
-          <span className="w-2.5 h-2.5 rounded-full bg-[#B84A39] dark:bg-[#E05A47]" />
+          <span className="w-2.5 h-2.5 rounded-full bg-[#D93829] dark:bg-[#ED4B3B]" />
           <span>Needs Attention ⚑</span>
         </div>
       </div>

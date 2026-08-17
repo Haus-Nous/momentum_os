@@ -29,11 +29,11 @@ export const SolarPlanetNode: React.FC<SolarPlanetNodeProps> = ({ planet, angleD
 
   const stateColors = {
     needs_attention: {
-      bg: 'bg-[#B84A39]/15 dark:bg-[#E05A47]/20',
-      border: 'border-[#B84A39] dark:border-[#E05A47]',
+      bg: 'bg-[#D93829]/15 dark:bg-[#ED4B3B]/20',
+      border: 'border-[#D93829] dark:border-[#ED4B3B]',
       glow: 'shadow-sm',
-      badge: 'bg-[#B84A39]/15 text-[#B84A39] dark:text-[#E05A47]',
-      text: 'text-[#B84A39] dark:text-[#E05A47]',
+      badge: 'bg-[#D93829]/15 text-[#D93829] dark:text-[#ED4B3B]',
+      text: 'text-[#D93829] dark:text-[#ED4B3B]',
       label: 'Needs Attention ⚑',
     },
     steady: {
