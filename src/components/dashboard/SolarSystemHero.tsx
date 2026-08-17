@@ -119,25 +119,25 @@ export const SolarSystemHero: React.FC = () => {
   const sunPulseScale = 1 + momentumScore / 300;
 
   return (
-    <Card className="p-6 border-indigo-500/30 bg-gradient-to-b from-[#0d111a]/90 via-[#07090e]/90 to-[#0d111a]/90 relative overflow-hidden flex flex-col items-center justify-center min-h-[460px]">
+    <Card className="p-6 border-[#E2DACD] dark:border-[#332F2B] bg-[#F3EFE6] dark:bg-[#1C1A18] relative overflow-hidden flex flex-col items-center justify-center min-h-[460px]">
       {/* Background Starfield Grid Effect */}
-      <div className="absolute inset-0 bg-[radial-gradient(#ffffff0a_1px,transparent_1px)] [background-size:24px_24px] pointer-events-none opacity-40" />
+      <div className="absolute inset-0 bg-[radial-gradient(#23201d0a_1px,transparent_1px)] dark:bg-[radial-gradient(#f5f2ec0a_1px,transparent_1px)] [background-size:24px_24px] pointer-events-none opacity-60" />
 
       {/* Header Overlay */}
       <div className="absolute top-4 left-4 right-4 flex items-center justify-between pointer-events-none z-20">
         <div className="flex items-center space-x-2">
-          <div className="w-2.5 h-2.5 rounded-full bg-emerald-400 animate-ping" />
-          <span className="text-xs font-mono font-bold text-gray-300 uppercase tracking-widest">ORBITAL SYSTEM TELEMETRY</span>
+          <div className="w-2 h-2 rounded-full bg-[#8A9A86] dark:bg-[#9DB098] animate-pulse" />
+          <span className="text-xs font-mono font-bold text-gray-700 dark:text-gray-300 uppercase tracking-widest">LIFE AREA MAP</span>
         </div>
-        <span className="text-xs font-mono text-emerald-400 font-bold bg-emerald-500/10 px-2.5 py-1 rounded-lg border border-emerald-500/20">
-          MOMENTUM VELOCITY: {momentumScore}%
+        <span className="text-xs font-mono text-[#C85A32] dark:text-[#D96B43] font-bold bg-[#C85A32]/10 dark:bg-[#D96B43]/15 px-2.5 py-1 rounded-lg border border-[#C85A32]/20 dark:border-[#D96B43]/30">
+          MOMENTUM SCORE: {momentumScore}%
         </span>
       </div>
 
       {/* Empty State Onboarding Hint Banner */}
       {totalSystemVolume === 0 && (
-        <div className="absolute top-12 z-20 px-3 py-1.5 rounded-xl bg-indigo-500/20 border border-indigo-500/40 text-indigo-300 text-xs font-medium animate-pulse text-center">
-          ✨ Welcome Architect! Add tasks, habits, or courses to expand your orbital telemetry.
+        <div className="absolute top-12 z-20 px-3 py-1.5 rounded-xl bg-[#C85A32]/10 border border-[#C85A32]/30 text-[#C85A32] dark:text-[#D96B43] text-xs font-medium text-center">
+          ✦ Add tasks, habits, or courses to populate your Life Area Map.
         </div>
       )}
 
@@ -152,8 +152,8 @@ export const SolarSystemHero: React.FC = () => {
               cy="190"
               r={p.orbitRadius}
               fill="none"
-              stroke="rgba(255, 255, 255, 0.08)"
-              strokeWidth="1.5"
+              stroke="rgba(120, 113, 106, 0.2)"
+              strokeWidth="1.2"
               strokeDasharray="4 6"
             />
           ))}
@@ -163,16 +163,16 @@ export const SolarSystemHero: React.FC = () => {
         <motion.div
           animate={{ scale: [1, sunPulseScale, 1] }}
           transition={{ repeat: Infinity, duration: 3, ease: 'easeInOut' }}
-          className="relative z-10 w-20 h-20 rounded-full bg-gradient-to-tr from-amber-500 via-emerald-400 to-indigo-500 p-0.5 shadow-2xl flex items-center justify-center cursor-pointer group"
+          className="relative z-10 w-20 h-20 rounded-full bg-gradient-to-tr from-[#C85A32] via-[#D9A05B] to-[#8A9A86] p-0.5 shadow-md flex items-center justify-center cursor-pointer group"
           style={{
-            boxShadow: `0 0 ${sunGlowSize}px rgba(16, 185, 129, ${0.4 + momentumScore / 200})`,
+            boxShadow: `0 0 ${Math.min(30, sunGlowSize)}px rgba(200, 90, 50, 0.25)`,
           }}
           onClick={() => setActiveTab('settings')}
           title="User Core — Click for System Settings"
         >
-          <div className="w-full h-full rounded-full bg-[#07090e] border border-white/20 flex flex-col items-center justify-center">
-            <span className="text-sm font-black text-white font-mono">{profile.name ? profile.name.slice(0, 2).toUpperCase() : 'ME'}</span>
-            <span className="text-[9px] font-mono font-bold text-emerald-400">L{profile.level || 1}</span>
+          <div className="w-full h-full rounded-full bg-[#FBF9F5] dark:bg-[#121110] border border-black/10 dark:border-white/10 flex flex-col items-center justify-center">
+            <span className="text-sm font-black text-gray-900 dark:text-white font-mono">{profile.name ? profile.name.slice(0, 2).toUpperCase() : 'ME'}</span>
+            <span className="text-[9px] font-mono font-bold text-[#C85A32] dark:text-[#D96B43]">L{profile.level || 1}</span>
           </div>
         </motion.div>
 
@@ -191,18 +191,18 @@ export const SolarSystemHero: React.FC = () => {
       </div>
 
       {/* Orbit Footer Key Legend */}
-      <div className="pt-2 flex flex-wrap items-center justify-center gap-4 text-[11px] text-gray-400 z-20 font-mono">
+      <div className="pt-2 flex flex-wrap items-center justify-center gap-4 text-[11px] text-gray-600 dark:text-gray-400 z-20 font-mono">
         <div className="flex items-center space-x-1.5">
-          <span className="w-2.5 h-2.5 rounded-full bg-emerald-400 shadow-[0_0_8px_rgba(52,211,153,0.8)]" />
-          <span>Thriving</span>
+          <span className="w-2.5 h-2.5 rounded-full bg-[#8A9A86] dark:bg-[#9DB098]" />
+          <span>Thriving ✦</span>
         </div>
         <div className="flex items-center space-x-1.5">
-          <span className="w-2.5 h-2.5 rounded-full bg-cyan-400 shadow-[0_0_8px_rgba(34,211,238,0.8)]" />
-          <span>Steady</span>
+          <span className="w-2.5 h-2.5 rounded-full bg-[#D9A05B] dark:bg-[#E5B574]" />
+          <span>Steady ⚡</span>
         </div>
         <div className="flex items-center space-x-1.5">
-          <span className="w-2.5 h-2.5 rounded-full bg-rose-400 shadow-[0_0_8px_rgba(244,63,94,0.8)]" />
-          <span>Needs Attention</span>
+          <span className="w-2.5 h-2.5 rounded-full bg-[#C85A32] dark:bg-[#D96B43]" />
+          <span>Needs Attention ⚑</span>
         </div>
       </div>
     </Card>

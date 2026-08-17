@@ -1,37 +1,51 @@
+@import url('https://fonts.googleapis.com/css2?family=Instrument+Sans:ital,wght@0,400..700;1,400..700&family=Space+Mono:ital,wght@0,400;0,700;1,400;1,700&display=swap');
 @import "tailwindcss";
 
 @layer base {
   :root {
-    --bg-primary: #f8fafc;
-    --bg-secondary: #ffffff;
-    --bg-card: rgba(255, 255, 255, 0.85);
-    --text-primary: #0f172a;
-    --text-secondary: #475569;
-    --border-color: rgba(0, 0, 0, 0.08);
-    --border-glow: rgba(99, 102, 241, 0.2);
+    /* Warm Alabaster / Sand Light Mode */
+    --bg-primary: #FBF9F5;
+    --bg-secondary: #F3EFE6;
+    --bg-card: #F3EFE6;
+    --text-primary: #23201D;
+    --text-secondary: #78716A;
+    --border-color: rgba(35, 32, 29, 0.12);
+    --border-glow: rgba(200, 90, 50, 0.25);
     
-    --accent-emerald: #10b981;
-    --accent-cyan: #06b6d4;
-    --accent-indigo: #6366f1;
-    --accent-amber: #f59e0b;
-    --accent-rose: #f43f5e;
-    --accent-purple: #a855f7;
+    /* Warm Accents */
+    --accent-emerald: #8A9A86;  /* Muted Sage */
+    --accent-cyan: #78899A;     /* Muted Slate */
+    --accent-indigo: #C85A32;   /* Terracotta */
+    --accent-amber: #D9A05B;    /* Warm Ochre */
+    --accent-rose: #C85A32;     /* Warm Terracotta Red */
+    --accent-purple: #9A7B9B;   /* Soft Warm Heather */
+    
+    --font-editorial: 'Instrument Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    --font-mono-dot: 'Space Mono', monospace;
   }
 
   .dark {
-    --bg-primary: #07090e;
-    --bg-secondary: #0d1117;
-    --bg-card: rgba(18, 24, 38, 0.75);
-    --text-primary: #f8fafc;
-    --text-secondary: #94a3b8;
-    --border-color: rgba(255, 255, 255, 0.08);
-    --border-glow: rgba(99, 102, 241, 0.35);
+    /* Deep Warm Stone / Charcoal Dark Mode */
+    --bg-primary: #121110;
+    --bg-secondary: #1C1A18;
+    --bg-card: #1C1A18;
+    --text-primary: #F5F2EC;
+    --text-secondary: #9E958C;
+    --border-color: rgba(245, 242, 236, 0.10);
+    --border-glow: rgba(217, 107, 67, 0.3);
+    
+    --accent-emerald: #9DB098;  /* Dark Muted Sage */
+    --accent-cyan: #90A2B4;     /* Dark Muted Slate */
+    --accent-indigo: #D96B43;   /* Dark Terracotta */
+    --accent-amber: #E5B574;    /* Dark Warm Ochre */
+    --accent-rose: #D96B43;     /* Dark Terracotta Red */
+    --accent-purple: #B295B3;   /* Dark Warm Heather */
   }
 
   body {
     background-color: var(--bg-primary);
     color: var(--text-primary);
-    font-family: system-ui, -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'Inter', Roboto, sans-serif;
+    font-family: var(--font-editorial);
     overflow-x: hidden;
     transition: background-color 0.3s ease, color 0.3s ease;
   }

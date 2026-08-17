@@ -29,28 +29,28 @@ export const SolarPlanetNode: React.FC<SolarPlanetNodeProps> = ({ planet, angleD
 
   const stateColors = {
     needs_attention: {
-      bg: 'bg-rose-500/20',
-      border: 'border-rose-500/60',
-      glow: 'shadow-[0_0_18px_rgba(244,63,94,0.6)]',
-      badge: 'bg-rose-500/30 text-rose-300',
-      text: 'text-rose-400',
-      label: 'Needs Attention ⚠️',
+      bg: 'bg-[#C85A32]/15 dark:bg-[#D96B43]/20',
+      border: 'border-[#C85A32] dark:border-[#D96B43]',
+      glow: 'shadow-sm',
+      badge: 'bg-[#C85A32]/15 text-[#C85A32] dark:text-[#D96B43]',
+      text: 'text-[#C85A32] dark:text-[#D96B43]',
+      label: 'Needs Attention ⚑',
     },
     steady: {
-      bg: 'bg-cyan-500/20',
-      border: 'border-cyan-500/60',
-      glow: 'shadow-[0_0_18px_rgba(34,211,238,0.6)]',
-      badge: 'bg-cyan-500/30 text-cyan-300',
-      text: 'text-cyan-400',
+      bg: 'bg-[#D9A05B]/15 dark:bg-[#E5B574]/20',
+      border: 'border-[#D9A05B] dark:border-[#E5B574]',
+      glow: 'shadow-sm',
+      badge: 'bg-[#D9A05B]/15 text-[#D9A05B] dark:text-[#E5B574]',
+      text: 'text-[#D9A05B] dark:text-[#E5B574]',
       label: 'Steady ⚡',
     },
     thriving: {
-      bg: 'bg-emerald-500/20',
-      border: 'border-emerald-500/60',
-      glow: 'shadow-[0_0_22px_rgba(52,211,153,0.7)]',
-      badge: 'bg-emerald-500/30 text-emerald-300',
-      text: 'text-emerald-400',
-      label: 'Thriving 🚀',
+      bg: 'bg-[#8A9A86]/15 dark:bg-[#9DB098]/20',
+      border: 'border-[#8A9A86] dark:border-[#9DB098]',
+      glow: 'shadow-sm',
+      badge: 'bg-[#8A9A86]/15 text-[#8A9A86] dark:text-[#9DB098]',
+      text: 'text-[#8A9A86] dark:text-[#9DB098]',
+      label: 'Thriving ✦',
     },
   };
 
@@ -88,7 +88,7 @@ export const SolarPlanetNode: React.FC<SolarPlanetNodeProps> = ({ planet, angleD
             duration: planet.orbitDuration,
             ease: 'linear',
           }}
-          className={`rounded-full border backdrop-blur-md flex items-center justify-center transition-transform duration-200 ${style.bg} ${style.border} ${style.glow} hover:scale-125`}
+          className={`rounded-full border backdrop-blur-sm flex items-center justify-center transition-transform duration-200 ${style.bg} ${style.border} ${style.glow} hover:scale-125`}
           style={{ width: `${sizePx}px`, height: `${sizePx}px` }}
         >
           <div className={style.text}>{planet.icon}</div>
@@ -96,18 +96,18 @@ export const SolarPlanetNode: React.FC<SolarPlanetNodeProps> = ({ planet, angleD
 
         {/* Hover Tooltip */}
         {isHovered && (
-          <div className="absolute bottom-full mb-2 left-1/2 -translate-x-1/2 bg-[#0d111a]/95 border border-white/20 p-2.5 rounded-xl shadow-2xl z-50 whitespace-nowrap backdrop-blur-xl text-left space-y-1 min-w-[150px] pointer-events-none">
+          <div className="absolute bottom-full mb-2 left-1/2 -translate-x-1/2 bg-[#F3EFE6] dark:bg-[#1C1A18] border border-[#E2DACD] dark:border-[#332F2B] p-3 rounded-xl shadow-lg z-50 whitespace-nowrap text-left space-y-1 min-w-[160px] pointer-events-none">
             <div className="flex items-center justify-between space-x-2">
-              <span className="font-bold text-white text-xs">{planet.name}</span>
+              <span className="font-bold text-gray-900 dark:text-white text-xs">{planet.name}</span>
               <span className={`text-[9px] px-1.5 py-0.5 rounded font-mono font-bold ${style.badge}`}>
                 {style.label}
               </span>
             </div>
-            <p className="text-[10px] text-gray-400">
-              Active Items: <span className="font-mono text-white font-bold">{planet.volumeCount}</span>
+            <p className="text-[10px] text-gray-600 dark:text-gray-400">
+              Active Items: <span className="font-mono text-gray-900 dark:text-white font-bold">{planet.volumeCount}</span>
             </p>
-            <div className="text-[9px] text-indigo-400 font-semibold pt-1 border-t border-white/10 flex items-center justify-between">
-              <span>Click to view module</span>
+            <div className="text-[9px] text-[#C85A32] dark:text-[#D96B43] font-semibold pt-1 border-t border-black/5 dark:border-white/5 flex items-center justify-between">
+              <span>View Module</span>
               <span>→</span>
             </div>
           </div>

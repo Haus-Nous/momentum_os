@@ -32,31 +32,33 @@ export const NASAMissionControlView: React.FC = () => {
 
   return (
     <div className="space-y-6 pb-12">
-      {/* NASA Command Header */}
-      <Card gradient glow="emerald" className="p-6 border-emerald-500/30">
+      {/* Home Base Header */}
+      <Card className="p-6 border-[#E2DACD] dark:border-[#332F2B] bg-[#F3EFE6] dark:bg-[#1C1A18]">
         <div className="flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
           <div>
-            <div className="flex items-center space-x-2 text-xs font-bold text-emerald-400 font-mono tracking-widest uppercase">
-              <Compass className="w-4 h-4 animate-spin-slow text-emerald-400" />
-              <span>HOME BASE COMMAND CENTER • REAL-TIME TELEMETRY</span>
+            <div className="flex items-center space-x-2 text-xs font-bold text-[#C85A32] dark:text-[#D96B43] font-mono tracking-widest uppercase">
+              <Compass className="w-4 h-4 text-[#C85A32] dark:text-[#D96B43]" />
+              <span>HOME BASE</span>
             </div>
             <h1 className="text-2xl font-black text-gray-900 dark:text-white mt-1 flex items-center space-x-3">
-              <span>SYSTEM ORBITAL TELEMETRY</span>
-              <Badge variant="emerald">NOMINAL EXECUTION</Badge>
+              <span>Momentum Overview</span>
+              <span className="text-xs font-bold font-mono px-2.5 py-1 rounded-lg bg-[#8A9A86]/15 text-[#8A9A86] dark:text-[#9DB098] border border-[#8A9A86]/30">
+                Steady Rhythm ✦
+              </span>
             </h1>
             <p className="text-xs text-gray-600 dark:text-gray-300 mt-1 max-w-xl">
-              Active mission telemetry for <span className="font-bold text-emerald-400">{profile.name}</span>. All subsystem modules operating at peak velocity.
+              Daily momentum snapshot for <span className="font-bold text-[#C85A32] dark:text-[#D96B43]">{profile.name}</span>. All life area modules are tracked in real time.
             </p>
           </div>
 
           <div className="flex items-center space-x-3 font-mono text-xs">
-            <div className="p-3 rounded-xl bg-black/20 border border-white/10 text-center">
-              <span className="text-gray-400 block text-[10px]">URGENCY SCORE</span>
-              <span className="text-xl font-bold text-rose-400">{urgencyScore}/100</span>
+            <div className="p-3 rounded-xl bg-[#FBF9F5] dark:bg-[#121110] border border-[#E2DACD] dark:border-[#332F2B] text-center">
+              <span className="text-gray-500 dark:text-gray-400 block text-[10px] uppercase tracking-wider">URGENCY SCORE</span>
+              <span className="text-xl font-bold text-[#C85A32] dark:text-[#D96B43]">{urgencyScore}/100</span>
             </div>
-            <div className="p-3 rounded-xl bg-black/20 border border-white/10 text-center">
-              <span className="text-gray-400 block text-[10px]">MOMENTUM</span>
-              <span className="text-xl font-bold text-emerald-400">{profile.momentumScore}%</span>
+            <div className="p-3 rounded-xl bg-[#FBF9F5] dark:bg-[#121110] border border-[#E2DACD] dark:border-[#332F2B] text-center">
+              <span className="text-gray-500 dark:text-gray-400 block text-[10px] uppercase tracking-wider">MOMENTUM</span>
+              <span className="text-xl font-bold text-[#8A9A86] dark:text-[#9DB098]">{profile.momentumScore}%</span>
             </div>
           </div>
         </div>
