@@ -52,7 +52,7 @@ export async function POST(req: NextRequest) {
       );
     }
 
-    const model = 'llama-3.3-70b-versatile';
+    const model = 'openai/gpt-oss-120b';
 
     if (action === 'parseCommand') {
       console.error('[API/AI LOG] Executing action parseCommand');
