@@ -14,10 +14,10 @@ export const LifeScoreGauge: React.FC = () => {
   const strokeDashoffset = circumference - (circumference * lifeScore) / 100;
 
   return (
-    <div className="glass-card p-5 rounded-2xl border border-indigo-500/30 relative overflow-hidden flex flex-col items-center justify-center text-center">
+    <div className="p-5 rounded-2xl border border-[#E2DACD] dark:border-[#332F2B] bg-[#F3EFE6] dark:bg-[#1C1A18] relative overflow-hidden flex flex-col items-center justify-center text-center">
       <div className="text-xs font-bold text-gray-500 uppercase tracking-wider mb-2 flex items-center space-x-1.5">
-        <Sparkles className="w-4 h-4 text-emerald-400" />
-        <span>Dynamic Life Score Gauge</span>
+        <Sparkles className="w-4 h-4 text-[#8A9A86] dark:text-[#9DB098]" />
+        <span>Life Balance Score</span>
       </div>
 
       {/* SVG Radial Ring */}
@@ -29,7 +29,7 @@ export const LifeScoreGauge: React.FC = () => {
             r={radius}
             stroke="currentColor"
             strokeWidth="8"
-            className="text-gray-200 dark:text-gray-800"
+            className="text-[#E2DACD] dark:text-[#332F2B]"
             fill="transparent"
           />
           <circle
@@ -41,19 +41,19 @@ export const LifeScoreGauge: React.FC = () => {
             strokeDasharray={circumference}
             strokeDashoffset={strokeDashoffset}
             strokeLinecap="round"
-            className="text-gradient from-emerald-400 to-indigo-500 text-emerald-500 transition-all duration-1000 ease-out"
+            className="text-[#D85A2A] dark:text-[#E56B3A] transition-all duration-1000 ease-out"
             fill="transparent"
           />
         </svg>
 
         <div className="absolute flex flex-col items-center justify-center">
           <span className="text-3xl font-black text-gray-900 dark:text-white font-mono">{lifeScore}</span>
-          <span className="text-[10px] text-emerald-500 font-bold uppercase tracking-widest">LIFE SCORE</span>
+          <span className="text-[10px] text-[#D85A2A] dark:text-[#E56B3A] font-bold uppercase tracking-widest">LIFE SCORE</span>
         </div>
       </div>
 
       <p className="text-[11px] text-gray-500 dark:text-gray-400 mt-1 max-w-xs">
-        Composite score evaluating habits, tasks, goals, and deep focus consistency.
+        Composite score evaluating habits, tasks, goals, and focus consistency.
       </p>
     </div>
   );

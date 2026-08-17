@@ -19,44 +19,44 @@ export const WeeklyBestCard: React.FC = () => {
   const isPersonalRecord = currentWeeklyAvg >= bestScore && currentWeeklyAvg > 0;
 
   return (
-    <Card className="p-5 border-indigo-500/30 space-y-4">
+    <Card className="p-5 border-[#E2DACD] dark:border-[#332F2B] space-y-4">
       <div className="flex items-center justify-between pb-2 border-b border-black/5 dark:border-white/5">
-        <div className="flex items-center space-x-2 text-xs font-bold text-indigo-400 uppercase tracking-wider">
-          <Trophy className="w-4 h-4 text-amber-400" />
-          <span>Weekly Performance Benchmark</span>
+        <div className="flex items-center space-x-2 text-xs font-bold text-[#D85A2A] dark:text-[#E56B3A] uppercase tracking-wider">
+          <Trophy className="w-4 h-4 text-[#D9A05B] dark:text-[#E5B574]" />
+          <span>Weekly Benchmark</span>
         </div>
         <Badge variant={isPersonalRecord ? 'emerald' : 'indigo'}>
-          {isPersonalRecord ? '🔥 PERSONAL BEST' : `${percentOfBest}% OF BEST`}
+          {isPersonalRecord ? '🔥 PERSONAL RECORD' : `${percentOfBest}% OF BEST`}
         </Badge>
       </div>
 
       <div className="grid grid-cols-2 gap-4 pt-1">
-        <div className="p-3 rounded-xl bg-black/20 border border-white/5 space-y-1">
-          <div className="text-[10px] font-bold text-gray-400 uppercase">This Week (7-Day Avg)</div>
-          <div className="text-2xl font-black font-mono text-emerald-400">
+        <div className="p-3 rounded-xl bg-black/5 dark:bg-white/5 border border-black/5 dark:border-white/10 space-y-1">
+          <div className="text-[10px] font-bold text-gray-500 uppercase">This Week (7-Day Avg)</div>
+          <div className="text-2xl font-black font-mono text-[#8A9A86] dark:text-[#9DB098]">
             {currentWeeklyAvg} <span className="text-xs text-gray-500 font-sans">/ 100</span>
           </div>
           <div className="text-[10px] text-gray-500 flex items-center space-x-1">
-            <Activity className="w-3 h-3 text-emerald-400" />
+            <Activity className="w-3 h-3 text-[#8A9A86] dark:text-[#9DB098]" />
             <span>Rolling 7-day average</span>
           </div>
         </div>
 
-        <div className="p-3 rounded-xl bg-black/20 border border-white/5 space-y-1">
-          <div className="text-[10px] font-bold text-gray-400 uppercase">All-Time Best Week</div>
-          <div className="text-2xl font-black font-mono text-amber-400">
+        <div className="p-3 rounded-xl bg-black/5 dark:bg-white/5 border border-black/5 dark:border-white/10 space-y-1">
+          <div className="text-[10px] font-bold text-gray-500 uppercase">All-Time Best Week</div>
+          <div className="text-2xl font-black font-mono text-[#D9A05B] dark:text-[#E5B574]">
             {bestScore} <span className="text-xs text-gray-500 font-sans">/ 100</span>
           </div>
           <div className="text-[10px] text-gray-500 flex items-center space-x-1">
-            <Award className="w-3 h-3 text-amber-400" />
+            <Award className="w-3 h-3 text-[#D9A05B] dark:text-[#E5B574]" />
             <span>Personal record target</span>
           </div>
         </div>
       </div>
 
-      <div className="w-full bg-black/30 rounded-full h-2 overflow-hidden border border-white/5">
+      <div className="w-full bg-black/5 dark:bg-white/10 rounded-full h-2 overflow-hidden border border-black/5 dark:border-white/10">
         <div
-          className="bg-gradient-to-r from-emerald-500 to-indigo-500 h-full rounded-full transition-all duration-500"
+          className="bg-[#D85A2A] dark:bg-[#E56B3A] h-full rounded-full transition-all duration-500"
           style={{ width: `${percentOfBest}%` }}
         />
       </div>

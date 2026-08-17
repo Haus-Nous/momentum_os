@@ -16,7 +16,7 @@ export const BulkActionsBar: React.FC<BulkActionsBarProps> = ({ selectedIds, onC
   if (selectedIds.length === 0) return null;
 
   return (
-    <div className="fixed bottom-6 left-1/2 -translate-x-1/2 z-40 glass-card px-5 py-3 rounded-2xl border border-indigo-500/40 shadow-2xl flex items-center space-x-4 animate-in fade-in slide-in-from-bottom-4 duration-200">
+    <div className="fixed bottom-6 left-1/2 -translate-x-1/2 z-40 bg-[#F3EFE6] dark:bg-[#1C1A18] px-5 py-3 rounded-2xl border border-[#E2DACD] dark:border-[#332F2B] shadow-xl flex items-center space-x-4 animate-in fade-in slide-in-from-bottom-4 duration-200">
       <span className="text-xs font-bold text-gray-900 dark:text-white">
         {selectedIds.length} Task{selectedIds.length > 1 ? 's' : ''} Selected
       </span>

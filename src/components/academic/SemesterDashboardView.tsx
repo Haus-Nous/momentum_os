@@ -45,13 +45,13 @@ export const SemesterDashboardView: React.FC = () => {
       <Card className="p-6 border-[#E2DACD] dark:border-[#332F2B] bg-[#F3EFE6] dark:bg-[#1C1A18]">
         <div className="flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
           <div className="flex items-center space-x-4">
-            <div className="p-3.5 rounded-2xl bg-[#C85A32]/10 text-[#C85A32] dark:text-[#D96B43]">
+            <div className="p-3.5 rounded-2xl bg-[#D85A2A]/10 text-[#D85A2A] dark:text-[#E56B3A]">
               <GraduationCap className="w-7 h-7" />
             </div>
             <div>
               <h2 className="text-xl font-black text-gray-900 dark:text-white">{labels.academicHubTitle}</h2>
               <p className="text-xs text-gray-600 dark:text-gray-300 mt-0.5">
-                {labels.academicSubtitle} • Completion Rate: <span className="font-bold text-[#C85A32] dark:text-[#D96B43]">{asgRate}%</span>
+                {labels.academicSubtitle} • Completion Rate: <span className="font-bold text-[#D85A2A] dark:text-[#E56B3A]">{asgRate}%</span>
               </p>
             </div>
           </div>
@@ -59,11 +59,11 @@ export const SemesterDashboardView: React.FC = () => {
           <div className="flex items-center space-x-3 text-xs font-mono">
             <div className="p-3 rounded-xl bg-black/5 dark:bg-white/5 border border-black/5 dark:border-white/10 text-center">
               <span className="text-gray-400 block text-[10px]">CGPA SCORE</span>
-              <span className="text-xl font-bold text-emerald-400">{calculatedCgpa}</span>
+              <span className="text-xl font-bold text-[#8A9A86] dark:text-[#9DB098]">{calculatedCgpa}</span>
             </div>
-            <div className="p-3 rounded-xl bg-black/20 border border-white/10 text-center">
+            <div className="p-3 rounded-xl bg-black/5 dark:bg-white/5 border border-black/5 dark:border-white/10 text-center">
               <span className="text-gray-400 block text-[10px]">SUBMISSION RATE</span>
-              <span className="text-xl font-bold text-rose-400">{asgRate}%</span>
+              <span className="text-xl font-bold text-[#D85A2A] dark:text-[#E56B3A]">{asgRate}%</span>
             </div>
           </div>
         </div>
@@ -71,11 +71,11 @@ export const SemesterDashboardView: React.FC = () => {
 
       {/* Courses & Attendance % Grid */}
       <div className="space-y-3">
-        <h3 className="text-xs font-bold text-gray-500 uppercase tracking-wider">Enrolled Courses & Attendance Velocity</h3>
+        <h3 className="text-xs font-bold text-gray-500 uppercase tracking-wider">Enrolled Courses & Attendance</h3>
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           {courses.map((crs) => (
-            <Card key={crs.id} className="p-5 border-black/10 dark:border-white/10 space-y-3">
+            <Card key={crs.id} className="p-5 border-[#E2DACD] dark:border-[#332F2B] space-y-3">
               <div className="flex items-start justify-between">
                 <div>
                   <Badge variant="indigo">{crs.code}</Badge>
@@ -92,11 +92,11 @@ export const SemesterDashboardView: React.FC = () => {
       </div>
 
       {/* Pending Assignments Matrix */}
-      <Card className="p-5 border-rose-500/30 space-y-4">
+      <Card className="p-5 border-[#E2DACD] dark:border-[#332F2B] space-y-4">
         <div className="flex items-center justify-between pb-2 border-b border-black/5 dark:border-white/5">
           <h3 className="text-sm font-bold text-gray-900 dark:text-white flex items-center space-x-2">
-            <CheckSquare className="w-4 h-4 text-rose-500" />
-            <span>Pending Assignments & Exam Submissions ({pendingAsgs.length})</span>
+            <CheckSquare className="w-4 h-4 text-[#D85A2A] dark:text-[#E56B3A]" />
+            <span>Pending Assignments & Submissions ({pendingAsgs.length})</span>
           </h3>
         </div>
 
@@ -113,9 +113,9 @@ export const SemesterDashboardView: React.FC = () => {
         </div>
       </Card>
 
-      {/* GitHub-Style Study Session Heatmap */}
-      <Card className="p-5 border-black/10 dark:border-white/10">
-        <h3 className="text-sm font-bold text-gray-900 dark:text-white mb-1">GitHub-Style Study Session Execution Matrix</h3>
+      {/* Study Session Heatmap */}
+      <Card className="p-5 border-[#E2DACD] dark:border-[#332F2B]">
+        <h3 className="text-sm font-bold text-gray-900 dark:text-white mb-1">Study Activity Heatmap</h3>
         <p className="text-xs text-gray-500 mb-4">Dedicated heatmap mapping academic study sessions across the year.</p>
         <GithubHeatmap completionHistory={studyHistory} />
       </Card>

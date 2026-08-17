@@ -81,14 +81,14 @@ export const HackathonModal: React.FC<HackathonModalProps> = ({ isOpen, onClose,
   };
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/70 backdrop-blur-md p-4">
-      <div className="w-full max-w-lg bg-white dark:bg-[#0d111a] border border-black/10 dark:border-white/15 rounded-2xl shadow-2xl overflow-hidden p-6 animate-in fade-in zoom-in-95 duration-150 max-h-[90vh] overflow-y-auto">
+    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-md p-4">
+      <div className="w-full max-w-lg bg-[#F3EFE6] dark:bg-[#1C1A18] border border-[#E2DACD] dark:border-[#332F2B] rounded-2xl shadow-xl overflow-hidden p-6 animate-in fade-in zoom-in-95 duration-150 max-h-[90vh] overflow-y-auto">
         <div className="flex items-center justify-between pb-4 border-b border-black/10 dark:border-white/10">
           <h2 className="text-base font-bold text-gray-900 dark:text-white flex items-center space-x-2">
-            <Trophy className="w-5 h-5 text-amber-500" />
-            <span>{initialHackathon ? 'Edit Hackathon Project' : 'Log New Hackathon Competition'}</span>
+            <Trophy className="w-5 h-5 text-[#D85A2A] dark:text-[#E56B3A]" />
+            <span>{initialHackathon ? 'Edit Hackathon' : 'Log New Hackathon'}</span>
           </h2>
-          <button onClick={onClose} className="p-1 rounded-lg text-gray-400 hover:text-white">
+          <button onClick={onClose} className="p-1 rounded-lg text-gray-400 hover:text-gray-900 dark:hover:text-white cursor-pointer">
             <X className="w-4 h-4" />
           </button>
         </div>
@@ -186,7 +186,7 @@ export const HackathonModal: React.FC<HackathonModalProps> = ({ isOpen, onClose,
 
           <div className="pt-4 border-t border-black/10 dark:border-white/10 flex justify-end space-x-2">
             <Button type="button" onClick={onClose} variant="ghost" size="sm">Cancel</Button>
-            <Button type="submit" variant="emerald" size="sm">{initialHackathon ? 'Update Hackathon' : 'Save Hackathon'}</Button>
+            <Button type="submit" variant="primary" size="sm">{initialHackathon ? 'Update Hackathon' : 'Save Hackathon'}</Button>
           </div>
         </form>
       </div>

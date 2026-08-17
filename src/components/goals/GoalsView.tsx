@@ -40,7 +40,7 @@ export const GoalsView: React.FC = () => {
           <button
             onClick={() => setActiveTab('matrix')}
             className={`flex items-center space-x-1.5 px-3 py-1.5 rounded-lg font-semibold transition-colors cursor-pointer shrink-0 ${
-              activeTab === 'matrix' ? 'bg-[#C85A32] dark:bg-[#D96B43] text-white shadow-sm' : 'text-gray-600 hover:text-gray-900 dark:text-gray-400 dark:hover:text-white'
+              activeTab === 'matrix' ? 'bg-[#D85A2A] dark:bg-[#E56B3A] text-white shadow-sm' : 'text-gray-600 hover:text-gray-900 dark:text-gray-400 dark:hover:text-white'
             }`}
           >
             <Target className="w-3.5 h-3.5 text-[#8A9A86] dark:text-[#9DB098]" />
@@ -50,7 +50,7 @@ export const GoalsView: React.FC = () => {
           <button
             onClick={() => setActiveTab('life_dashboard')}
             className={`flex items-center space-x-1.5 px-3 py-1.5 rounded-lg font-semibold transition-colors cursor-pointer shrink-0 ${
-              activeTab === 'life_dashboard' ? 'bg-[#C85A32] dark:bg-[#D96B43] text-white shadow-sm' : 'text-gray-600 hover:text-gray-900 dark:text-gray-400 dark:hover:text-white'
+              activeTab === 'life_dashboard' ? 'bg-[#D85A2A] dark:bg-[#E56B3A] text-white shadow-sm' : 'text-gray-600 hover:text-gray-900 dark:text-gray-400 dark:hover:text-white'
             }`}
           >
             <BarChart2 className="w-3.5 h-3.5 text-[#78899A] dark:text-[#90A2B4]" />
@@ -60,7 +60,7 @@ export const GoalsView: React.FC = () => {
           <button
             onClick={() => setActiveTab('reviews')}
             className={`flex items-center space-x-1.5 px-3 py-1.5 rounded-lg font-semibold transition-colors cursor-pointer shrink-0 ${
-              activeTab === 'reviews' ? 'bg-[#C85A32] dark:bg-[#D96B43] text-white shadow-sm' : 'text-gray-600 hover:text-gray-900 dark:text-gray-400 dark:hover:text-white'
+              activeTab === 'reviews' ? 'bg-[#D85A2A] dark:bg-[#E56B3A] text-white shadow-sm' : 'text-gray-600 hover:text-gray-900 dark:text-gray-400 dark:hover:text-white'
             }`}
           >
             <Sparkles className="w-3.5 h-3.5 text-[#D9A05B] dark:text-[#E5B574]" />

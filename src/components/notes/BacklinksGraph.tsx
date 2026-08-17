@@ -22,10 +22,10 @@ export const BacklinksGraph: React.FC<BacklinksGraphProps> = ({ notes, selectedN
   });
 
   return (
-    <div className="glass-card rounded-2xl p-4 border border-white/10 flex flex-col items-center justify-center text-center">
-      <div className="flex items-center space-x-2 text-xs font-bold text-white mb-2 self-start">
-        <Share2 className="w-4 h-4 text-indigo-400" />
-        <span>Bi-Directional Knowledge Graph</span>
+    <div className="rounded-2xl p-4 border border-[#E2DACD] dark:border-[#332F2B] bg-[#F3EFE6] dark:bg-[#1C1A18] flex flex-col items-center justify-center text-center">
+      <div className="flex items-center space-x-2 text-xs font-bold text-gray-900 dark:text-white mb-2 self-start">
+        <Share2 className="w-4 h-4 text-[#D85A2A] dark:text-[#E56B3A]" />
+        <span>Knowledge Graph</span>
       </div>
 
       <div className="relative w-64 h-64">
@@ -43,7 +43,7 @@ export const BacklinksGraph: React.FC<BacklinksGraphProps> = ({ notes, selectedN
                   y2={n2.y}
                   stroke="currentColor"
                   strokeWidth="1"
-                  className="text-indigo-500/30"
+                  className="text-[#D85A2A]/30 dark:text-[#E56B3A]/30"
                 />
               );
             })
@@ -62,13 +62,13 @@ export const BacklinksGraph: React.FC<BacklinksGraphProps> = ({ notes, selectedN
                   cx={pos.x}
                   cy={pos.y}
                   r={isSelected ? '10' : '7'}
-                  className={isSelected ? 'fill-emerald-400 stroke-emerald-300 stroke-2' : 'fill-indigo-500 hover:fill-cyan-400 transition-colors'}
+                  className={isSelected ? 'fill-[#D85A2A] dark:fill-[#E56B3A] stroke-[#F3EFE6] dark:stroke-[#1C1A18] stroke-2' : 'fill-[#8A9A86] hover:fill-[#D85A2A] dark:hover:fill-[#E56B3A] transition-colors'}
                 />
                 <text
                   x={pos.x}
                   y={pos.y + 18}
                   textAnchor="middle"
-                  className="text-[9px] fill-gray-400 font-mono group-hover:fill-white transition-colors"
+                  className="text-[9px] fill-gray-500 font-mono group-hover:fill-gray-900 dark:group-hover:fill-white transition-colors"
                 >
                   {pos.note.title.slice(0, 14)}...
                 </text>

@@ -52,10 +52,10 @@ export const SettingsView: React.FC = () => {
       </Card>
 
       {/* User Persona & Framing Settings */}
-      <Card className="p-5 border-indigo-500/30 space-y-4">
+      <Card className="p-5 border-[#E2DACD] dark:border-[#332F2B] space-y-4">
         <div>
           <h3 className="text-sm font-bold text-gray-900 dark:text-white">User Persona & Framing Mode</h3>
-          <p className="text-[11px] text-gray-500">Adapts workspace terminology and terminology across Career, Upskilling, and Life Areas.</p>
+          <p className="text-[11px] text-gray-500">Adapts workspace terminology and focus areas.</p>
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
@@ -72,15 +72,15 @@ export const SettingsView: React.FC = () => {
                 onClick={() => setPersona(p.id as any)}
                 className={`p-4 rounded-xl border text-left transition-all cursor-pointer space-y-1 ${
                   isSelected
-                    ? 'bg-indigo-600/20 border-indigo-500 text-white shadow-md'
+                    ? 'bg-[#D85A2A]/10 border-[#D85A2A] text-gray-900 dark:text-white shadow-sm'
                     : 'bg-black/5 dark:bg-white/5 border-black/10 dark:border-white/10 text-gray-400 hover:border-gray-500'
                 }`}
               >
                 <div className="text-xs font-bold text-gray-900 dark:text-white flex items-center justify-between">
                   <span>{p.title}</span>
-                  {isSelected && <span className="text-[10px] bg-indigo-500 text-white px-1.5 py-0.5 rounded font-mono font-bold">ACTIVE</span>}
+                  {isSelected && <span className="text-[10px] bg-[#D85A2A] text-white px-1.5 py-0.5 rounded font-mono font-bold">ACTIVE</span>}
                 </div>
-                <p className="text-[11px] text-gray-400 leading-relaxed">{p.desc}</p>
+                <p className="text-[11px] text-gray-500 leading-relaxed">{p.desc}</p>
               </button>
             );
           })}
@@ -88,7 +88,7 @@ export const SettingsView: React.FC = () => {
       </Card>
 
       {/* Life Areas Module System */}
-      <Card className="p-5 border-black/10 dark:border-white/10 space-y-4">
+      <Card className="p-5 border-[#E2DACD] dark:border-[#332F2B] space-y-4">
         <div className="flex items-center justify-between border-b border-black/5 dark:border-white/5 pb-3">
           <div>
             <h3 className="text-sm font-bold text-gray-900 dark:text-white">Life Areas & Workspace Modules</h3>
@@ -118,16 +118,16 @@ export const SettingsView: React.FC = () => {
             };
 
             return (
-              <div key={mod.id} className="p-3 rounded-2xl bg-black/20 border border-white/5 flex items-center justify-between">
+              <div key={mod.id} className="p-3 rounded-2xl bg-black/5 dark:bg-white/5 border border-black/5 dark:border-white/10 flex items-center justify-between">
                 <div>
-                  <div className="text-xs font-semibold text-gray-200">{mod.label}</div>
-                  <div className="text-[10px] text-gray-400">{mod.desc}</div>
+                  <div className="text-xs font-semibold text-gray-800 dark:text-gray-200">{mod.label}</div>
+                  <div className="text-[10px] text-gray-500">{mod.desc}</div>
                 </div>
                 <input
                   type="checkbox"
                   checked={isEnabled}
                   onChange={toggleModule}
-                  className="rounded text-indigo-500 cursor-pointer w-4 h-4"
+                  className="rounded text-[#D85A2A] dark:text-[#E56B3A] cursor-pointer w-4 h-4 accent-[#D85A2A] dark:accent-[#E56B3A]"
                 />
               </div>
             );
@@ -136,7 +136,7 @@ export const SettingsView: React.FC = () => {
       </Card>
 
       {/* Theme & Display Settings */}
-      <Card className="p-5 border-black/10 dark:border-white/10 space-y-4">
+      <Card className="p-5 border-[#E2DACD] dark:border-[#332F2B] space-y-4">
         <h3 className="text-sm font-bold text-gray-900 dark:text-white">Visual Theme & Aesthetics</h3>
         <div className="flex items-center justify-between">
           <div>
@@ -148,14 +148,14 @@ export const SettingsView: React.FC = () => {
       </Card>
 
       {/* Audio & Notifications */}
-      <Card className="p-5 border-black/10 dark:border-white/10 space-y-4">
+      <Card className="p-5 border-[#E2DACD] dark:border-[#332F2B] space-y-4">
         <h3 className="text-sm font-bold text-gray-900 dark:text-white">Audio Cues & System Alerts</h3>
 
         <div className="flex items-center justify-between">
           <div className="flex items-center space-x-2">
-            <Volume2 className="w-4 h-4 text-indigo-500" />
+            <Volume2 className="w-4 h-4 text-[#D85A2A] dark:text-[#E56B3A]" />
             <div>
-              <div className="text-xs font-semibold text-gray-800 dark:text-gray-200">Web Audio Feedback</div>
+              <div className="text-xs font-semibold text-gray-800 dark:text-gray-200">Audio Feedback</div>
               <div className="text-[11px] text-gray-500">Play UI clicks, focus bell rings, and achievement chimes</div>
             </div>
           </div>
@@ -163,45 +163,45 @@ export const SettingsView: React.FC = () => {
             type="checkbox"
             checked={settings.soundEnabled}
             onChange={(e) => updateSettings({ soundEnabled: e.target.checked })}
-            className="rounded text-indigo-500 cursor-pointer"
+            className="rounded cursor-pointer accent-[#D85A2A] dark:accent-[#E56B3A]"
           />
         </div>
 
         <div className="flex items-center justify-between pt-3 border-t border-black/5 dark:border-white/5">
           <div className="flex items-center space-x-2">
-            <Bell className="w-4 h-4 text-amber-500" />
+            <Bell className="w-4 h-4 text-[#D9A05B] dark:text-[#E5B574]" />
             <div>
               <div className="text-xs font-semibold text-gray-800 dark:text-gray-200">System Notifications</div>
-              <div className="text-[11px] text-gray-500">Show assignment and hackathon deadline reminder toasts</div>
+              <div className="text-[11px] text-gray-500">Show assignment and deadline reminder toasts</div>
             </div>
           </div>
           <input
             type="checkbox"
             checked={settings.notificationsEnabled}
             onChange={(e) => updateSettings({ notificationsEnabled: e.target.checked })}
-            className="rounded text-indigo-500 cursor-pointer"
+            className="rounded cursor-pointer accent-[#D85A2A] dark:accent-[#E56B3A]"
           />
         </div>
       </Card>
 
       {/* Data Backup, Export & Import */}
-      <Card className="p-5 border-emerald-500/30 space-y-4">
+      <Card className="p-5 border-[#E2DACD] dark:border-[#332F2B] space-y-4">
         <h3 className="text-sm font-bold text-gray-900 dark:text-white flex items-center space-x-2">
-          <Shield className="w-4 h-4 text-emerald-500" />
-          <span>Database Export, Import & CSV Backup</span>
+          <Shield className="w-4 h-4 text-[#8A9A86] dark:text-[#9DB098]" />
+          <span>Data Export, Import & CSV Backup</span>
         </h3>
 
         <p className="text-xs text-gray-500">
-          Your MOMENTUM OS data is persisted locally in client IndexedDB / LocalStorage. Download full JSON or CSV backups or restore from an existing JSON file.
+          Your MOMENTUM OS data is stored locally in client IndexedDB / LocalStorage. Download full JSON or CSV backups or restore from an existing JSON file.
         </p>
 
         <div className="flex flex-wrap gap-3 pt-2">
-          <Button onClick={exportDataJSON} variant="emerald" size="md">
+          <Button onClick={exportDataJSON} variant="primary" size="md">
             <Download className="w-4 h-4 mr-1.5" /> Export Data JSON
           </Button>
 
           <Button onClick={exportDataCSV} variant="secondary" size="md">
-            <FileSpreadsheet className="w-4 h-4 mr-1.5 text-cyan-400" /> Export CSV Spreadsheet
+            <FileSpreadsheet className="w-4 h-4 mr-1.5 text-[#D85A2A] dark:text-[#E56B3A]" /> Export CSV Spreadsheet
           </Button>
 
           <Button onClick={() => fileInputRef.current?.click()} variant="secondary" size="md">
@@ -215,8 +215,8 @@ export const SettingsView: React.FC = () => {
             className="hidden"
           />
 
-          <Button onClick={handleClearWorkspace} variant="outline" size="md">
-            <RotateCcw className="w-4 h-4 mr-1.5 text-rose-500" /> Clear All Workspace Data
+          <Button onClick={handleClearWorkspace} variant="destructive" size="md">
+            <RotateCcw className="w-4 h-4 mr-1.5" /> Clear All Workspace Data
           </Button>
         </div>
       </Card>

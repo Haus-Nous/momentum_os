@@ -30,7 +30,7 @@ export const GoalCard: React.FC<GoalCardProps> = ({ goal }) => {
 
   return (
     <>
-      <Card className="p-5 border-black/10 dark:border-white/10 relative overflow-hidden flex flex-col justify-between space-y-4">
+      <Card className="p-5 border-[#E2DACD] dark:border-[#332F2B] relative overflow-hidden flex flex-col justify-between space-y-4">
         <div>
           {/* Header Row */}
           <div className="flex items-start justify-between">
@@ -47,15 +47,15 @@ export const GoalCard: React.FC<GoalCardProps> = ({ goal }) => {
             <div className="flex items-center space-x-1">
               <button
                 onClick={() => setIsAIBreakdownOpen(true)}
-                className="p-1 text-indigo-400 hover:text-indigo-300"
+                className="p-1 text-[#D85A2A] dark:text-[#E56B3A] hover:text-[#C44E20] cursor-pointer"
                 title="AI Goal Breakdown"
               >
                 <Sparkles className="w-4 h-4" />
               </button>
-              <button onClick={() => setIsEditOpen(true)} className="p-1 text-gray-400 hover:text-white">
+              <button onClick={() => setIsEditOpen(true)} className="p-1 text-gray-400 hover:text-gray-900 dark:hover:text-white cursor-pointer">
                 <Edit className="w-4 h-4" />
               </button>
-              <button onClick={() => deleteGoal(goal.id)} className="p-1 text-gray-400 hover:text-rose-500">
+              <button onClick={() => deleteGoal(goal.id)} className="p-1 text-gray-400 hover:text-[#D93829] dark:hover:text-[#ED4B3B] cursor-pointer">
                 <Trash2 className="w-4 h-4" />
               </button>
             </div>
@@ -64,20 +64,20 @@ export const GoalCard: React.FC<GoalCardProps> = ({ goal }) => {
           {/* Vision & Why Drivers */}
           {goal.vision && (
             <p className="text-xs text-gray-600 dark:text-gray-300 mt-2 font-medium">
-              <span className="font-bold text-emerald-500">Vision:</span> {goal.vision}
+              <span className="font-bold text-[#8A9A86] dark:text-[#9DB098]">Vision:</span> {goal.vision}
             </p>
           )}
 
           {goal.why && (
             <p className="text-[11px] text-gray-500 dark:text-gray-400 mt-1 italic">
-              <span className="font-semibold text-indigo-400">Why:</span> "{goal.why}"
+              <span className="font-semibold text-[#D85A2A] dark:text-[#E56B3A]">Why:</span> "{goal.why}"
             </p>
           )}
 
           {/* Self-Reward Tag */}
           {goal.reward && (
-            <div className="mt-3 p-2 rounded-xl bg-amber-500/10 border border-amber-500/20 text-xs text-amber-600 dark:text-amber-300 font-semibold flex items-center space-x-1.5">
-              <Gift className="w-4 h-4 text-amber-500 shrink-0" />
+            <div className="mt-3 p-2 rounded-xl bg-[#D9A05B]/10 border border-[#D9A05B]/20 text-xs text-[#D9A05B] dark:text-[#E5B574] font-semibold flex items-center space-x-1.5">
+              <Gift className="w-4 h-4 text-[#D9A05B] dark:text-[#E5B574] shrink-0" />
               <span>Reward at 100%: {goal.reward}</span>
             </div>
           )}
@@ -92,9 +92,9 @@ export const GoalCard: React.FC<GoalCardProps> = ({ goal }) => {
                 <div
                   key={m.id}
                   onClick={() => toggleMilestone(goal.id, m.id)}
-                  className="flex items-center space-x-2 text-xs text-gray-700 dark:text-gray-300 cursor-pointer hover:text-emerald-400"
+                  className="flex items-center space-x-2 text-xs text-gray-700 dark:text-gray-300 cursor-pointer hover:text-[#8A9A86] dark:hover:text-[#9DB098]"
                 >
-                  <input type="checkbox" checked={m.completed} onChange={() => {}} className="rounded text-emerald-500" />
+                  <input type="checkbox" checked={m.completed} onChange={() => {}} className="rounded accent-[#D85A2A] dark:accent-[#E56B3A]" />
                   <span className={m.completed ? 'line-through text-gray-400' : ''}>{m.title}</span>
                 </div>
               ))}
@@ -107,7 +107,7 @@ export const GoalCard: React.FC<GoalCardProps> = ({ goal }) => {
           <ProgressBar progress={goal.progressPercent} label="Goal Completion" />
           <div className="flex items-center justify-between text-[10px] text-gray-400 font-mono">
             <span>Target: {goal.targetDate}</span>
-            <span className="font-bold text-emerald-400">{goal.progressPercent}% Complete</span>
+            <span className="font-bold text-[#8A9A86] dark:text-[#9DB098]">{goal.progressPercent}% Complete</span>
           </div>
         </div>
       </Card>

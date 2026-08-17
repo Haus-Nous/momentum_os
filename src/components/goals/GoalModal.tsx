@@ -87,14 +87,14 @@ export const GoalModal: React.FC<GoalModalProps> = ({ isOpen, onClose, initialGo
   };
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/70 backdrop-blur-md p-4">
-      <div className="w-full max-w-lg bg-white dark:bg-[#0d111a] border border-black/10 dark:border-white/15 rounded-2xl shadow-2xl overflow-hidden p-6 animate-in fade-in zoom-in-95 duration-150 max-h-[90vh] overflow-y-auto">
+    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-md p-4">
+      <div className="w-full max-w-lg bg-[#F3EFE6] dark:bg-[#1C1A18] border border-[#E2DACD] dark:border-[#332F2B] rounded-2xl shadow-xl overflow-hidden p-6 animate-in fade-in zoom-in-95 duration-150 max-h-[90vh] overflow-y-auto">
         <div className="flex items-center justify-between pb-4 border-b border-black/10 dark:border-white/10">
           <h2 className="text-base font-bold text-gray-900 dark:text-white flex items-center space-x-2">
-            <Target className="w-5 h-5 text-emerald-500" />
-            <span>{initialGoal ? 'Edit Goal Architecture' : 'Create North Star Goal'}</span>
+            <Target className="w-5 h-5 text-[#D85A2A] dark:text-[#E56B3A]" />
+            <span>{initialGoal ? 'Edit Goal' : 'Create New Goal'}</span>
           </h2>
-          <button onClick={onClose} className="p-1 rounded-lg text-gray-400 hover:text-white">
+          <button onClick={onClose} className="p-1 rounded-lg text-gray-400 hover:text-gray-900 dark:hover:text-white cursor-pointer">
             <X className="w-4 h-4" />
           </button>
         </div>
@@ -114,14 +114,14 @@ export const GoalModal: React.FC<GoalModalProps> = ({ isOpen, onClose, initialGo
               <select
                 value={horizon}
                 onChange={(e) => setHorizon(e.target.value as GoalHorizon)}
-                className="w-full bg-white/60 dark:bg-white/5 border border-black/10 dark:border-white/10 rounded-xl px-3 py-2 text-gray-900 dark:text-white focus:outline-none font-bold"
+                className="w-full bg-black/5 dark:bg-white/5 border border-black/10 dark:border-white/10 rounded-xl px-3 py-2 text-gray-900 dark:text-white focus:outline-none font-bold"
               >
-                <option value="daily" className="dark:bg-[#0d111a]">Daily Target</option>
-                <option value="weekly" className="dark:bg-[#0d111a]">Weekly Sprint</option>
-                <option value="monthly" className="dark:bg-[#0d111a]">Monthly Objective</option>
-                <option value="quarterly" className="dark:bg-[#0d111a]">Quarterly OKR</option>
-                <option value="yearly" className="dark:bg-[#0d111a]">Yearly Goal</option>
-                <option value="life" className="dark:bg-[#0d111a]">Life North Star</option>
+                <option value="daily" className="dark:bg-[#1C1A18]">Daily Target</option>
+                <option value="weekly" className="dark:bg-[#1C1A18]">Weekly Sprint</option>
+                <option value="monthly" className="dark:bg-[#1C1A18]">Monthly Objective</option>
+                <option value="quarterly" className="dark:bg-[#1C1A18]">Quarterly OKR</option>
+                <option value="yearly" className="dark:bg-[#1C1A18]">Yearly Goal</option>
+                <option value="life" className="dark:bg-[#1C1A18]">Life North Star</option>
               </select>
             </div>
 
@@ -130,13 +130,13 @@ export const GoalModal: React.FC<GoalModalProps> = ({ isOpen, onClose, initialGo
               <select
                 value={category}
                 onChange={(e) => setCategory(e.target.value as any)}
-                className="w-full bg-white/60 dark:bg-white/5 border border-black/10 dark:border-white/10 rounded-xl px-3 py-2 text-gray-900 dark:text-white focus:outline-none"
+                className="w-full bg-black/5 dark:bg-white/5 border border-black/10 dark:border-white/10 rounded-xl px-3 py-2 text-gray-900 dark:text-white focus:outline-none"
               >
-                <option value="career" className="dark:bg-[#0d111a]">Career 💼</option>
-                <option value="academic" className="dark:bg-[#0d111a]">Academic 🎓</option>
-                <option value="fitness" className="dark:bg-[#0d111a]">Fitness 🏋️‍♂️</option>
-                <option value="financial" className="dark:bg-[#0d111a]">Financial 💰</option>
-                <option value="personal" className="dark:bg-[#0d111a]">Personal ✨</option>
+                <option value="career" className="dark:bg-[#1C1A18]">Career 💼</option>
+                <option value="academic" className="dark:bg-[#1C1A18]">Academic 🎓</option>
+                <option value="fitness" className="dark:bg-[#1C1A18]">Fitness 🏋️‍♂️</option>
+                <option value="financial" className="dark:bg-[#1C1A18]">Financial 💰</option>
+                <option value="personal" className="dark:bg-[#1C1A18]">Personal ✨</option>
               </select>
             </div>
 
@@ -180,7 +180,7 @@ export const GoalModal: React.FC<GoalModalProps> = ({ isOpen, onClose, initialGo
                 value={milestoneInput}
                 onChange={(e) => setMilestoneInput(e.target.value)}
                 placeholder="Add milestone checkpoint..."
-                className="flex-1 bg-white/60 dark:bg-white/5 border border-black/10 dark:border-white/10 rounded-xl px-3 py-1.5 text-xs text-gray-900 dark:text-white focus:outline-none"
+                className="flex-1 bg-black/5 dark:bg-white/5 border border-black/10 dark:border-white/10 rounded-xl px-3 py-1.5 text-xs text-gray-900 dark:text-white focus:outline-none"
               />
               <Button type="button" onClick={handleAddMilestone} variant="secondary" size="sm">Add</Button>
             </div>
@@ -188,7 +188,7 @@ export const GoalModal: React.FC<GoalModalProps> = ({ isOpen, onClose, initialGo
               {milestones.map((m) => (
                 <div key={m.id} className="flex items-center justify-between bg-black/5 dark:bg-white/5 px-2.5 py-1 rounded-lg text-xs">
                   <span>{m.title}</span>
-                  <button type="button" onClick={() => handleRemoveMilestone(m.id)} className="text-gray-400 hover:text-rose-500">
+                  <button type="button" onClick={() => handleRemoveMilestone(m.id)} className="text-gray-400 hover:text-[#D93829] dark:hover:text-[#ED4B3B]">
                     <X className="w-3.5 h-3.5" />
                   </button>
                 </div>
@@ -198,7 +198,7 @@ export const GoalModal: React.FC<GoalModalProps> = ({ isOpen, onClose, initialGo
 
           <div className="pt-4 border-t border-black/10 dark:border-white/10 flex justify-end space-x-2">
             <Button type="button" onClick={onClose} variant="ghost" size="sm">Cancel</Button>
-            <Button type="submit" variant="emerald" size="sm">{initialGoal ? 'Update Goal' : 'Create Goal'}</Button>
+            <Button type="submit" variant="primary" size="sm">{initialGoal ? 'Update Goal' : 'Create Goal'}</Button>
           </div>
         </form>
       </div>

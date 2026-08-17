@@ -23,10 +23,10 @@ export const TaskKanban: React.FC<TaskKanbanProps> = ({ tasks }) => {
       {columns.map((col) => {
         const colTasks = tasks.filter((t) => t.status === col.id);
         return (
-          <div key={col.id} className={`glass-card rounded-2xl p-3 border ${col.bg} flex flex-col h-[650px]`}>
+          <div key={col.id} className="rounded-2xl p-3 border border-[#E2DACD] dark:border-[#332F2B] bg-[#F3EFE6] dark:bg-[#1C1A18] flex flex-col h-[650px]">
             <div className="flex items-center justify-between pb-2 mb-2 border-b border-black/5 dark:border-white/5">
               <h3 className={`text-xs font-bold ${col.color}`}>{col.title}</h3>
-              <span className="text-[10px] px-1.5 py-0.5 rounded-full font-bold bg-black/10 dark:bg-white/10 text-gray-400">
+              <span className="text-[10px] px-1.5 py-0.5 rounded-full font-bold bg-black/10 dark:bg-white/10 text-gray-500 dark:text-gray-400">
                 {colTasks.length}
               </span>
             </div>

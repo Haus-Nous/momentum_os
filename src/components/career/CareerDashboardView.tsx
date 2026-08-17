@@ -58,11 +58,11 @@ export const CareerDashboardView: React.FC = () => {
           </div>
 
           <div className="flex items-center space-x-2">
-            <Button onClick={() => setIsInternshipModalOpen(true)} variant="emerald" size="md">
+            <Button onClick={() => setIsInternshipModalOpen(true)} variant="primary" size="md">
               <Plus className="w-4 h-4 mr-1.5" /> {labels.internshipButton}
             </Button>
             <Button onClick={() => setIsHackathonModalOpen(true)} variant="secondary" size="md">
-              <Trophy className="w-4 h-4 mr-1.5 text-purple-400" /> {labels.hackathonButton}
+              <Trophy className="w-4 h-4 mr-1.5 text-[#D85A2A] dark:text-[#E56B3A]" /> {labels.hackathonButton}
             </Button>
           </div>
         </div>
@@ -82,12 +82,12 @@ export const CareerDashboardView: React.FC = () => {
                   <span className="font-mono text-[10px] text-gray-500">{stageInternships.length}</span>
                 </div>
 
-                <div className={`p-2.5 rounded-2xl bg-black/5 dark:bg-white/5 border ${stage.color} min-h-[160px] space-y-2`}>
+                <div className="p-2.5 rounded-2xl bg-black/5 dark:bg-white/5 border border-[#E2DACD] dark:border-[#332F2B] min-h-[160px] space-y-2">
                   {stageInternships.map((int) => (
-                    <Card key={int.id} className="p-3 border-black/10 dark:border-white/10 space-y-1 text-xs">
+                    <Card key={int.id} className="p-3 border-[#E2DACD] dark:border-[#332F2B] space-y-1 text-xs">
                       <div className="font-bold text-gray-900 dark:text-white">{int.company}</div>
                       <div className="text-[11px] text-gray-400">{int.role}</div>
-                      {int.salary && <div className="text-[10px] text-emerald-400 font-mono">{int.salary}</div>}
+                      {int.salary && <div className="text-[10px] text-[#8A9A86] dark:text-[#9DB098] font-mono">{int.salary}</div>}
                     </Card>
                   ))}
                 </div>
@@ -100,10 +100,10 @@ export const CareerDashboardView: React.FC = () => {
       {/* Research Papers & Certifications Grid */}
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
         {/* Research Papers */}
-        <Card className="p-5 border-cyan-500/30 space-y-4">
+        <Card className="p-5 border-[#E2DACD] dark:border-[#332F2B] space-y-4">
           <div className="flex items-center justify-between pb-2 border-b border-black/5 dark:border-white/5">
             <h3 className="text-sm font-bold text-gray-900 dark:text-white flex items-center space-x-2">
-              <FileText className="w-4 h-4 text-cyan-400" />
+              <FileText className="w-4 h-4 text-[#D85A2A] dark:text-[#E56B3A]" />
               <span>Research Papers & Publications ({researchPapers.length})</span>
             </h3>
           </div>
@@ -112,7 +112,7 @@ export const CareerDashboardView: React.FC = () => {
             {researchPapers.map((rp) => (
               <div key={rp.id} className="p-3.5 rounded-xl bg-black/5 dark:bg-white/5 border border-black/5 dark:border-white/5 space-y-1 text-xs">
                 <div className="font-bold text-gray-900 dark:text-white">{rp.title}</div>
-                <div className="text-[11px] text-cyan-400">{rp.journal}</div>
+                <div className="text-[11px] text-[#D85A2A] dark:text-[#E56B3A]">{rp.journal}</div>
                 <div className="text-[10px] text-gray-500">Co-authors: {rp.coAuthors.join(', ')}</div>
               </div>
             ))}
@@ -120,10 +120,10 @@ export const CareerDashboardView: React.FC = () => {
         </Card>
 
         {/* Certifications */}
-        <Card className="p-5 border-amber-500/30 space-y-4">
+        <Card className="p-5 border-[#E2DACD] dark:border-[#332F2B] space-y-4">
           <div className="flex items-center justify-between pb-2 border-b border-black/5 dark:border-white/5">
             <h3 className="text-sm font-bold text-gray-900 dark:text-white flex items-center space-x-2">
-              <Award className="w-4 h-4 text-amber-400" />
+              <Award className="w-4 h-4 text-[#D9A05B] dark:text-[#E5B574]" />
               <span>Industry Certifications ({certifications.length})</span>
             </h3>
           </div>
@@ -132,7 +132,7 @@ export const CareerDashboardView: React.FC = () => {
             {certifications.map((cert) => (
               <div key={cert.id} className="p-3.5 rounded-xl bg-black/5 dark:bg-white/5 border border-black/5 dark:border-white/5 space-y-1 text-xs">
                 <div className="font-bold text-gray-900 dark:text-white">{cert.name}</div>
-                <div className="text-[11px] text-amber-400">{cert.issuer} • Issued {cert.issueDate}</div>
+                <div className="text-[11px] text-[#D9A05B] dark:text-[#E5B574]">{cert.issuer} • Issued {cert.issueDate}</div>
               </div>
             ))}
           </div>

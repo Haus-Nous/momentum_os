@@ -24,24 +24,24 @@ export const HabitsView: React.FC = () => {
       <GamificationCard />
 
       {/* Workspace Header Controls */}
-      <div className="flex flex-col md:flex-row items-start md:items-center justify-between gap-4 glass-card p-4 rounded-2xl border border-black/10 dark:border-white/10">
+      <div className="flex flex-col md:flex-row items-start md:items-center justify-between gap-4 p-4 rounded-2xl border border-[#E2DACD] dark:border-[#332F2B] bg-[#F3EFE6] dark:bg-[#1C1A18]">
         <div className="flex items-center space-x-2">
           {/* Tab Switcher */}
           <div className="flex items-center bg-black/5 dark:bg-white/5 p-1 rounded-xl border border-black/5 dark:border-white/10 text-xs">
             <button
               onClick={() => setTab('active')}
-              className={`flex items-center space-x-1.5 px-3 py-1.5 rounded-lg font-semibold transition-colors ${
-                tab === 'active' ? 'bg-indigo-600 text-white' : 'text-gray-500 hover:text-gray-900 dark:text-gray-400 dark:hover:text-white'
+              className={`flex items-center space-x-1.5 px-3 py-1.5 rounded-lg font-semibold transition-colors cursor-pointer ${
+                tab === 'active' ? 'bg-[#D85A2A] dark:bg-[#E56B3A] text-white shadow-sm' : 'text-gray-600 hover:text-gray-900 dark:text-gray-400 dark:hover:text-white'
               }`}
             >
-              <Flame className="w-3.5 h-3.5 text-amber-400" />
+              <Flame className="w-3.5 h-3.5 text-[#D9A05B] dark:text-[#E5B574]" />
               <span>Active Habits ({activeHabits.length})</span>
             </button>
 
             <button
               onClick={() => setTab('paused_archived')}
-              className={`flex items-center space-x-1.5 px-3 py-1.5 rounded-lg font-semibold transition-colors ${
-                tab === 'paused_archived' ? 'bg-indigo-600 text-white' : 'text-gray-500 hover:text-gray-900 dark:text-gray-400 dark:hover:text-white'
+              className={`flex items-center space-x-1.5 px-3 py-1.5 rounded-lg font-semibold transition-colors cursor-pointer ${
+                tab === 'paused_archived' ? 'bg-[#D85A2A] dark:bg-[#E56B3A] text-white shadow-sm' : 'text-gray-600 hover:text-gray-900 dark:text-gray-400 dark:hover:text-white'
               }`}
             >
               <Archive className="w-3.5 h-3.5" />
@@ -50,19 +50,19 @@ export const HabitsView: React.FC = () => {
 
             <button
               onClick={() => setTab('analytics')}
-              className={`flex items-center space-x-1.5 px-3 py-1.5 rounded-lg font-semibold transition-colors ${
-                tab === 'analytics' ? 'bg-indigo-600 text-white' : 'text-gray-500 hover:text-gray-900 dark:text-gray-400 dark:hover:text-white'
+              className={`flex items-center space-x-1.5 px-3 py-1.5 rounded-lg font-semibold transition-colors cursor-pointer ${
+                tab === 'analytics' ? 'bg-[#D85A2A] dark:bg-[#E56B3A] text-white shadow-sm' : 'text-gray-600 hover:text-gray-900 dark:text-gray-400 dark:hover:text-white'
               }`}
             >
-              <BarChart2 className="w-3.5 h-3.5 text-emerald-400" />
-              <span>Advanced Analytics</span>
+              <BarChart2 className="w-3.5 h-3.5 text-[#8A9A86] dark:text-[#9DB098]" />
+              <span>Analytics</span>
             </button>
           </div>
         </div>
 
-        <Button onClick={() => setIsCreateOpen(true)} variant="emerald" size="md">
+        <Button onClick={() => setIsCreateOpen(true)} variant="primary" size="md">
           <Plus className="w-4 h-4 mr-1.5" />
-          <span>New Habit Protocol</span>
+          <span>New Habit</span>
         </Button>
       </div>
 
@@ -92,7 +92,7 @@ export const HabitsView: React.FC = () => {
 
           {activeHabits.length === 0 && (
             <div className="col-span-full p-12 text-center text-xs text-gray-500 border border-dashed border-black/10 dark:border-white/10 rounded-2xl">
-              No active habits scheduled. Click "New Habit Protocol" above to start!
+              No active habits scheduled. Click "New Habit" above to start!
             </div>
           )}
         </div>

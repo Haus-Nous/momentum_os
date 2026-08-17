@@ -100,14 +100,14 @@ export const TaskCreateModal: React.FC<TaskCreateModalProps> = ({ isOpen, onClos
   };
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/70 backdrop-blur-md p-4">
-      <div className="w-full max-w-xl bg-white dark:bg-[#0d111a] border border-black/10 dark:border-white/15 rounded-2xl shadow-2xl overflow-hidden p-6 animate-in fade-in zoom-in-95 duration-150 max-h-[90vh] overflow-y-auto">
+    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-md p-4">
+      <div className="w-full max-w-xl bg-[#F3EFE6] dark:bg-[#1C1A18] border border-[#E2DACD] dark:border-[#332F2B] rounded-2xl shadow-xl overflow-hidden p-6 animate-in fade-in zoom-in-95 duration-150 max-h-[90vh] overflow-y-auto">
         <div className="flex items-center justify-between pb-4 border-b border-black/10 dark:border-white/10">
           <h2 className="text-base font-bold text-gray-900 dark:text-white flex items-center space-x-2">
-            <CheckSquare className="w-5 h-5 text-indigo-500" />
-            <span>{initialTask ? 'Edit Task Protocol' : 'Create New High-Leverage Task'}</span>
+            <CheckSquare className="w-5 h-5 text-[#D85A2A] dark:text-[#E56B3A]" />
+            <span>{initialTask ? 'Edit Task' : 'Create New Task'}</span>
           </h2>
-          <button onClick={onClose} className="p-1 rounded-lg text-gray-400 hover:text-white">
+          <button onClick={onClose} className="p-1 rounded-lg text-gray-400 hover:text-gray-900 dark:hover:text-white cursor-pointer">
             <X className="w-4 h-4" />
           </button>
         </div>
@@ -135,14 +135,14 @@ export const TaskCreateModal: React.FC<TaskCreateModalProps> = ({ isOpen, onClos
               <select
                 value={status}
                 onChange={(e) => setStatus(e.target.value as TaskStatus)}
-                className="w-full bg-white/60 dark:bg-white/5 border border-black/10 dark:border-white/10 rounded-xl px-3 py-2 text-gray-900 dark:text-white focus:outline-none"
+                className="w-full bg-black/5 dark:bg-white/5 border border-black/10 dark:border-white/10 rounded-xl px-3 py-2 text-gray-900 dark:text-white focus:outline-none"
               >
-                <option value="todo" className="dark:bg-[#0d111a]">Todo ⏹️</option>
-                <option value="doing" className="dark:bg-[#0d111a]">Doing ⏳</option>
-                <option value="blocked" className="dark:bg-[#0d111a]">Blocked ⛔</option>
-                <option value="waiting" className="dark:bg-[#0d111a]">Waiting ⏸️</option>
-                <option value="completed" className="dark:bg-[#0d111a]">Completed ✅</option>
-                <option value="cancelled" className="dark:bg-[#0d111a]">Cancelled ❌</option>
+                <option value="todo" className="dark:bg-[#1C1A18]">Todo ⏹️</option>
+                <option value="doing" className="dark:bg-[#1C1A18]">Doing ⏳</option>
+                <option value="blocked" className="dark:bg-[#1C1A18]">Blocked ⛔</option>
+                <option value="waiting" className="dark:bg-[#1C1A18]">Waiting ⏸️</option>
+                <option value="completed" className="dark:bg-[#1C1A18]">Completed ✅</option>
+                <option value="cancelled" className="dark:bg-[#1C1A18]">Cancelled ❌</option>
               </select>
             </div>
 
@@ -151,12 +151,12 @@ export const TaskCreateModal: React.FC<TaskCreateModalProps> = ({ isOpen, onClos
               <select
                 value={priority}
                 onChange={(e) => setPriority(e.target.value as Priority)}
-                className="w-full bg-white/60 dark:bg-white/5 border border-black/10 dark:border-white/10 rounded-xl px-3 py-2 text-gray-900 dark:text-white focus:outline-none"
+                className="w-full bg-black/5 dark:bg-white/5 border border-black/10 dark:border-white/10 rounded-xl px-3 py-2 text-gray-900 dark:text-white focus:outline-none"
               >
-                <option value="urgent" className="dark:bg-[#0d111a]">P1 - Urgent</option>
-                <option value="high" className="dark:bg-[#0d111a]">P2 - High</option>
-                <option value="medium" className="dark:bg-[#0d111a]">P3 - Medium</option>
-                <option value="low" className="dark:bg-[#0d111a]">P4 - Low</option>
+                <option value="urgent" className="dark:bg-[#1C1A18]">P1 - Urgent</option>
+                <option value="high" className="dark:bg-[#1C1A18]">P2 - High</option>
+                <option value="medium" className="dark:bg-[#1C1A18]">P3 - Medium</option>
+                <option value="low" className="dark:bg-[#1C1A18]">P4 - Low</option>
               </select>
             </div>
 
@@ -165,11 +165,11 @@ export const TaskCreateModal: React.FC<TaskCreateModalProps> = ({ isOpen, onClos
               <select
                 value={energyLevel}
                 onChange={(e) => setEnergyLevel(e.target.value as EnergyLevel)}
-                className="w-full bg-white/60 dark:bg-white/5 border border-black/10 dark:border-white/10 rounded-xl px-3 py-2 text-gray-900 dark:text-white focus:outline-none"
+                className="w-full bg-black/5 dark:bg-white/5 border border-black/10 dark:border-white/10 rounded-xl px-3 py-2 text-gray-900 dark:text-white focus:outline-none"
               >
-                <option value="high" className="dark:bg-[#0d111a]">⚡ High Energy</option>
-                <option value="medium" className="dark:bg-[#0d111a]">⚙️ Medium Energy</option>
-                <option value="low" className="dark:bg-[#0d111a]">🌿 Low Energy</option>
+                <option value="high" className="dark:bg-[#1C1A18]">⚡ High Energy</option>
+                <option value="medium" className="dark:bg-[#1C1A18]">⚙️ Medium Energy</option>
+                <option value="low" className="dark:bg-[#1C1A18]">🌿 Low Energy</option>
               </select>
             </div>
           </div>
@@ -203,10 +203,10 @@ export const TaskCreateModal: React.FC<TaskCreateModalProps> = ({ isOpen, onClos
               <select
                 value={projectId}
                 onChange={(e) => setProjectId(e.target.value)}
-                className="w-full bg-white/60 dark:bg-white/5 border border-black/10 dark:border-white/10 rounded-xl px-3 py-2 text-gray-900 dark:text-white focus:outline-none"
+                className="w-full bg-black/5 dark:bg-white/5 border border-black/10 dark:border-white/10 rounded-xl px-3 py-2 text-gray-900 dark:text-white focus:outline-none"
               >
                 {projects.map((p) => (
-                  <option key={p.id} value={p.id} className="dark:bg-[#0d111a]">{p.name}</option>
+                  <option key={p.id} value={p.id} className="dark:bg-[#1C1A18]">{p.name}</option>
                 ))}
               </select>
             </div>
@@ -235,7 +235,7 @@ export const TaskCreateModal: React.FC<TaskCreateModalProps> = ({ isOpen, onClos
                 value={subtaskInput}
                 onChange={(e) => setSubtaskInput(e.target.value)}
                 placeholder="Add subtask step..."
-                className="flex-1 bg-white/60 dark:bg-white/5 border border-black/10 dark:border-white/10 rounded-xl px-3 py-1.5 text-xs text-gray-900 dark:text-white focus:outline-none"
+                className="flex-1 bg-black/5 dark:bg-white/5 border border-black/10 dark:border-white/10 rounded-xl px-3 py-1.5 text-xs text-gray-900 dark:text-white focus:outline-none"
               />
               <Button type="button" onClick={handleAddSubtask} variant="secondary" size="sm">Add</Button>
             </div>
@@ -243,7 +243,7 @@ export const TaskCreateModal: React.FC<TaskCreateModalProps> = ({ isOpen, onClos
               {subtasks.map((st) => (
                 <div key={st.id} className="flex items-center justify-between bg-black/5 dark:bg-white/5 px-2.5 py-1 rounded-lg text-xs">
                   <span>{st.title}</span>
-                  <button type="button" onClick={() => handleRemoveSubtask(st.id)} className="text-gray-400 hover:text-rose-500">
+                  <button type="button" onClick={() => handleRemoveSubtask(st.id)} className="text-gray-400 hover:text-[#D93829] dark:hover:text-[#ED4B3B]">
                     <X className="w-3.5 h-3.5" />
                   </button>
                 </div>
@@ -261,7 +261,7 @@ export const TaskCreateModal: React.FC<TaskCreateModalProps> = ({ isOpen, onClos
 
           <div className="pt-4 border-t border-black/10 dark:border-white/10 flex justify-end space-x-2">
             <Button type="button" onClick={onClose} variant="ghost" size="sm">Cancel</Button>
-            <Button type="submit" variant="emerald" size="sm">{initialTask ? 'Update Task' : 'Create Task'}</Button>
+            <Button type="submit" variant="primary" size="sm">{initialTask ? 'Update Task' : 'Create Task'}</Button>
           </div>
         </form>
       </div>

@@ -36,24 +36,24 @@ export const TimeBlockGrid: React.FC<TimeBlockGridProps> = ({ events }) => {
   return (
     <div className="space-y-4">
       {/* Controls Bar */}
-      <div className="flex items-center justify-between glass-card p-3 rounded-2xl border border-white/10">
-        <div className="flex items-center space-x-2 text-xs font-bold text-white">
-          <Clock className="w-4 h-4 text-cyan-400" />
+      <div className="flex items-center justify-between p-3 rounded-2xl border border-[#E2DACD] dark:border-[#332F2B] bg-[#F3EFE6] dark:bg-[#1C1A18]">
+        <div className="flex items-center space-x-2 text-xs font-bold text-gray-900 dark:text-white">
+          <Clock className="w-4 h-4 text-[#D85A2A] dark:text-[#E56B3A]" />
           <span>Today's Time Block Schedule</span>
         </div>
 
         <button
           onClick={() => setIsAdding(!isAdding)}
-          className="flex items-center space-x-1.5 bg-indigo-600 hover:bg-indigo-500 text-white font-bold text-xs px-3 py-1.5 rounded-xl transition-all shadow-sm"
+          className="flex items-center space-x-1.5 bg-[#D85A2A] hover:bg-[#C44E20] dark:bg-[#E56B3A] dark:hover:bg-[#D85A2A] text-white font-bold text-xs px-3 py-1.5 rounded-xl transition-all shadow-sm cursor-pointer"
         >
           <Plus className="w-4 h-4" />
-          <span>Add Timeblock Slot</span>
+          <span>Add Timeblock</span>
         </button>
       </div>
 
       {/* Inline Add Timeblock Form */}
       {isAdding && (
-        <form onSubmit={handleAdd} className="glass-card p-4 rounded-2xl border border-indigo-500/30 space-y-3 text-xs">
+        <form onSubmit={handleAdd} className="p-4 rounded-2xl border border-[#E2DACD] dark:border-[#332F2B] bg-[#F3EFE6] dark:bg-[#1C1A18] space-y-3 text-xs">
           <div className="grid grid-cols-1 md:grid-cols-4 gap-3">
             <input
               type="text"
@@ -61,41 +61,41 @@ export const TimeBlockGrid: React.FC<TimeBlockGridProps> = ({ events }) => {
               value={newEventTitle}
               onChange={(e) => setNewEventTitle(e.target.value)}
               placeholder="Block Title (e.g. Deep Work Sprint)"
-              className="bg-white/5 border border-white/10 rounded-xl px-3 py-2 text-white focus:outline-none"
+              className="bg-black/5 dark:bg-white/5 border border-black/10 dark:border-white/10 rounded-xl px-3 py-2 text-gray-900 dark:text-white focus:outline-none"
             />
             <input
               type="time"
               value={startTime}
               onChange={(e) => setStartTime(e.target.value)}
-              className="bg-white/5 border border-white/10 rounded-xl px-3 py-2 text-white focus:outline-none"
+              className="bg-black/5 dark:bg-white/5 border border-black/10 dark:border-white/10 rounded-xl px-3 py-2 text-gray-900 dark:text-white focus:outline-none"
             />
             <input
               type="time"
               value={endTime}
               onChange={(e) => setEndTime(e.target.value)}
-              className="bg-white/5 border border-white/10 rounded-xl px-3 py-2 text-white focus:outline-none"
+              className="bg-black/5 dark:bg-white/5 border border-black/10 dark:border-white/10 rounded-xl px-3 py-2 text-gray-900 dark:text-white focus:outline-none"
             />
             <select
               value={category}
               onChange={(e) => setCategory(e.target.value as any)}
-              className="bg-[#121826] border border-white/10 rounded-xl px-3 py-2 text-white"
+              className="bg-black/5 dark:bg-white/5 border border-black/10 dark:border-white/10 rounded-xl px-3 py-2 text-gray-900 dark:text-white"
             >
-              <option value="deep_work">Deep Work Sprint</option>
-              <option value="routine">Routine Stack</option>
-              <option value="meeting">Sync / Meeting</option>
-              <option value="task">Specific Task</option>
-              <option value="rest">Recovery / Exercise</option>
+              <option value="deep_work" className="dark:bg-[#1C1A18]">Deep Work Sprint</option>
+              <option value="routine" className="dark:bg-[#1C1A18]">Routine Stack</option>
+              <option value="meeting" className="dark:bg-[#1C1A18]">Sync / Meeting</option>
+              <option value="task" className="dark:bg-[#1C1A18]">Specific Task</option>
+              <option value="rest" className="dark:bg-[#1C1A18]">Recovery / Exercise</option>
             </select>
           </div>
           <div className="flex justify-end space-x-2">
             <button
               type="button"
               onClick={() => setIsAdding(false)}
-              className="px-3 py-1 text-gray-400 hover:text-white"
+              className="px-3 py-1 text-gray-500 hover:text-gray-900 dark:hover:text-white cursor-pointer"
             >
               Cancel
             </button>
-            <button type="submit" className="px-4 py-1.5 rounded-lg bg-emerald-600 font-bold text-white">
+            <button type="submit" className="px-4 py-1.5 rounded-lg bg-[#D85A2A] hover:bg-[#C44E20] dark:bg-[#E56B3A] dark:hover:bg-[#D85A2A] font-bold text-white cursor-pointer">
               Schedule Slot
             </button>
           </div>
@@ -103,13 +103,13 @@ export const TimeBlockGrid: React.FC<TimeBlockGridProps> = ({ events }) => {
       )}
 
       {/* 24-Hour Timeline Grid */}
-      <div className="glass-card rounded-2xl p-5 border border-white/10 space-y-1">
+      <div className="rounded-2xl p-5 border border-[#E2DACD] dark:border-[#332F2B] bg-[#F3EFE6] dark:bg-[#1C1A18] space-y-1">
         {hours.map((hour) => {
           const hourStr = `${hour.toString().padStart(2, '0')}:00`;
           const matchingEvents = events.filter((e) => e.startTime.startsWith(hour.toString().padStart(2, '0')));
 
           return (
-            <div key={hour} className="flex items-start space-x-4 py-2 border-b border-white/5 group">
+            <div key={hour} className="flex items-start space-x-4 py-2 border-b border-black/5 dark:border-white/5 group">
               <div className="w-14 text-xs font-mono font-bold text-gray-500 shrink-0 pt-1">
                 {hourStr}
               </div>
@@ -118,11 +118,10 @@ export const TimeBlockGrid: React.FC<TimeBlockGridProps> = ({ events }) => {
                 {matchingEvents.map((evt) => (
                   <div
                     key={evt.id}
-                    className="flex items-center justify-between px-3 py-1.5 rounded-xl text-xs font-semibold border shadow-sm transition-all"
+                    className="flex items-center justify-between px-3 py-1.5 rounded-xl text-xs font-semibold border shadow-sm transition-all text-gray-900 dark:text-white"
                     style={{
                       backgroundColor: `${evt.color}20`,
                       borderColor: `${evt.color}50`,
-                      color: '#ffffff',
                     }}
                   >
                     <div className="flex items-center space-x-2">
@@ -133,7 +132,7 @@ export const TimeBlockGrid: React.FC<TimeBlockGridProps> = ({ events }) => {
 
                     <button
                       onClick={() => deleteCalendarEvent(evt.id)}
-                      className="ml-3 opacity-0 group-hover:opacity-100 hover:text-rose-400 transition-opacity"
+                      className="ml-3 opacity-0 group-hover:opacity-100 hover:text-[#D93829] dark:hover:text-[#ED4B3B] transition-opacity cursor-pointer"
                     >
                       <Trash2 className="w-3.5 h-3.5" />
                     </button>
@@ -141,7 +140,7 @@ export const TimeBlockGrid: React.FC<TimeBlockGridProps> = ({ events }) => {
                 ))}
 
                 {matchingEvents.length === 0 && (
-                  <span className="text-[11px] text-gray-600 opacity-0 group-hover:opacity-100 transition-opacity italic">
+                  <span className="text-[11px] text-gray-400 opacity-0 group-hover:opacity-100 transition-opacity italic">
                     + Open Time Slot
                   </span>
                 )}

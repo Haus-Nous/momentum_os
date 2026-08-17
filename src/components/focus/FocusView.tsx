@@ -20,17 +20,17 @@ export const FocusView: React.FC = () => {
         <div className="rounded-3xl p-6 border border-[#E2DACD] dark:border-[#332F2B] bg-[#F3EFE6] dark:bg-[#1C1A18] flex flex-col justify-between space-y-6">
           <div>
             <div className="flex items-center space-x-2 mb-2">
-              <Volume2 className="w-5 h-5 text-[#C85A32] dark:text-[#D96B43]" />
-              <h3 className="text-sm font-bold text-gray-900 dark:text-white">Procedural Sound Generator</h3>
+              <Volume2 className="w-5 h-5 text-[#D85A2A] dark:text-[#E56B3A]" />
+              <h3 className="text-sm font-bold text-gray-900 dark:text-white">Soundscape Generator</h3>
             </div>
             <p className="text-xs text-gray-600 dark:text-gray-400 leading-relaxed">
-              Synthesize zero-latency procedural ambient audio using native Web Audio API oscillators and pink noise filters.
+              Ambient audio soundscapes to deepen concentration and minimize distraction.
             </p>
 
             <div className="space-y-2.5 mt-6">
               {[
                 { type: 'rain' as const, label: 'Gentle Rain & Thunder', icon: CloudRain, color: 'text-[#78899A] dark:text-[#90A2B4]' },
-                { type: 'lofi' as const, label: 'Warm Lo-Fi Synth', icon: Music, color: 'text-[#C85A32] dark:text-[#D96B43]' },
+                { type: 'lofi' as const, label: 'Warm Lo-Fi Synth', icon: Music, color: 'text-[#D85A2A] dark:text-[#E56B3A]' },
                 { type: 'cafe' as const, label: 'Café Chatter & Warmth', icon: Coffee, color: 'text-[#D9A05B] dark:text-[#E5B574]' },
                 { type: 'forest' as const, label: 'Forest Pine Breeze', icon: Trees, color: 'text-[#8A9A86] dark:text-[#9DB098]' },
               ].map((sound) => {
@@ -42,7 +42,7 @@ export const FocusView: React.FC = () => {
                     onClick={() => toggleAmbientSound(sound.type)}
                     className={`w-full flex items-center justify-between p-3 rounded-xl border text-xs font-semibold transition-all cursor-pointer ${
                       isActive
-                        ? 'bg-[#C85A32]/10 border-[#C85A32]/40 text-[#C85A32] dark:text-[#D96B43] shadow-sm'
+                        ? 'bg-[#D85A2A]/10 border-[#D85A2A]/40 text-[#D85A2A] dark:text-[#E56B3A] shadow-sm'
                         : 'bg-black/5 dark:bg-white/5 border-black/5 dark:border-white/5 text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white'
                     }`}
                   >
@@ -59,8 +59,8 @@ export const FocusView: React.FC = () => {
 
           {/* Volume Control */}
           {ambientSound.isPlaying && (
-            <div className="p-3 rounded-xl bg-white/5 border border-white/10 space-y-1">
-              <div className="flex items-center justify-between text-xs text-gray-300 font-semibold">
+            <div className="p-3 rounded-xl bg-black/5 dark:bg-white/5 border border-black/5 dark:border-white/10 space-y-1">
+              <div className="flex items-center justify-between text-xs text-gray-700 dark:text-gray-300 font-semibold">
                 <span>Soundscape Volume</span>
                 <span className="font-mono">{Math.round(ambientSound.volume * 100)}%</span>
               </div>
@@ -71,7 +71,7 @@ export const FocusView: React.FC = () => {
                 step="0.05"
                 value={ambientSound.volume}
                 onChange={(e) => setAmbientVolume(parseFloat(e.target.value))}
-                className="w-full h-1.5 accent-indigo-500 cursor-pointer"
+                className="w-full h-1.5 accent-[#D85A2A] dark:accent-[#E56B3A] cursor-pointer"
               />
             </div>
           )}

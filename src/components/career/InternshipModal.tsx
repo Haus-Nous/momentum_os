@@ -65,14 +65,14 @@ export const InternshipModal: React.FC<InternshipModalProps> = ({ isOpen, onClos
   };
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/70 backdrop-blur-md p-4">
-      <div className="w-full max-w-lg bg-white dark:bg-[#0d111a] border border-black/10 dark:border-white/15 rounded-2xl shadow-2xl overflow-hidden p-6 animate-in fade-in zoom-in-95 duration-150">
+    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-md p-4">
+      <div className="w-full max-w-lg bg-[#F3EFE6] dark:bg-[#1C1A18] border border-[#E2DACD] dark:border-[#332F2B] rounded-2xl shadow-xl overflow-hidden p-6 animate-in fade-in zoom-in-95 duration-150">
         <div className="flex items-center justify-between pb-4 border-b border-black/10 dark:border-white/10">
           <h2 className="text-base font-bold text-gray-900 dark:text-white flex items-center space-x-2">
-            <Briefcase className="w-5 h-5 text-indigo-500" />
-            <span>{initialInternship ? 'Edit Internship Application' : 'Log New Internship Target'}</span>
+            <Briefcase className="w-5 h-5 text-[#D85A2A] dark:text-[#E56B3A]" />
+            <span>{initialInternship ? 'Edit Application' : 'Log New Application'}</span>
           </h2>
-          <button onClick={onClose} className="p-1 rounded-lg text-gray-400 hover:text-white">
+          <button onClick={onClose} className="p-1 rounded-lg text-gray-400 hover:text-gray-900 dark:hover:text-white cursor-pointer">
             <X className="w-4 h-4" />
           </button>
         </div>
@@ -102,14 +102,14 @@ export const InternshipModal: React.FC<InternshipModalProps> = ({ isOpen, onClos
               <select
                 value={status}
                 onChange={(e) => setStatus(e.target.value as InternshipStatus)}
-                className="w-full bg-white/60 dark:bg-white/5 border border-black/10 dark:border-white/10 rounded-xl px-3 py-2 text-gray-900 dark:text-white focus:outline-none"
+                className="w-full bg-black/5 dark:bg-white/5 border border-black/10 dark:border-white/10 rounded-xl px-3 py-2 text-gray-900 dark:text-white focus:outline-none"
               >
-                <option value="wishlist" className="dark:bg-[#0d111a]">Wishlist 📌</option>
-                <option value="applied" className="dark:bg-[#0d111a]">Applied 🚀</option>
-                <option value="assessment" className="dark:bg-[#0d111a]">Assessment / OA ⚙️</option>
-                <option value="interview" className="dark:bg-[#0d111a]">Interview Round 🎯</option>
-                <option value="offer" className="dark:bg-[#0d111a]">Offer Received 🏆</option>
-                <option value="rejected" className="dark:bg-[#0d111a]">Rejected ❌</option>
+                <option value="wishlist" className="dark:bg-[#1C1A18]">Wishlist 📌</option>
+                <option value="applied" className="dark:bg-[#1C1A18]">Applied 🚀</option>
+                <option value="assessment" className="dark:bg-[#1C1A18]">Assessment / OA ⚙️</option>
+                <option value="interview" className="dark:bg-[#1C1A18]">Interview Round 🎯</option>
+                <option value="offer" className="dark:bg-[#1C1A18]">Offer Received 🏆</option>
+                <option value="rejected" className="dark:bg-[#1C1A18]">Archived ❌</option>
               </select>
             </div>
 
@@ -170,7 +170,7 @@ export const InternshipModal: React.FC<InternshipModalProps> = ({ isOpen, onClos
 
           <div className="pt-4 border-t border-black/10 dark:border-white/10 flex justify-end space-x-2">
             <Button type="button" onClick={onClose} variant="ghost" size="sm">Cancel</Button>
-            <Button type="submit" variant="emerald" size="sm">{initialInternship ? 'Update Application' : 'Save Application'}</Button>
+            <Button type="submit" variant="primary" size="sm">{initialInternship ? 'Update Application' : 'Save Application'}</Button>
           </div>
         </form>
       </div>

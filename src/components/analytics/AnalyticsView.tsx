@@ -48,19 +48,19 @@ export const AnalyticsView: React.FC = () => {
         <div className="flex items-center bg-black/5 dark:bg-white/5 p-1 rounded-xl text-xs font-bold border border-black/5 dark:border-white/10">
           <button
             onClick={() => setTimeframe('weekly')}
-            className={`px-3 py-1.5 rounded-lg transition-colors cursor-pointer ${timeframe === 'weekly' ? 'bg-[#C85A32] dark:bg-[#D96B43] text-white font-bold' : 'text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white'}`}
+            className={`px-3 py-1.5 rounded-lg transition-colors cursor-pointer ${timeframe === 'weekly' ? 'bg-[#D85A2A] dark:bg-[#E56B3A] text-white font-bold shadow-sm' : 'text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white'}`}
           >
             Weekly View
           </button>
           <button
             onClick={() => setTimeframe('monthly')}
-            className={`px-3 py-1.5 rounded-lg transition-colors cursor-pointer ${timeframe === 'monthly' ? 'bg-[#C85A32] dark:bg-[#D96B43] text-white font-bold' : 'text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white'}`}
+            className={`px-3 py-1.5 rounded-lg transition-colors cursor-pointer ${timeframe === 'monthly' ? 'bg-[#D85A2A] dark:bg-[#E56B3A] text-white font-bold shadow-sm' : 'text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white'}`}
           >
             Monthly View
           </button>
           <button
             onClick={() => setTimeframe('yearly')}
-            className={`px-3 py-1.5 rounded-lg transition-colors cursor-pointer ${timeframe === 'yearly' ? 'bg-[#C85A32] dark:bg-[#D96B43] text-white font-bold' : 'text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white'}`}
+            className={`px-3 py-1.5 rounded-lg transition-colors cursor-pointer ${timeframe === 'yearly' ? 'bg-[#D85A2A] dark:bg-[#E56B3A] text-white font-bold shadow-sm' : 'text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white'}`}
           >
             Yearly View
           </button>
@@ -70,9 +70,9 @@ export const AnalyticsView: React.FC = () => {
       {/* Animated Counter Tickers Grid */}
       <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-4">
         {/* Productivity Score */}
-        <Card className="p-4 border-[#C85A32]/30 dark:border-[#D96B43]/30">
+        <Card className="p-4 border-[#D85A2A]/30 dark:border-[#E56B3A]/30">
           <div className="text-[10px] font-bold text-gray-500 uppercase">Productivity Score</div>
-          <div className="text-2xl text-[#C85A32] dark:text-[#D96B43] font-bold font-mono mt-1">
+          <div className="text-2xl text-[#D85A2A] dark:text-[#E56B3A] font-bold font-mono mt-1">
             <AnimatedCounter value={timeframe === 'weekly' ? metrics.weeklyProductivityScore : metrics.monthlyProductivityScore} suffix="/100" />
           </div>
         </Card>
@@ -94,9 +94,9 @@ export const AnalyticsView: React.FC = () => {
         </Card>
 
         {/* Study Hours */}
-        <Card className="p-4 border-[#C85A32]/30 dark:border-[#D96B43]/30">
+        <Card className="p-4 border-[#D85A2A]/30 dark:border-[#E56B3A]/30">
           <div className="text-[10px] font-bold text-gray-500 uppercase">Study Hours</div>
-          <div className="text-2xl text-[#C85A32] dark:text-[#D96B43] font-bold font-mono mt-1">
+          <div className="text-2xl text-[#D85A2A] dark:text-[#E56B3A] font-bold font-mono mt-1">
             <AnimatedCounter value={metrics.studyHours} suffix=" hrs" decimals={1} />
           </div>
         </Card>
@@ -110,7 +110,7 @@ export const AnalyticsView: React.FC = () => {
         </Card>
 
         {/* Sleep Architecture */}
-        <Card className="p-4 border-stone-300 dark:border-stone-700">
+        <Card className="p-4 border-[#E2DACD] dark:border-[#332F2B]">
           <div className="text-[10px] font-bold text-gray-500 uppercase">Avg Sleep</div>
           <div className="text-2xl text-gray-900 dark:text-white font-bold font-mono mt-1">
             <AnimatedCounter value={metrics.avgSleepHours} suffix=" hrs" decimals={1} />
@@ -122,9 +122,9 @@ export const AnalyticsView: React.FC = () => {
       <ProductivityCharts timeframe={timeframe} />
 
       {/* 365-Day Contribution Heatmap */}
-      <Card className="p-5 border-black/10 dark:border-white/10">
-        <h3 className="text-sm font-bold text-gray-900 dark:text-white mb-1">365-Day Global Execution Heatmap</h3>
-        <p className="text-xs text-gray-500 mb-4">GitHub-style activity matrix mapping habit executions across the entire year.</p>
+      <Card className="p-5 border-[#E2DACD] dark:border-[#332F2B]">
+        <h3 className="text-sm font-bold text-gray-900 dark:text-white mb-1">365-Day Global Activity Heatmap</h3>
+        <p className="text-xs text-gray-500 mb-4">Activity matrix mapping habit executions across the entire year.</p>
         <GithubHeatmap completionHistory={combinedHistory} />
       </Card>
 

@@ -84,14 +84,14 @@ export const HabitModal: React.FC<HabitModalProps> = ({ isOpen, onClose, initial
   };
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/70 backdrop-blur-md p-4">
-      <div className="w-full max-w-lg bg-white dark:bg-[#0d111a] border border-black/10 dark:border-white/15 rounded-2xl shadow-2xl overflow-hidden p-6 animate-in fade-in zoom-in-95 duration-150">
+    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-md p-4">
+      <div className="w-full max-w-lg bg-[#F3EFE6] dark:bg-[#1C1A18] border border-[#E2DACD] dark:border-[#332F2B] rounded-2xl shadow-xl overflow-hidden p-6 animate-in fade-in zoom-in-95 duration-150">
         <div className="flex items-center justify-between pb-4 border-b border-black/10 dark:border-white/10">
           <h2 className="text-base font-bold text-gray-900 dark:text-white flex items-center space-x-2">
-            <Flame className="w-5 h-5 text-amber-500" />
-            <span>{initialHabit ? 'Edit Habit Protocol' : 'Create New Habit Protocol'}</span>
+            <Flame className="w-5 h-5 text-[#D9A05B] dark:text-[#E5B574]" />
+            <span>{initialHabit ? 'Edit Habit' : 'Create New Habit'}</span>
           </h2>
-          <button onClick={onClose} className="p-1 rounded-lg text-gray-400 hover:text-white">
+          <button onClick={onClose} className="p-1 rounded-lg text-gray-400 hover:text-gray-900 dark:hover:text-white cursor-pointer">
             <X className="w-4 h-4" />
           </button>
         </div>
@@ -119,10 +119,10 @@ export const HabitModal: React.FC<HabitModalProps> = ({ isOpen, onClose, initial
               <select
                 value={category}
                 onChange={(e) => setCategory(e.target.value as HabitCategory)}
-                className="w-full bg-white/60 dark:bg-white/5 border border-black/10 dark:border-white/10 rounded-xl px-3 py-2 text-gray-900 dark:text-white focus:outline-none"
+                className="w-full bg-black/5 dark:bg-white/5 border border-black/10 dark:border-white/10 rounded-xl px-3 py-2 text-gray-900 dark:text-white focus:outline-none"
               >
                 {categories.map((c) => (
-                  <option key={c.id} value={c.id} className="dark:bg-[#0d111a]">{c.label}</option>
+                  <option key={c.id} value={c.id} className="dark:bg-[#1C1A18]">{c.label}</option>
                 ))}
               </select>
             </div>
@@ -132,12 +132,12 @@ export const HabitModal: React.FC<HabitModalProps> = ({ isOpen, onClose, initial
               <select
                 value={frequency}
                 onChange={(e) => setFrequency(e.target.value as HabitFrequency)}
-                className="w-full bg-white/60 dark:bg-white/5 border border-black/10 dark:border-white/10 rounded-xl px-3 py-2 text-gray-900 dark:text-white focus:outline-none"
+                className="w-full bg-black/5 dark:bg-white/5 border border-black/10 dark:border-white/10 rounded-xl px-3 py-2 text-gray-900 dark:text-white focus:outline-none"
               >
-                <option value="daily" className="dark:bg-[#0d111a]">Daily</option>
-                <option value="weekly" className="dark:bg-[#0d111a]">Weekly Target</option>
-                <option value="monthly" className="dark:bg-[#0d111a]">Monthly Target</option>
-                <option value="custom" className="dark:bg-[#0d111a]">Custom Schedule</option>
+                <option value="daily" className="dark:bg-[#1C1A18]">Daily</option>
+                <option value="weekly" className="dark:bg-[#1C1A18]">Weekly Target</option>
+                <option value="monthly" className="dark:bg-[#1C1A18]">Monthly Target</option>
+                <option value="custom" className="dark:bg-[#1C1A18]">Custom Schedule</option>
               </select>
             </div>
           </div>
@@ -148,12 +148,12 @@ export const HabitModal: React.FC<HabitModalProps> = ({ isOpen, onClose, initial
               <select
                 value={difficulty}
                 onChange={(e) => setDifficulty(e.target.value as HabitDifficulty)}
-                className="w-full bg-white/60 dark:bg-white/5 border border-black/10 dark:border-white/10 rounded-xl px-3 py-2 text-gray-900 dark:text-white focus:outline-none"
+                className="w-full bg-black/5 dark:bg-white/5 border border-black/10 dark:border-white/10 rounded-xl px-3 py-2 text-gray-900 dark:text-white focus:outline-none"
               >
-                <option value="easy" className="dark:bg-[#0d111a]">Easy (+50 XP)</option>
-                <option value="medium" className="dark:bg-[#0d111a]">Medium (+75 XP)</option>
-                <option value="hard" className="dark:bg-[#0d111a]">Hard (+100 XP)</option>
-                <option value="extreme" className="dark:bg-[#0d111a]">Extreme (+150 XP)</option>
+                <option value="easy" className="dark:bg-[#1C1A18]">Easy (+50 XP)</option>
+                <option value="medium" className="dark:bg-[#1C1A18]">Medium (+75 XP)</option>
+                <option value="hard" className="dark:bg-[#1C1A18]">Hard (+100 XP)</option>
+                <option value="extreme" className="dark:bg-[#1C1A18]">Extreme (+150 XP)</option>
               </select>
             </div>
 
@@ -196,7 +196,7 @@ export const HabitModal: React.FC<HabitModalProps> = ({ isOpen, onClose, initial
 
           <div className="pt-4 border-t border-black/10 dark:border-white/10 flex justify-end space-x-2">
             <Button type="button" onClick={onClose} variant="ghost" size="sm">Cancel</Button>
-            <Button type="submit" variant="emerald" size="sm">{initialHabit ? 'Update Habit' : 'Create Habit'}</Button>
+            <Button type="submit" variant="primary" size="sm">{initialHabit ? 'Update Habit' : 'Create Habit'}</Button>
           </div>
         </form>
       </div>

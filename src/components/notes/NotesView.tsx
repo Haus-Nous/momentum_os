@@ -19,7 +19,7 @@ export const NotesView: React.FC = () => {
 
   const handleCreateNote = () => {
     const newNote = {
-      title: 'Untitled Note Protocol',
+      title: 'Untitled Note',
       content: `# Untitled Note\n\nWrite markdown notes or thesis here...\nUse [[Systems Over Motivation Thesis]] for bi-directional links.`,
       tags: ['general'],
       linkedNoteIds: [],
@@ -36,13 +36,13 @@ export const NotesView: React.FC = () => {
           <div>
             <div className="flex items-center justify-between mb-3">
               <div className="flex items-center space-x-2 text-xs font-bold text-gray-900 dark:text-white">
-                <BookOpen className="w-4 h-4 text-[#C85A32] dark:text-[#D96B43]" />
-                <span>Knowledge Graph & Notes</span>
+                <BookOpen className="w-4 h-4 text-[#D85A2A] dark:text-[#E56B3A]" />
+                <span>Notes & Second Brain</span>
               </div>
 
               <button
                 onClick={handleCreateNote}
-                className="p-1.5 rounded-lg bg-[#C85A32] hover:bg-[#B54E29] dark:bg-[#D96B43] dark:hover:bg-[#C85A32] text-white transition-colors cursor-pointer"
+                className="p-1.5 rounded-lg bg-[#D85A2A] hover:bg-[#C44E20] dark:bg-[#E56B3A] dark:hover:bg-[#D85A2A] text-white transition-colors cursor-pointer"
                 title="Create Note"
               >
                 <Plus className="w-4 h-4" />
@@ -69,7 +69,7 @@ export const NotesView: React.FC = () => {
                   onClick={() => setSelectedNoteId(n.id)}
                   className={`p-3 rounded-xl border text-xs cursor-pointer transition-all ${
                     n.id === selectedNote?.id
-                      ? 'bg-[#C85A32]/10 border-[#C85A32]/40 text-[#C85A32] dark:text-[#D96B43] font-bold'
+                      ? 'bg-[#D85A2A]/10 border-[#D85A2A]/40 text-[#D85A2A] dark:text-[#E56B3A] font-bold shadow-sm'
                       : 'bg-black/5 dark:bg-white/5 border-transparent text-gray-700 dark:text-gray-300 hover:bg-black/10 dark:hover:bg-white/10'
                   }`}
                 >
@@ -96,7 +96,7 @@ export const NotesView: React.FC = () => {
               onDelete={() => deleteNote(selectedNote.id)}
             />
           ) : (
-            <div className="h-full glass-card rounded-2xl flex items-center justify-center text-xs text-gray-500">
+            <div className="h-full rounded-2xl border border-[#E2DACD] dark:border-[#332F2B] bg-[#F3EFE6] dark:bg-[#1C1A18] flex items-center justify-center text-xs text-gray-500">
               Select or create a note to edit.
             </div>
           )}

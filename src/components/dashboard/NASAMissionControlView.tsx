@@ -110,12 +110,12 @@ export const NASAMissionControlView: React.FC = () => {
           </div>
         </Card>
 
-        {/* Upcoming Interview Pipeline Radar */}
-        <Card className="p-5 border-indigo-500/30 space-y-4">
+        {/* Upcoming Interview Pipeline */}
+        <Card className="p-5 border-[#E2DACD] dark:border-[#332F2B] space-y-4">
           <div className="flex items-center justify-between pb-2 border-b border-black/5 dark:border-white/5">
-            <div className="flex items-center space-x-2 text-xs font-bold text-indigo-400 uppercase tracking-wider">
+            <div className="flex items-center space-x-2 text-xs font-bold text-[#D85A2A] dark:text-[#E56B3A] uppercase tracking-wider">
               <Activity className="w-4 h-4" />
-              <span>Career Interview Telemetry</span>
+              <span>Upcoming Interviews</span>
             </div>
             <Badge variant="indigo">{interviews.length} INTERVIEWS</Badge>
           </div>
@@ -123,9 +123,9 @@ export const NASAMissionControlView: React.FC = () => {
           <div className="space-y-2">
             {interviews.length > 0 ? (
               interviews.map((int) => (
-                <div key={int.id} className="p-3 rounded-xl bg-indigo-500/10 border border-indigo-500/20 space-y-1 text-xs">
+                <div key={int.id} className="p-3 rounded-xl bg-black/5 dark:bg-white/5 border border-black/5 dark:border-white/10 space-y-1 text-xs">
                   <div className="font-bold text-gray-900 dark:text-white">{int.role}</div>
-                  <div className="text-[11px] text-indigo-400 font-mono">{int.company} • {int.salary}</div>
+                  <div className="text-[11px] text-[#D85A2A] dark:text-[#E56B3A] font-mono">{int.company} • {int.salary}</div>
                 </div>
               ))
             ) : (
@@ -140,11 +140,11 @@ export const NASAMissionControlView: React.FC = () => {
 
       {/* Today's Timeline Sprints & Project Health */}
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-        <Card className="lg:col-span-2 p-5 border-black/10 dark:border-white/10 space-y-4">
+        <Card className="lg:col-span-2 p-5 border-[#E2DACD] dark:border-[#332F2B] space-y-4">
           <div className="flex items-center justify-between pb-3 border-b border-black/5 dark:border-white/5">
             <h3 className="text-sm font-bold text-gray-900 dark:text-white flex items-center space-x-2">
-              <CheckSquare className="w-4 h-4 text-emerald-400" />
-              <span>Today's Orbital Sprints & Priority Tasks</span>
+              <CheckSquare className="w-4 h-4 text-[#8A9A86] dark:text-[#9DB098]" />
+              <span>Today's Tasks & Priorities</span>
             </h3>
             <Button onClick={() => setActiveTab('tasks')} variant="ghost" size="sm">
               All Tasks <ArrowUpRight className="w-3.5 h-3.5 ml-1" />
@@ -165,23 +165,23 @@ export const NASAMissionControlView: React.FC = () => {
         </Card>
 
         {/* Focus Block Sanctuary */}
-        <Card className="p-5 border-indigo-500/30 flex flex-col justify-between">
+        <Card className="p-5 border-[#E2DACD] dark:border-[#332F2B] flex flex-col justify-between">
           <div>
-            <div className="flex items-center space-x-2 text-xs font-bold text-indigo-400">
+            <div className="flex items-center space-x-2 text-xs font-bold text-[#D85A2A] dark:text-[#E56B3A]">
               <Clock className="w-4 h-4" />
-              <span>Deep Focus Ignition Block</span>
+              <span>Focus Block</span>
             </div>
-            <h3 className="text-base font-bold text-gray-900 dark:text-white mt-1">Initiate 50-Min Focus</h3>
-            <p className="text-xs text-gray-500 mt-1">Zero distractions, rain audio soundscapes, planted cyber trees.</p>
+            <h3 className="text-base font-bold text-gray-900 dark:text-white mt-1">Start 50-Min Focus</h3>
+            <p className="text-xs text-gray-500 mt-1">Zero distractions, ambient audio, calm environment.</p>
           </div>
 
           <div className="my-6 text-center">
-            <div className="text-4xl font-black font-mono text-indigo-400">50:00</div>
-            <div className="text-[10px] text-gray-400 mt-1">POMODORO FOCUS BLOCK</div>
+            <div className="text-4xl font-black font-mono text-[#D85A2A] dark:text-[#E56B3A]">50:00</div>
+            <div className="text-[10px] text-gray-400 mt-1">FOCUS SPRINT</div>
           </div>
 
-          <Button onClick={() => startFocusTimer('Home Base Focus Sprint', 50)} variant="emerald" size="md" className="w-full justify-center">
-            <Play className="w-4 h-4 mr-1.5 fill-white" /> Initiate Deep Focus Block
+          <Button onClick={() => startFocusTimer('Home Base Focus Sprint', 50)} variant="primary" size="md" className="w-full justify-center">
+            <Play className="w-4 h-4 mr-1.5 fill-white" /> Start 50-Min Focus
           </Button>
         </Card>
       </div>
