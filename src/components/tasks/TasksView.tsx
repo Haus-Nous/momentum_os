@@ -88,7 +88,7 @@ export const TasksView: React.FC = () => {
   return (
     <div className="space-y-6 pb-12">
       {/* Workspace Controls Header */}
-      <div className="flex flex-col lg:flex-row items-start lg:items-center justify-between gap-4 glass-card p-4 rounded-2xl border border-black/10 dark:border-white/10">
+      <div className="flex flex-col lg:flex-row items-start lg:items-center justify-between gap-4 p-4 rounded-2xl bg-[#F3EFE6] dark:bg-[#1C1A18] border border-[#E2DACD] dark:border-[#332F2B]">
         {/* Bucket Filter Buttons */}
         <div className="flex items-center space-x-1.5 bg-black/5 dark:bg-white/5 p-1 rounded-xl border border-black/5 dark:border-white/10 text-xs overflow-x-auto">
           {buckets.map((b) => {
@@ -98,8 +98,8 @@ export const TasksView: React.FC = () => {
               <button
                 key={b.id}
                 onClick={() => setActiveBucket(b.id)}
-                className={`flex items-center space-x-1.5 px-3 py-1.5 rounded-lg font-semibold transition-colors shrink-0 ${
-                  isActive ? 'bg-indigo-600 text-white shadow-sm' : 'text-gray-500 hover:text-gray-900 dark:text-gray-400 dark:hover:text-white'
+                className={`flex items-center space-x-1.5 px-3 py-1.5 rounded-lg font-semibold transition-colors cursor-pointer shrink-0 ${
+                  isActive ? 'bg-[#C85A32] dark:bg-[#D96B43] text-white shadow-sm' : 'text-gray-600 hover:text-gray-900 dark:text-gray-400 dark:hover:text-white'
                 }`}
               >
                 <Icon className="w-3.5 h-3.5" />
@@ -114,7 +114,7 @@ export const TasksView: React.FC = () => {
           <div className="flex items-center bg-black/5 dark:bg-white/5 p-1 rounded-xl border border-black/5 dark:border-white/10 text-xs">
             <button
               onClick={() => setViewMode('list')}
-              className={`p-1.5 rounded-lg transition-colors ${viewMode === 'list' ? 'bg-indigo-600 text-white' : 'text-gray-400 hover:text-white'}`}
+              className={`p-1.5 rounded-lg transition-colors cursor-pointer ${viewMode === 'list' ? 'bg-[#C85A32] dark:bg-[#D96B43] text-white' : 'text-gray-400 hover:text-gray-900 dark:hover:text-white'}`}
               title="List View"
             >
               <List className="w-4 h-4" />
@@ -122,7 +122,7 @@ export const TasksView: React.FC = () => {
 
             <button
               onClick={() => setViewMode('kanban')}
-              className={`p-1.5 rounded-lg transition-colors ${viewMode === 'kanban' ? 'bg-indigo-600 text-white' : 'text-gray-400 hover:text-white'}`}
+              className={`p-1.5 rounded-lg transition-colors cursor-pointer ${viewMode === 'kanban' ? 'bg-[#C85A32] dark:bg-[#D96B43] text-white' : 'text-gray-400 hover:text-gray-900 dark:hover:text-white'}`}
               title="6-Column Kanban Board"
             >
               <Columns className="w-4 h-4" />
@@ -130,7 +130,7 @@ export const TasksView: React.FC = () => {
 
             <button
               onClick={() => setViewMode('timeline')}
-              className={`p-1.5 rounded-lg transition-colors ${viewMode === 'timeline' ? 'bg-indigo-600 text-white' : 'text-gray-400 hover:text-white'}`}
+              className={`p-1.5 rounded-lg transition-colors cursor-pointer ${viewMode === 'timeline' ? 'bg-[#C85A32] dark:bg-[#D96B43] text-white' : 'text-gray-400 hover:text-gray-900 dark:hover:text-white'}`}
               title="Gantt Timeline View"
             >
               <Layers className="w-4 h-4" />
@@ -138,7 +138,7 @@ export const TasksView: React.FC = () => {
 
             <button
               onClick={() => setViewMode('calendar')}
-              className={`p-1.5 rounded-lg transition-colors ${viewMode === 'calendar' ? 'bg-indigo-600 text-white' : 'text-gray-400 hover:text-white'}`}
+              className={`p-1.5 rounded-lg transition-colors cursor-pointer ${viewMode === 'calendar' ? 'bg-[#C85A32] dark:bg-[#D96B43] text-white' : 'text-gray-400 hover:text-gray-900 dark:hover:text-white'}`}
               title="Calendar Grid View"
             >
               <CalendarIcon className="w-4 h-4" />
@@ -146,14 +146,14 @@ export const TasksView: React.FC = () => {
 
             <button
               onClick={() => setViewMode('table')}
-              className={`p-1.5 rounded-lg transition-colors ${viewMode === 'table' ? 'bg-indigo-600 text-white' : 'text-gray-400 hover:text-white'}`}
+              className={`p-1.5 rounded-lg transition-colors cursor-pointer ${viewMode === 'table' ? 'bg-[#C85A32] dark:bg-[#D96B43] text-white' : 'text-gray-400 hover:text-gray-900 dark:hover:text-white'}`}
               title="Compact Table View"
             >
               <TableIcon className="w-4 h-4" />
             </button>
           </div>
 
-          <Button onClick={() => setIsCreateOpen(true)} variant="emerald" size="md">
+          <Button onClick={() => setIsCreateOpen(true)} variant="primary" size="md">
             <Plus className="w-4 h-4 mr-1.5" />
             <span>New Task</span>
           </Button>

@@ -17,22 +17,22 @@ export const FocusView: React.FC = () => {
         </div>
 
         {/* Ambient Sound Generator Panel */}
-        <div className="glass-card rounded-3xl p-6 border border-white/10 flex flex-col justify-between space-y-6">
+        <div className="rounded-3xl p-6 border border-[#E2DACD] dark:border-[#332F2B] bg-[#F3EFE6] dark:bg-[#1C1A18] flex flex-col justify-between space-y-6">
           <div>
             <div className="flex items-center space-x-2 mb-2">
-              <Volume2 className="w-5 h-5 text-cyan-400" />
-              <h3 className="text-sm font-bold text-white">Procedural Sound Generator</h3>
+              <Volume2 className="w-5 h-5 text-[#C85A32] dark:text-[#D96B43]" />
+              <h3 className="text-sm font-bold text-gray-900 dark:text-white">Procedural Sound Generator</h3>
             </div>
-            <p className="text-xs text-gray-400 leading-relaxed">
+            <p className="text-xs text-gray-600 dark:text-gray-400 leading-relaxed">
               Synthesize zero-latency procedural ambient audio using native Web Audio API oscillators and pink noise filters.
             </p>
 
             <div className="space-y-2.5 mt-6">
               {[
-                { type: 'rain' as const, label: 'Gentle Rain & Thunder', icon: CloudRain, color: 'text-cyan-400' },
-                { type: 'lofi' as const, label: 'Cyberpunk Lo-Fi Synth', icon: Music, color: 'text-indigo-400' },
-                { type: 'cafe' as const, label: 'Café Chatter & Warmth', icon: Coffee, color: 'text-amber-400' },
-                { type: 'forest' as const, label: 'Forest Pine Breeze', icon: Trees, color: 'text-emerald-400' },
+                { type: 'rain' as const, label: 'Gentle Rain & Thunder', icon: CloudRain, color: 'text-[#78899A] dark:text-[#90A2B4]' },
+                { type: 'lofi' as const, label: 'Warm Lo-Fi Synth', icon: Music, color: 'text-[#C85A32] dark:text-[#D96B43]' },
+                { type: 'cafe' as const, label: 'Café Chatter & Warmth', icon: Coffee, color: 'text-[#D9A05B] dark:text-[#E5B574]' },
+                { type: 'forest' as const, label: 'Forest Pine Breeze', icon: Trees, color: 'text-[#8A9A86] dark:text-[#9DB098]' },
               ].map((sound) => {
                 const Icon = sound.icon;
                 const isActive = ambientSound.isPlaying && ambientSound.type === sound.type;
@@ -40,17 +40,17 @@ export const FocusView: React.FC = () => {
                   <button
                     key={sound.type}
                     onClick={() => toggleAmbientSound(sound.type)}
-                    className={`w-full flex items-center justify-between p-3 rounded-xl border text-xs font-semibold transition-all ${
+                    className={`w-full flex items-center justify-between p-3 rounded-xl border text-xs font-semibold transition-all cursor-pointer ${
                       isActive
-                        ? 'bg-white/10 border-indigo-500/50 text-white shadow-md'
-                        : 'bg-white/5 border-white/5 text-gray-400 hover:text-white hover:bg-white/10'
+                        ? 'bg-[#C85A32]/10 border-[#C85A32]/40 text-[#C85A32] dark:text-[#D96B43] shadow-sm'
+                        : 'bg-black/5 dark:bg-white/5 border-black/5 dark:border-white/5 text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white'
                     }`}
                   >
                     <div className="flex items-center space-x-3">
                       <Icon className={`w-4 h-4 ${sound.color}`} />
                       <span>{sound.label}</span>
                     </div>
-                    {isActive && <span className="text-[10px] text-emerald-400 font-bold animate-pulse">PLAYING</span>}
+                    {isActive && <span className="text-[10px] text-[#8A9A86] dark:text-[#9DB098] font-bold">PLAYING</span>}
                   </button>
                 );
               })}

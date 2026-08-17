@@ -10,7 +10,7 @@ export interface ProgressBarProps {
 
 export const ProgressBar: React.FC<ProgressBarProps> = ({
   value,
-  color = 'bg-gradient-to-r from-emerald-500 to-cyan-400',
+  color = 'bg-[#C85A32] dark:bg-[#D96B43]',
   className,
   showPercent = false,
 }) => {

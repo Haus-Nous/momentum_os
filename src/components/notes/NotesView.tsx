@@ -32,17 +32,17 @@ export const NotesView: React.FC = () => {
     <div className="space-y-6 pb-12">
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 h-[720px]">
         {/* Left Column: Note List */}
-        <div className="lg:col-span-4 glass-card rounded-2xl p-4 border border-white/10 flex flex-col justify-between space-y-4">
+        <div className="lg:col-span-4 rounded-2xl p-4 border border-[#E2DACD] dark:border-[#332F2B] bg-[#F3EFE6] dark:bg-[#1C1A18] flex flex-col justify-between space-y-4">
           <div>
             <div className="flex items-center justify-between mb-3">
-              <div className="flex items-center space-x-2 text-xs font-bold text-white">
-                <BookOpen className="w-4 h-4 text-indigo-400" />
-                <span>Knowledge Graph</span>
+              <div className="flex items-center space-x-2 text-xs font-bold text-gray-900 dark:text-white">
+                <BookOpen className="w-4 h-4 text-[#C85A32] dark:text-[#D96B43]" />
+                <span>Knowledge Graph & Notes</span>
               </div>
 
               <button
                 onClick={handleCreateNote}
-                className="p-1.5 rounded-lg bg-indigo-600 hover:bg-indigo-500 text-white transition-colors"
+                className="p-1.5 rounded-lg bg-[#C85A32] hover:bg-[#B54E29] dark:bg-[#D96B43] dark:hover:bg-[#C85A32] text-white transition-colors cursor-pointer"
                 title="Create Note"
               >
                 <Plus className="w-4 h-4" />
@@ -51,40 +51,35 @@ export const NotesView: React.FC = () => {
 
             {/* Search Input */}
             <div className="relative mb-3">
-              <Search className="w-3.5 h-3.5 text-gray-500 absolute left-3 top-2.5" />
+              <Search className="w-3.5 h-3.5 text-gray-400 absolute left-3 top-2.5" />
               <input
                 type="text"
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
                 placeholder="Search notes or #tags..."
-                className="w-full bg-white/5 border border-white/10 rounded-xl pl-8 pr-3 py-1.5 text-xs text-white focus:outline-none"
+                className="w-full bg-black/5 dark:bg-white/5 border border-black/5 dark:border-white/10 rounded-xl pl-8 pr-3 py-1.5 text-xs text-gray-900 dark:text-white focus:outline-none"
               />
             </div>
 
-            {/* Note List */}
-            <div className="space-y-1.5 max-h-72 overflow-y-auto pr-1">
-              {filteredNotes.map((note) => {
-                const isSelected = note.id === selectedNoteId;
-                return (
-                  <div
-                    key={note.id}
-                    onClick={() => setSelectedNoteId(note.id)}
-                    className={`p-2.5 rounded-xl border text-xs cursor-pointer transition-all ${
-                      isSelected
-                        ? 'bg-indigo-600/30 border-indigo-500/50 text-white font-bold'
-                        : 'bg-white/5 border-white/5 text-gray-300 hover:bg-white/10'
-                    }`}
-                  >
-                    <div className="flex items-center justify-between mb-1">
-                      <span className="truncate flex-1">{note.title}</span>
-                    </div>
-                    <div className="flex items-center space-x-1 text-[10px] text-gray-400">
-                      <Tag className="w-3 h-3 text-purple-400" />
-                      <span className="truncate">{note.tags.join(', ')}</span>
-                    </div>
+            {/* Note Item List */}
+            <div className="space-y-1 overflow-y-auto max-h-[520px] pr-1">
+              {filteredNotes.map((n) => (
+                <div
+                  key={n.id}
+                  onClick={() => setSelectedNoteId(n.id)}
+                  className={`p-3 rounded-xl border text-xs cursor-pointer transition-all ${
+                    n.id === selectedNote?.id
+                      ? 'bg-[#C85A32]/10 border-[#C85A32]/40 text-[#C85A32] dark:text-[#D96B43] font-bold'
+                      : 'bg-black/5 dark:bg-white/5 border-transparent text-gray-700 dark:text-gray-300 hover:bg-black/10 dark:hover:bg-white/10'
+                  }`}
+                >
+                  <div className="font-bold truncate">{n.title}</div>
+                  <div className="flex items-center space-x-1 mt-1 text-[10px] text-gray-500">
+                    <Tag className="w-2.5 h-2.5" />
+                    <span>{n.tags.join(', ')}</span>
                   </div>
-                );
-              })}
+                </div>
+              ))}
             </div>
           </div>
 

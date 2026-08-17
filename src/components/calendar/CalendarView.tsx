@@ -18,25 +18,25 @@ export const CalendarView: React.FC = () => {
   return (
     <div className="space-y-6 pb-12">
       {/* Header Banner */}
-      <div className="glass-card rounded-2xl p-6 border border-cyan-500/30 bg-gradient-to-r from-cyan-950/30 via-[#0d111a] to-indigo-950/30 relative overflow-hidden">
+      <div className="rounded-2xl p-6 border border-[#E2DACD] dark:border-[#332F2B] bg-[#F3EFE6] dark:bg-[#1C1A18] relative overflow-hidden">
         <div className="flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
           <div>
-            <div className="flex items-center space-x-2 text-xs font-bold text-cyan-400 uppercase tracking-wider mb-1">
-              <CalendarIcon className="w-4 h-4 text-cyan-400" />
-              <span>TIMEBLOCKING ENGINE</span>
+            <div className="flex items-center space-x-2 text-xs font-bold text-[#C85A32] dark:text-[#D96B43] uppercase tracking-wider mb-1">
+              <CalendarIcon className="w-4 h-4 text-[#C85A32] dark:text-[#D96B43]" />
+              <span>TIMEBLOCKING & SCHEDULE</span>
             </div>
-            <h2 className="text-xl font-black text-white">{todayDateFormatted}</h2>
-            <p className="text-xs text-gray-300 max-w-xl mt-1">
+            <h2 className="text-xl font-black text-gray-900 dark:text-white">{todayDateFormatted}</h2>
+            <p className="text-xs text-gray-600 dark:text-gray-300 max-w-xl mt-1">
               Map high-leverage tasks onto fixed time slots to protect focus windows from calendar chaos.
             </p>
           </div>
 
           <button
             onClick={() => setIsReviewOpen(true)}
-            className="flex items-center space-x-2 bg-gradient-to-r from-purple-600 to-indigo-600 hover:from-purple-500 hover:to-indigo-500 text-white font-bold text-xs px-4 py-2.5 rounded-xl transition-all shadow-lg shadow-purple-600/25"
+            className="flex items-center space-x-2 bg-[#C85A32] hover:bg-[#B54E29] dark:bg-[#D96B43] dark:hover:bg-[#C85A32] text-white font-bold text-xs px-4 py-2.5 rounded-xl transition-all shadow-sm cursor-pointer"
           >
             <Moon className="w-4 h-4" />
-            <span>Launch Evening Shutdown Ritual</span>
+            <span>Evening Review & Shutdown</span>
           </button>
         </div>
       </div>

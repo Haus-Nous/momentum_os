@@ -172,7 +172,7 @@ export const HabitCard: React.FC<HabitCardProps> = ({ habit }) => {
 
           {/* Log / Skip / Done Button */}
           {isSkippedToday ? (
-            <span className="text-xs font-bold text-cyan-500 bg-cyan-500/10 px-3 py-1.5 rounded-xl border border-cyan-500/20">
+            <span className="text-xs font-bold text-[#78899A] dark:text-[#90A2B4] bg-[#78899A]/10 px-3 py-1.5 rounded-xl border border-[#78899A]/20">
               Skipped Today
             </span>
           ) : (
@@ -182,10 +182,10 @@ export const HabitCard: React.FC<HabitCardProps> = ({ habit }) => {
               transition={{ duration: 0.2 }}
               onClick={() => logHabitCompletion(habit.id)}
               disabled={habit.status === 'paused' || habit.status === 'archived'}
-              className={`px-3.5 py-1.5 rounded-xl text-xs font-bold flex items-center space-x-1.5 transition-all shadow-md cursor-pointer ${
+              className={`px-3.5 py-1.5 rounded-xl text-xs font-bold flex items-center space-x-1.5 transition-all shadow-sm cursor-pointer ${
                 isCompletedToday
-                  ? 'bg-emerald-500/20 text-emerald-600 dark:text-emerald-300 border border-emerald-500/40'
-                  : 'bg-emerald-600 hover:bg-emerald-500 text-white shadow-emerald-600/30'
+                  ? 'bg-[#8A9A86]/20 text-[#8A9A86] dark:text-[#9DB098] border border-[#8A9A86]/40'
+                  : 'bg-[#8A9A86] hover:bg-[#788874] dark:bg-[#9DB098] dark:hover:bg-[#8A9A86] text-white'
               }`}
             >
               <Check className="w-4 h-4" />

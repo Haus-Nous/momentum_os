@@ -15,11 +15,11 @@ export const AchievementsView: React.FC = () => {
   return (
     <div className="space-y-6 pb-12">
       {/* RPG Level & XP Hero Header */}
-      <Card gradient glow="emerald" className="p-6 border-emerald-500/30">
+      <Card className="p-6 border-[#E2DACD] dark:border-[#332F2B] bg-[#F3EFE6] dark:bg-[#1C1A18]">
         <div className="flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
           <div className="flex items-center space-x-4">
-            <div className="w-14 h-14 rounded-2xl bg-gradient-to-tr from-emerald-500 to-indigo-600 p-0.5 shadow-xl shadow-emerald-500/20">
-              <div className="w-full h-full bg-[#0d111a] rounded-[14px] flex items-center justify-center font-black text-emerald-400 text-xl font-mono">
+            <div className="w-14 h-14 rounded-2xl bg-[#C85A32] dark:bg-[#D96B43] p-0.5 shadow-sm">
+              <div className="w-full h-full bg-[#F3EFE6] dark:bg-[#1C1A18] rounded-[14px] flex items-center justify-center font-black text-[#C85A32] dark:text-[#D96B43] text-xl font-mono">
                 L{profile.level}
               </div>
             </div>
@@ -27,16 +27,16 @@ export const AchievementsView: React.FC = () => {
             <div>
               <h2 className="text-xl font-black text-gray-900 dark:text-white flex items-center space-x-2">
                 <span>{profile.name}</span>
-                <Badge variant="emerald">LEVEL {profile.level} ARCHITECT</Badge>
+                <Badge variant="indigo">LEVEL {profile.level} ARCHITECT</Badge>
               </h2>
-              <p className="text-xs text-gray-500 dark:text-gray-400 mt-0.5">
-                Current XP: <span className="font-bold text-emerald-400">{profile.xp}</span> / {profile.xpToNextLevel} XP
+              <p className="text-xs text-gray-600 dark:text-gray-400 mt-0.5">
+                Current XP: <span className="font-bold text-[#C85A32] dark:text-[#D96B43]">{profile.xp}</span> / {profile.xpToNextLevel} XP
               </p>
             </div>
           </div>
 
           <div className="w-full md:w-64">
-            <ProgressBar progress={xpPct} color="emerald" label="XP Level Advancement" />
+            <ProgressBar progress={xpPct} color="terracotta" label="XP Level Advancement" />
           </div>
         </div>
       </Card>

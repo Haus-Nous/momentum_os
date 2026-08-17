@@ -9,9 +9,9 @@ export interface BadgeProps {
 
 export const Badge: React.FC<BadgeProps> = ({ variant = 'indigo', children, className }) => {
   const variantClasses = {
-    urgent: 'bg-[#C85A32]/15 text-[#C85A32] dark:text-[#D96B43] border-[#C85A32]/30',
-    high: 'bg-[#D9A05B]/15 text-[#D9A05B] dark:text-[#E5B574] border-[#D9A05B]/30',
-    medium: 'bg-[#C85A32]/15 text-[#C85A32] dark:text-[#D96B43] border-[#C85A32]/30',
+    urgent: 'bg-[#B84A39]/15 text-[#B84A39] dark:text-[#E05A47] border-[#B84A39]/30',
+    high: 'bg-[#B84A39]/15 text-[#B84A39] dark:text-[#E05A47] border-[#B84A39]/30',
+    medium: 'bg-[#D9A05B]/15 text-[#D9A05B] dark:text-[#E5B574] border-[#D9A05B]/30',
     low: 'bg-[#78716A]/15 text-[#78716A] dark:text-[#9E958C] border-[#78716A]/30',
     emerald: 'bg-[#8A9A86]/15 text-[#8A9A86] dark:text-[#9DB098] border-[#8A9A86]/30',
     cyan: 'bg-[#78899A]/15 text-[#78899A] dark:text-[#90A2B4] border-[#78899A]/30',

@@ -33,37 +33,37 @@ export const TimerWidget: React.FC = () => {
   };
 
   return (
-    <div className="glass-card rounded-3xl p-8 border border-indigo-500/30 flex flex-col items-center justify-center text-center relative overflow-hidden bg-gradient-to-b from-indigo-950/20 via-[#0d111a] to-[#0d111a]">
+    <div className="rounded-3xl p-8 border border-[#E2DACD] dark:border-[#332F2B] bg-[#F3EFE6] dark:bg-[#1C1A18] flex flex-col items-center justify-center text-center relative overflow-hidden">
       {/* Target Task Header */}
       <div className="mb-6 space-y-1">
-        <span className="text-[10px] font-bold uppercase tracking-wider text-indigo-400 px-2.5 py-1 rounded-full bg-indigo-500/10 border border-indigo-500/30">
+        <span className="text-[10px] font-bold uppercase tracking-wider text-[#C85A32] dark:text-[#D96B43] px-2.5 py-1 rounded-full bg-[#C85A32]/10 border border-[#C85A32]/30">
           {modeLabels[focusTimer.mode]}
         </span>
-        <h2 className="text-lg font-bold text-white max-w-md truncate mt-2">{focusTimer.taskTitle}</h2>
+        <h2 className="text-lg font-bold text-gray-900 dark:text-white max-w-md truncate mt-2">{focusTimer.taskTitle}</h2>
       </div>
 
       {/* Mode Switcher Buttons */}
-      <div className="flex items-center space-x-2 bg-white/5 p-1 rounded-xl mb-8 border border-white/10 text-xs">
+      <div className="flex items-center space-x-2 bg-black/5 dark:bg-white/5 p-1 rounded-xl mb-8 border border-black/5 dark:border-white/10 text-xs">
         <button
           onClick={() => setFocusMode('pomodoro')}
-          className={`px-3 py-1.5 rounded-lg font-semibold transition-colors ${
-            focusTimer.mode === 'pomodoro' ? 'bg-indigo-600 text-white' : 'text-gray-400 hover:text-white'
+          className={`px-3 py-1.5 rounded-lg font-semibold transition-colors cursor-pointer ${
+            focusTimer.mode === 'pomodoro' ? 'bg-[#C85A32] dark:bg-[#D96B43] text-white' : 'text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white'
           }`}
         >
           50m Sprint
         </button>
         <button
           onClick={() => setFocusMode('short_break')}
-          className={`px-3 py-1.5 rounded-lg font-semibold transition-colors ${
-            focusTimer.mode === 'short_break' ? 'bg-indigo-600 text-white' : 'text-gray-400 hover:text-white'
+          className={`px-3 py-1.5 rounded-lg font-semibold transition-colors cursor-pointer ${
+            focusTimer.mode === 'short_break' ? 'bg-[#C85A32] dark:bg-[#D96B43] text-white' : 'text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white'
           }`}
         >
           10m Break
         </button>
         <button
           onClick={() => setFocusMode('long_break')}
-          className={`px-3 py-1.5 rounded-lg font-semibold transition-colors ${
-            focusTimer.mode === 'long_break' ? 'bg-indigo-600 text-white' : 'text-gray-400 hover:text-white'
+          className={`px-3 py-1.5 rounded-lg font-semibold transition-colors cursor-pointer ${
+            focusTimer.mode === 'long_break' ? 'bg-[#C85A32] dark:bg-[#D96B43] text-white' : 'text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white'
           }`}
         >
           30m Recovery
@@ -73,7 +73,7 @@ export const TimerWidget: React.FC = () => {
       {/* SVG Timer Ring Display */}
       <div className="relative w-64 h-64 flex items-center justify-center my-4">
         <svg className="w-full h-full transform -rotate-90">
-          <circle cx="128" cy="128" r="110" stroke="currentColor" strokeWidth="8" className="text-gray-800/80" fill="transparent" />
+          <circle cx="128" cy="128" r="110" stroke="currentColor" strokeWidth="8" className="text-[#E2DACD] dark:text-[#332F2B]" fill="transparent" />
           <circle
             cx="128"
             cy="128"
@@ -83,17 +83,17 @@ export const TimerWidget: React.FC = () => {
             strokeDasharray={691}
             strokeDashoffset={691 - (691 * progressPercent) / 100}
             strokeLinecap="round"
-            className="text-indigo-500 transition-all duration-1000 ease-linear shadow-lg"
+            className="text-[#C85A32] dark:text-[#D96B43] transition-all duration-1000 ease-linear shadow-sm"
             fill="transparent"
           />
         </svg>
 
         <div className="absolute flex flex-col items-center">
-          <span className="text-5xl font-black font-mono tracking-tighter text-white drop-shadow-md">
+          <span className="text-5xl font-black font-mono tracking-tighter text-gray-900 dark:text-white">
             {formatTime(focusTimer.timeRemaining)}
           </span>
-          <span className="text-xs text-indigo-300 font-semibold mt-1 flex items-center space-x-1">
-            <Zap className="w-3.5 h-3.5 text-emerald-400 inline" />
+          <span className="text-xs text-[#C85A32] dark:text-[#D96B43] font-semibold mt-1 flex items-center space-x-1">
+            <Zap className="w-3.5 h-3.5 text-[#8A9A86] dark:text-[#9DB098] inline" />
             <span>{focusTimer.isRunning ? 'Focus In Progress' : 'Paused'}</span>
           </span>
         </div>
@@ -103,10 +103,10 @@ export const TimerWidget: React.FC = () => {
       <div className="flex items-center space-x-4 mt-6">
         <button
           onClick={() => (focusTimer.isRunning ? pauseFocusTimer() : startFocusTimer())}
-          className={`px-8 py-3.5 rounded-2xl font-black text-sm flex items-center space-x-2 transition-all shadow-xl ${
+          className={`px-8 py-3.5 rounded-2xl font-black text-sm flex items-center space-x-2 transition-all shadow-sm cursor-pointer ${
             focusTimer.isRunning
-              ? 'bg-amber-500 hover:bg-amber-400 text-black shadow-amber-500/30'
-              : 'bg-gradient-to-r from-indigo-600 to-emerald-500 hover:from-indigo-500 hover:to-emerald-400 text-white shadow-indigo-600/40'
+              ? 'bg-[#D9A05B] hover:bg-[#C48F4C] text-black'
+              : 'bg-[#C85A32] hover:bg-[#B54E29] dark:bg-[#D96B43] dark:hover:bg-[#C85A32] text-white'
           }`}
         >
           {focusTimer.isRunning ? <Pause className="w-5 h-5 fill-current" /> : <Play className="w-5 h-5 fill-current" />}
@@ -115,7 +115,7 @@ export const TimerWidget: React.FC = () => {
 
         <button
           onClick={resetFocusTimer}
-          className="p-3.5 rounded-2xl bg-white/5 hover:bg-white/10 text-gray-400 hover:text-white border border-white/10 transition-colors"
+          className="p-3.5 rounded-2xl bg-black/5 dark:bg-white/5 hover:bg-black/10 dark:hover:bg-white/10 text-gray-500 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white border border-black/5 dark:border-white/10 transition-colors cursor-pointer"
           title="Reset Timer"
         >
           <RotateCcw className="w-5 h-5" />

@@ -42,22 +42,22 @@ export const SemesterDashboardView: React.FC = () => {
   return (
     <div className="space-y-6 pb-12">
       {/* Header Banner */}
-      <Card gradient glow="rose" className="p-6 border-rose-500/30">
+      <Card className="p-6 border-[#E2DACD] dark:border-[#332F2B] bg-[#F3EFE6] dark:bg-[#1C1A18]">
         <div className="flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
           <div className="flex items-center space-x-4">
-            <div className="p-3.5 rounded-2xl bg-rose-500/20 text-rose-400">
+            <div className="p-3.5 rounded-2xl bg-[#C85A32]/10 text-[#C85A32] dark:text-[#D96B43]">
               <GraduationCap className="w-7 h-7" />
             </div>
             <div>
               <h2 className="text-xl font-black text-gray-900 dark:text-white">{labels.academicHubTitle}</h2>
               <p className="text-xs text-gray-600 dark:text-gray-300 mt-0.5">
-                {labels.academicSubtitle} • Completion Rate: <span className="font-bold text-rose-400">{asgRate}%</span>
+                {labels.academicSubtitle} • Completion Rate: <span className="font-bold text-[#C85A32] dark:text-[#D96B43]">{asgRate}%</span>
               </p>
             </div>
           </div>
 
           <div className="flex items-center space-x-3 text-xs font-mono">
-            <div className="p-3 rounded-xl bg-black/20 border border-white/10 text-center">
+            <div className="p-3 rounded-xl bg-black/5 dark:bg-white/5 border border-black/5 dark:border-white/10 text-center">
               <span className="text-gray-400 block text-[10px]">CGPA SCORE</span>
               <span className="text-xl font-bold text-emerald-400">{calculatedCgpa}</span>
             </div>

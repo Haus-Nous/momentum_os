@@ -43,16 +43,16 @@ export const CareerDashboardView: React.FC = () => {
   return (
     <div className="space-y-6 pb-12">
       {/* Header Banner */}
-      <Card gradient glow="indigo" className="p-6 border-indigo-500/30">
+      <Card className="p-6 border-[#E2DACD] dark:border-[#332F2B] bg-[#F3EFE6] dark:bg-[#1C1A18]">
         <div className="flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
           <div className="flex items-center space-x-4">
-            <div className="p-3.5 rounded-2xl bg-indigo-500/20 text-indigo-400">
+            <div className="p-3.5 rounded-2xl bg-[#C85A32]/10 text-[#C85A32] dark:text-[#D96B43]">
               <Briefcase className="w-7 h-7" />
             </div>
             <div>
               <h2 className="text-xl font-black text-gray-900 dark:text-white">{labels.careerHubTitle}</h2>
               <p className="text-xs text-gray-600 dark:text-gray-300 mt-0.5">
-                {labels.careerSubtitle}: <span className="font-bold text-emerald-400">{internships.length} Entries</span> • Career Velocity Score: <span className="font-bold text-indigo-400">{careerVelocity}/100</span>
+                {labels.careerSubtitle}: <span className="font-bold text-[#8A9A86] dark:text-[#9DB098]">{internships.length} Entries</span> • Velocity Score: <span className="font-bold text-[#C85A32] dark:text-[#D96B43]">{careerVelocity}/100</span>
               </p>
             </div>
           </div>

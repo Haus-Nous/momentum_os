@@ -35,40 +35,40 @@ export const GoalsView: React.FC = () => {
   return (
     <div className="space-y-6 pb-12">
       {/* Header Controls */}
-      <div className="flex flex-col md:flex-row items-start md:items-center justify-between gap-4 glass-card p-4 rounded-2xl border border-black/10 dark:border-white/10">
-        <div className="flex items-center space-x-1.5 bg-black/5 dark:bg-white/5 p-1 rounded-xl border border-black/5 dark:border-white/10 text-xs">
+      <div className="flex flex-col md:flex-row items-start md:items-center justify-between gap-4 p-4 rounded-2xl border border-[#E2DACD] dark:border-[#332F2B] bg-[#F3EFE6] dark:bg-[#1C1A18]">
+        <div className="flex items-center space-x-1.5 bg-black/5 dark:bg-white/5 p-1 rounded-xl border border-black/5 dark:border-white/10 text-xs overflow-x-auto">
           <button
             onClick={() => setActiveTab('matrix')}
-            className={`flex items-center space-x-1.5 px-3 py-1.5 rounded-lg font-semibold transition-colors ${
-              activeTab === 'matrix' ? 'bg-indigo-600 text-white' : 'text-gray-500 hover:text-gray-900 dark:text-gray-400 dark:hover:text-white'
+            className={`flex items-center space-x-1.5 px-3 py-1.5 rounded-lg font-semibold transition-colors cursor-pointer shrink-0 ${
+              activeTab === 'matrix' ? 'bg-[#C85A32] dark:bg-[#D96B43] text-white shadow-sm' : 'text-gray-600 hover:text-gray-900 dark:text-gray-400 dark:hover:text-white'
             }`}
           >
-            <Target className="w-3.5 h-3.5 text-emerald-400" />
+            <Target className="w-3.5 h-3.5 text-[#8A9A86] dark:text-[#9DB098]" />
             <span>6-Horizon Goals Matrix ({goals.length})</span>
           </button>
 
           <button
             onClick={() => setActiveTab('life_dashboard')}
-            className={`flex items-center space-x-1.5 px-3 py-1.5 rounded-lg font-semibold transition-colors ${
-              activeTab === 'life_dashboard' ? 'bg-indigo-600 text-white' : 'text-gray-500 hover:text-gray-900 dark:text-gray-400 dark:hover:text-white'
+            className={`flex items-center space-x-1.5 px-3 py-1.5 rounded-lg font-semibold transition-colors cursor-pointer shrink-0 ${
+              activeTab === 'life_dashboard' ? 'bg-[#C85A32] dark:bg-[#D96B43] text-white shadow-sm' : 'text-gray-600 hover:text-gray-900 dark:text-gray-400 dark:hover:text-white'
             }`}
           >
-            <BarChart2 className="w-3.5 h-3.5 text-cyan-400" />
+            <BarChart2 className="w-3.5 h-3.5 text-[#78899A] dark:text-[#90A2B4]" />
             <span>Life Progress Dashboard</span>
           </button>
 
           <button
             onClick={() => setActiveTab('reviews')}
-            className={`flex items-center space-x-1.5 px-3 py-1.5 rounded-lg font-semibold transition-colors ${
-              activeTab === 'reviews' ? 'bg-indigo-600 text-white' : 'text-gray-500 hover:text-gray-900 dark:text-gray-400 dark:hover:text-white'
+            className={`flex items-center space-x-1.5 px-3 py-1.5 rounded-lg font-semibold transition-colors cursor-pointer shrink-0 ${
+              activeTab === 'reviews' ? 'bg-[#C85A32] dark:bg-[#D96B43] text-white shadow-sm' : 'text-gray-600 hover:text-gray-900 dark:text-gray-400 dark:hover:text-white'
             }`}
           >
-            <Sparkles className="w-3.5 h-3.5 text-amber-400" />
+            <Sparkles className="w-3.5 h-3.5 text-[#D9A05B] dark:text-[#E5B574]" />
             <span>Review Rituals</span>
           </button>
         </div>
 
-        <Button onClick={() => setIsModalOpen(true)} variant="emerald" size="md">
+        <Button onClick={() => setIsModalOpen(true)} variant="primary" size="md">
           <Plus className="w-4 h-4 mr-1.5" /> Create Goal
         </Button>
       </div>
@@ -87,10 +87,10 @@ export const GoalsView: React.FC = () => {
               <button
                 key={h.id}
                 onClick={() => setActiveHorizonFilter(h.id)}
-                className={`px-3 py-1.5 rounded-xl font-bold transition-all shrink-0 ${
+                className={`px-3 py-1.5 rounded-xl font-bold transition-all shrink-0 cursor-pointer ${
                   activeHorizonFilter === h.id
-                    ? 'bg-emerald-500 text-black shadow-md'
-                    : 'bg-black/5 dark:bg-white/5 text-gray-500 hover:text-white border border-black/5 dark:border-white/5'
+                    ? 'bg-[#8A9A86] text-white shadow-sm'
+                    : 'bg-black/5 dark:bg-white/5 text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white border border-black/5 dark:border-white/5'
                 }`}
               >
                 {h.label}

@@ -37,13 +37,13 @@ export const SettingsView: React.FC = () => {
   return (
     <div className="space-y-6 pb-12">
       {/* Header Banner */}
-      <Card gradient glow="indigo" className="p-6 border-indigo-500/30">
+      <Card className="p-6 border-[#E2DACD] dark:border-[#332F2B] bg-[#F3EFE6] dark:bg-[#1C1A18]">
         <div className="flex items-center space-x-3">
-          <div className="p-3 rounded-2xl bg-indigo-500/20 text-indigo-500">
+          <div className="p-3 rounded-2xl bg-[#C85A32]/10 text-[#C85A32] dark:text-[#D96B43]">
             <SettingsIcon className="w-6 h-6" />
           </div>
           <div>
-            <h2 className="text-xl font-black text-gray-900 dark:text-white">System Settings & Data Backups</h2>
+            <h2 className="text-xl font-black text-gray-900 dark:text-white">Settings & Data Backups</h2>
             <p className="text-xs text-gray-600 dark:text-gray-300 mt-0.5">
               Configure global operating preferences, themes, sound effects, and JSON/CSV database backups.
             </p>

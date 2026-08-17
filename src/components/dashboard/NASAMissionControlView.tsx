@@ -54,7 +54,7 @@ export const NASAMissionControlView: React.FC = () => {
           <div className="flex items-center space-x-3 font-mono text-xs">
             <div className="p-3 rounded-xl bg-[#FBF9F5] dark:bg-[#121110] border border-[#E2DACD] dark:border-[#332F2B] text-center">
               <span className="text-gray-500 dark:text-gray-400 block text-[10px] uppercase tracking-wider">URGENCY SCORE</span>
-              <span className="text-xl font-bold text-[#C85A32] dark:text-[#D96B43]">{urgencyScore}/100</span>
+              <span className="text-xl font-bold text-[#B84A39] dark:text-[#E05A47]">{urgencyScore}/100</span>
             </div>
             <div className="p-3 rounded-xl bg-[#FBF9F5] dark:bg-[#121110] border border-[#E2DACD] dark:border-[#332F2B] text-center">
               <span className="text-gray-500 dark:text-gray-400 block text-[10px] uppercase tracking-wider">MOMENTUM</span>
@@ -84,19 +84,19 @@ export const NASAMissionControlView: React.FC = () => {
         <WeeklyBestCard />
 
         {/* Priority Matrix & Critical Deadlines */}
-        <Card className="p-5 border-rose-500/30 space-y-4">
+        <Card className="p-5 border-[#B84A39]/30 dark:border-[#E05A47]/30 space-y-4">
           <div className="flex items-center justify-between pb-2 border-b border-black/5 dark:border-white/5">
-            <div className="flex items-center space-x-2 text-xs font-bold text-rose-500 uppercase tracking-wider">
+            <div className="flex items-center space-x-2 text-xs font-bold text-[#B84A39] dark:text-[#E05A47] uppercase tracking-wider">
               <ShieldAlert className="w-4 h-4" />
               <span>Critical Deadlines Radar</span>
             </div>
-            <Badge variant="rose">{pendingAssignments.length} PENDING</Badge>
+            <Badge variant="urgent">{pendingAssignments.length} PENDING</Badge>
           </div>
 
           <div className="space-y-2">
             {pendingAssignments.length > 0 ? (
               pendingAssignments.slice(0, 3).map((asg) => (
-                <div key={asg.id} className="p-3 rounded-xl bg-rose-500/10 border border-rose-500/20 flex items-center justify-between text-xs">
+                <div key={asg.id} className="p-3 rounded-xl bg-[#B84A39]/10 border border-[#B84A39]/20 flex items-center justify-between text-xs">
                   <div>
                     <div className="font-bold text-gray-900 dark:text-white">{asg.title}</div>
                     <div className="text-[10px] text-gray-400">Due: {asg.dueDate}</div>

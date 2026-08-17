@@ -29,17 +29,19 @@ export const TaskItem: React.FC<TaskItemProps> = ({ task, isSelected = false, on
     cancelled: { label: 'Cancelled ❌', color: 'text-gray-500 line-through' },
   };
 
-  const priorityBadges: Record<string, 'rose' | 'amber' | 'indigo' | 'gray'> = {
-    urgent: 'rose',
-    high: 'amber',
-    medium: 'indigo',
-    low: 'gray',
+  const priorityBadges: Record<string, 'urgent' | 'high' | 'medium' | 'low'> = {
+    urgent: 'urgent',
+    high: 'high',
+    medium: 'medium',
+    low: 'low',
   };
 
   return (
     <>
-      <div className={`group glass-card p-3 rounded-xl border transition-all flex flex-col space-y-2 ${
-        isSelected ? 'border-indigo-500/50 bg-indigo-500/10' : 'border-black/5 dark:border-white/10 hover:border-black/15 dark:hover:border-white/20'
+      <div className={`group p-3.5 rounded-xl border transition-all flex flex-col space-y-2 ${
+        isSelected
+          ? 'border-[#C85A32] dark:border-[#D96B43] bg-[#C85A32]/10 dark:bg-[#D96B43]/15'
+          : 'bg-[#F3EFE6] dark:bg-[#1C1A18] border-[#E2DACD] dark:border-[#332F2B] hover:border-stone-400 dark:hover:border-stone-600'
       }`}>
         <div className="flex items-center justify-between">
           <div className="flex items-center space-x-3 flex-1 min-w-0">
@@ -49,7 +51,7 @@ export const TaskItem: React.FC<TaskItemProps> = ({ task, isSelected = false, on
                 type="checkbox"
                 checked={isSelected}
                 onChange={() => onToggleSelect(task.id)}
-                className="rounded text-indigo-500 cursor-pointer"
+                className="rounded text-[#C85A32] dark:text-[#D96B43] cursor-pointer"
               />
             )}
 
@@ -59,12 +61,12 @@ export const TaskItem: React.FC<TaskItemProps> = ({ task, isSelected = false, on
               onChange={(e) => toggleTaskStatus(task.id, e.target.value as TaskStatus)}
               className="bg-transparent text-xs focus:outline-none cursor-pointer border-none font-semibold text-gray-700 dark:text-gray-300"
             >
-              <option value="todo" className="dark:bg-[#0d111a]">⏹️ Todo</option>
-              <option value="doing" className="dark:bg-[#0d111a]">⏳ Doing</option>
-              <option value="blocked" className="dark:bg-[#0d111a]">⛔ Blocked</option>
-              <option value="waiting" className="dark:bg-[#0d111a]">⏸️ Waiting</option>
-              <option value="completed" className="dark:bg-[#0d111a]">✅ Completed</option>
-              <option value="cancelled" className="dark:bg-[#0d111a]">❌ Cancelled</option>
+              <option value="todo" className="dark:bg-[#1C1A18]">⏹️ Todo</option>
+              <option value="doing" className="dark:bg-[#1C1A18]">⏳ Doing</option>
+              <option value="blocked" className="dark:bg-[#1C1A18]">⛔ Blocked</option>
+              <option value="waiting" className="dark:bg-[#1C1A18]">⏸️ Waiting</option>
+              <option value="completed" className="dark:bg-[#1C1A18]">✅ Completed</option>
+              <option value="cancelled" className="dark:bg-[#1C1A18]">❌ Cancelled</option>
             </select>
 
             <div className="flex-1 min-w-0">
@@ -77,7 +79,7 @@ export const TaskItem: React.FC<TaskItemProps> = ({ task, isSelected = false, on
                   {task.title}
                 </span>
 
-                <Badge variant={priorityBadges[task.priority] || 'gray'}>
+                <Badge variant={priorityBadges[task.priority] || 'low'}>
                   {task.priority.toUpperCase()}
                 </Badge>
 
@@ -99,18 +101,18 @@ export const TaskItem: React.FC<TaskItemProps> = ({ task, isSelected = false, on
             {/* Task Focus Timer Launcher */}
             <button
               onClick={() => startFocusTimer(task.title, task.timeEstimateMinutes)}
-              className="p-1.5 rounded-lg bg-indigo-500/10 text-indigo-600 dark:text-indigo-400 hover:bg-indigo-500/20 text-xs flex items-center space-x-1"
+              className="p-1.5 rounded-lg bg-[#C85A32]/10 dark:bg-[#D96B43]/15 text-[#C85A32] dark:text-[#D96B43] hover:bg-[#C85A32]/20 text-xs flex items-center space-x-1 cursor-pointer"
               title="Start Focus Timer"
             >
-              <Play className="w-3 h-3 fill-indigo-400" />
+              <Play className="w-3 h-3 fill-[#C85A32] dark:fill-[#D96B43]" />
               <span className="font-mono text-[10px] hidden sm:inline">{task.timeEstimateMinutes}m</span>
             </button>
 
-            <button onClick={() => setIsEditOpen(true)} className="p-1 text-gray-400 hover:text-white">
+            <button onClick={() => setIsEditOpen(true)} className="p-1 text-gray-400 hover:text-gray-900 dark:hover:text-white cursor-pointer">
               <Edit className="w-3.5 h-3.5" />
             </button>
 
-            <button onClick={() => deleteTask(task.id)} className="p-1 text-gray-400 hover:text-rose-500">
+            <button onClick={() => deleteTask(task.id)} className="p-1 text-gray-400 hover:text-[#B84A39] dark:hover:text-[#E05A47] cursor-pointer">
               <Trash2 className="w-3.5 h-3.5" />
             </button>
           </div>
