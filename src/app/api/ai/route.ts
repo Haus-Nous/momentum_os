@@ -94,18 +94,20 @@ Return ONLY valid JSON with no extra markdown wrapping.`
           {
             role: 'system',
             content: `You are a deadline risk assessment system for Momentum OS.
-Analyze the user's upcoming assignments, hackathons, and internships and return a JSON array of risk reports:
-[
-  {
-    "id": string,
-    "title": string,
-    "type": "Assignment" | "Hackathon" | "Internship",
-    "dueDate": string,
-    "riskLevel": "HIGH 🚨" | "MEDIUM ⚠️",
-    "reason": string
-  }
-]
-Return ONLY valid JSON array with no extra markdown wrapping.`
+Analyze the user's upcoming assignments, hackathons, and internships and return a JSON object with a "risks" array:
+{
+  "risks": [
+    {
+      "id": "1",
+      "title": "Example Assignment",
+      "type": "Assignment",
+      "dueDate": "2026-08-20",
+      "riskLevel": "HIGH 🚨",
+      "reason": "Due in 2 days"
+    }
+  ]
+}
+Return ONLY valid JSON object with no extra markdown wrapping.`
           },
           { role: 'user', content: JSON.stringify(payload) }
         ],
@@ -113,10 +115,10 @@ Return ONLY valid JSON array with no extra markdown wrapping.`
         response_format: { type: 'json_object' }
       });
 
-      const responseText = completion.choices[0]?.message?.content || '[]';
+      const responseText = completion.choices[0]?.message?.content || '{"risks":[]}';
       const parsed = JSON.parse(responseText);
       const risksArray = Array.isArray(parsed) ? parsed : (parsed.risks || parsed.reports || []);
-      console.error('[API/AI LOG] predictRisks success');
+      console.error('[API/AI LOG] predictRisks success. Risks count:', risksArray.length);
       return NextResponse.json(risksArray);
     }
 
@@ -128,15 +130,17 @@ Return ONLY valid JSON array with no extra markdown wrapping.`
           {
             role: 'system',
             content: `You are a goal breakdown engine for Momentum OS.
-Break down the user's high-level goal into 3-5 actionable task steps. Return JSON array:
-[
-  {
-    "title": string,
-    "timeEstimateMinutes": number,
-    "priority": "urgent" | "high" | "medium" | "low"
-  }
-]
-Return ONLY valid JSON array with no markdown.`
+Break down the user's high-level goal into 3-5 actionable task steps. Return a JSON object with a "tasks" array:
+{
+  "tasks": [
+    {
+      "title": "Step 1 Title",
+      "timeEstimateMinutes": 30,
+      "priority": "high"
+    }
+  ]
+}
+Return ONLY valid JSON object with no markdown.`
           },
           { role: 'user', content: JSON.stringify(payload.goal || payload) }
         ],
@@ -144,10 +148,10 @@ Return ONLY valid JSON array with no markdown.`
         response_format: { type: 'json_object' }
       });
 
-      const responseText = completion.choices[0]?.message?.content || '[]';
+      const responseText = completion.choices[0]?.message?.content || '{"tasks":[]}';
       const parsed = JSON.parse(responseText);
       const tasksArray = Array.isArray(parsed) ? parsed : (parsed.tasks || parsed.steps || []);
-      console.error('[API/AI LOG] breakdownGoal success');
+      console.error('[API/AI LOG] breakdownGoal success. Tasks count:', tasksArray.length);
       return NextResponse.json(tasksArray);
     }
 

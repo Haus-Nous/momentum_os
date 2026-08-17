@@ -12,6 +12,7 @@ import { FloatingActionButton } from '../components/ui/FloatingActionButton';
 import { KeyboardShortcutsModal } from '../components/common/KeyboardShortcutsModal';
 import { DailyReviewModal } from '../components/calendar/DailyReviewModal';
 import { NotificationsModal } from '../components/common/NotificationsModal';
+import { AIAssistantDrawer } from '../components/ai/AIAssistantDrawer';
 
 import { NASAMissionControlView } from '../components/dashboard/NASAMissionControlView';
 import { PremiumDashboardView } from '../components/dashboard/PremiumDashboardView';
@@ -161,6 +162,7 @@ export default function Home() {
       <KeyboardShortcutsModal isOpen={isShortcutsOpen} onClose={() => setShortcutsOpen(false)} />
       <DailyReviewModal isOpen={isDailyReviewOpen} onClose={() => setDailyReviewOpen(false)} />
       <NotificationsModal isOpen={isNotificationsOpen} onClose={() => setNotificationsOpen(false)} />
+      <AIAssistantDrawer />
       <FloatingActionButton />
     </div>
   );
