@@ -7,17 +7,17 @@ import { Loader2 } from 'lucide-react';
 import { cn } from '../../utils/cn';
 
 const buttonVariants = cva(
-  "inline-flex items-center justify-center rounded-xl text-xs font-bold transition-all focus:outline-none focus:ring-2 focus:ring-indigo-500/40 disabled:opacity-50 disabled:pointer-events-none select-none cursor-pointer",
+  "inline-flex items-center justify-center rounded-xl text-xs font-bold transition-all focus:outline-none focus:ring-2 focus:ring-[#C85A32]/40 disabled:opacity-50 disabled:pointer-events-none select-none cursor-pointer",
   {
     variants: {
       variant: {
-        primary: "bg-gradient-to-r from-indigo-600 via-indigo-500 to-emerald-500 text-white shadow-lg shadow-indigo-500/25 hover:brightness-110",
-        secondary: "bg-white/10 dark:bg-white/10 text-gray-900 dark:text-white hover:bg-white/20 border border-black/5 dark:border-white/10",
-        glass: "bg-white/40 dark:bg-white/5 backdrop-blur-md text-gray-900 dark:text-white border border-black/10 dark:border-white/10 hover:border-indigo-500/40 hover:bg-white/60 dark:hover:bg-white/10 shadow-sm",
+        primary: "bg-[#C85A32] hover:bg-[#B54E29] dark:bg-[#D96B43] dark:hover:bg-[#C85A32] text-white shadow-sm hover:brightness-105",
+        secondary: "bg-[#E2DACD]/50 dark:bg-[#332F2B]/60 text-gray-900 dark:text-white hover:bg-[#E2DACD] dark:hover:bg-[#332F2B] border border-[#E2DACD] dark:border-[#332F2B]",
+        glass: "bg-[#F3EFE6]/80 dark:bg-[#1C1A18]/80 backdrop-blur-md text-gray-900 dark:text-white border border-[#E2DACD] dark:border-[#332F2B] hover:border-[#C85A32]/40 shadow-sm",
         ghost: "text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white hover:bg-black/5 dark:hover:bg-white/5",
-        outline: "border border-gray-300 dark:border-gray-700 text-gray-800 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-white/5",
-        destructive: "bg-rose-600/90 hover:bg-rose-600 text-white shadow-lg shadow-rose-600/20",
-        emerald: "bg-emerald-600 hover:bg-emerald-500 text-white shadow-lg shadow-emerald-600/30",
+        outline: "border border-[#E2DACD] dark:border-[#332F2B] text-gray-800 dark:text-gray-200 hover:bg-[#E2DACD]/30 dark:hover:bg-[#332F2B]/30",
+        destructive: "bg-[#C85A32] hover:bg-[#B54E29] text-white shadow-sm",
+        emerald: "bg-[#8A9A86] hover:bg-[#788874] dark:bg-[#9DB098] dark:hover:bg-[#8A9A86] text-white shadow-sm",
       },
       size: {
         sm: "px-3 py-1.5 text-[11px]",

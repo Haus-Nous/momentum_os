@@ -25,7 +25,7 @@ export const Header: React.FC = () => {
   const unreadCount = notifications.filter((n) => !n.read).length;
 
   return (
-    <header className="h-16 border-b border-black/10 dark:border-white/10 glass-card sticky top-0 z-30 px-6 flex items-center justify-between">
+    <header className="h-16 border-b border-[#E2DACD] dark:border-[#332F2B] bg-[#F3EFE6] dark:bg-[#1C1A18] sticky top-0 z-30 px-6 flex items-center justify-between transition-colors">
       {/* Left: Quick Search Trigger & Command Hint */}
       <div className="flex items-center space-x-4">
         <button
@@ -44,12 +44,12 @@ export const Header: React.FC = () => {
           onClick={() => toggleAmbientSound('rain')}
           className={`flex items-center space-x-1.5 px-2.5 py-1 rounded-lg text-xs font-semibold border transition-all cursor-pointer ${
             ambientSound.isPlaying
-              ? 'bg-indigo-500/20 text-indigo-400 border-indigo-500/30 shadow-sm shadow-indigo-500/20 animate-pulse'
-              : 'bg-black/5 dark:bg-white/5 text-gray-400 border-black/5 dark:border-white/5 hover:text-gray-200'
+              ? 'bg-[#C85A32]/10 text-[#C85A32] dark:text-[#D96B43] border-[#C85A32]/30'
+              : 'bg-black/5 dark:bg-white/5 text-gray-500 dark:text-gray-400 border-black/5 dark:border-white/5 hover:text-gray-900 dark:hover:text-white'
           }`}
-          title="Toggle Cyber Ambient Rain Soundscape"
+          title="Toggle Ambient Audio Soundscape"
         >
-          {ambientSound.isPlaying ? <Volume2 className="w-3.5 h-3.5 text-indigo-400" /> : <VolumeX className="w-3.5 h-3.5" />}
+          {ambientSound.isPlaying ? <Volume2 className="w-3.5 h-3.5 text-[#C85A32] dark:text-[#D96B43]" /> : <VolumeX className="w-3.5 h-3.5" />}
           <span className="hidden md:inline">{ambientSound.isPlaying ? 'Rain Audio' : 'Ambient Audio'}</span>
         </button>
       </div>
@@ -58,7 +58,7 @@ export const Header: React.FC = () => {
       <div className="flex items-center space-x-3">
         {/* User Account Info Pill */}
         {currentUser && (
-          <div className="hidden sm:flex items-center space-x-2 px-3 py-1 rounded-xl bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 text-xs font-medium">
+          <div className="hidden sm:flex items-center space-x-2 px-3 py-1 rounded-xl bg-[#8A9A86]/10 border border-[#8A9A86]/20 text-[#8A9A86] dark:text-[#9DB098] text-xs font-medium">
             <UserIcon className="w-3.5 h-3.5" />
             <span className="font-semibold">{currentUser.name}</span>
           </div>
@@ -67,7 +67,7 @@ export const Header: React.FC = () => {
         {/* AI Productivity Assistant Trigger Button */}
         <button
           onClick={() => setAIAssistantOpen(true)}
-          className="flex items-center space-x-1.5 px-3 py-1.5 rounded-xl bg-gradient-to-tr from-indigo-600 to-purple-600 hover:from-indigo-500 hover:to-purple-500 text-white text-xs font-bold shadow-md shadow-indigo-500/20 transition-all cursor-pointer"
+          className="flex items-center space-x-1.5 px-3.5 py-1.5 rounded-xl bg-[#C85A32] hover:bg-[#B54E29] dark:bg-[#D96B43] dark:hover:bg-[#C85A32] text-white text-xs font-bold shadow-sm transition-all cursor-pointer"
           title="Open AI Assistant"
         >
           <Sparkles className="w-3.5 h-3.5" />
@@ -76,12 +76,12 @@ export const Header: React.FC = () => {
 
         {/* Active Habit Streak & Freeze Token Badges */}
         <div className="flex items-center space-x-1.5">
-          <div className="flex items-center space-x-1 bg-amber-500/10 border border-amber-500/20 px-2.5 py-1 rounded-xl text-amber-500 font-mono text-xs font-bold" title="Active Daily Streak">
-            <Flame className="w-3.5 h-3.5 fill-amber-500" />
+          <div className="flex items-center space-x-1 bg-[#D9A05B]/10 border border-[#D9A05B]/20 px-2.5 py-1 rounded-xl text-[#D9A05B] dark:text-[#E5B574] font-mono text-xs font-bold" title="Active Daily Streak">
+            <Flame className="w-3.5 h-3.5 fill-[#D9A05B] dark:fill-[#E5B574]" />
             <span>{profile.streakDays}d</span>
           </div>
 
-          <div className="flex items-center space-x-1 bg-cyan-500/10 border border-cyan-500/20 px-2.5 py-1 rounded-xl text-cyan-400 font-mono text-xs font-bold" title="Streak Freeze Tokens (Max 3)">
+          <div className="flex items-center space-x-1 bg-[#78899A]/10 border border-[#78899A]/20 px-2.5 py-1 rounded-xl text-[#78899A] dark:text-[#90A2B4] font-mono text-xs font-bold" title="Streak Freeze Tokens (Max 3)">
             <span>🧊</span>
             <span>{profile.freezeTokens ?? 2}</span>
           </div>
@@ -90,19 +90,19 @@ export const Header: React.FC = () => {
         {/* Notification Bell with Badge */}
         <button
           onClick={() => setNotificationsOpen(true)}
-          className="relative p-2 rounded-xl bg-black/5 dark:bg-white/5 hover:bg-black/10 dark:hover:bg-white/10 text-gray-400 hover:text-white transition-colors cursor-pointer"
+          className="relative p-2 rounded-xl bg-black/5 dark:bg-white/5 hover:bg-black/10 dark:hover:bg-white/10 text-gray-500 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white transition-colors cursor-pointer"
           title="Notifications"
         >
           <Bell className="w-4 h-4" />
           {unreadCount > 0 && (
-            <span className="absolute top-1 right-1 w-2 h-2 rounded-full bg-rose-500 animate-ping" />
+            <span className="absolute top-1 right-1 w-2 h-2 rounded-full bg-[#C85A32] dark:bg-[#D96B43] animate-ping" />
           )}
         </button>
 
         {/* Log Out Button */}
         <button
           onClick={() => logout()}
-          className="p-2 rounded-xl bg-rose-500/10 hover:bg-rose-500/20 text-rose-400 border border-rose-500/20 transition-colors cursor-pointer"
+          className="p-2 rounded-xl bg-[#C85A32]/10 hover:bg-[#C85A32]/20 text-[#C85A32] dark:text-[#D96B43] border border-[#C85A32]/20 transition-colors cursor-pointer"
           title="Log Out"
         >
           <LogOut className="w-4 h-4" />

@@ -52,13 +52,13 @@ export const Sidebar: React.FC = () => {
 
   return (
     <aside
-      className={`h-screen sticky top-0 z-40 bg-[#0d111a] border-r border-black/10 dark:border-white/10 flex flex-col justify-between transition-all duration-300 ${
+      className={`h-screen sticky top-0 z-40 bg-[#F3EFE6] dark:bg-[#1C1A18] border-r border-[#E2DACD] dark:border-[#332F2B] flex flex-col justify-between transition-all duration-300 ${
         isCollapsed ? 'w-20' : 'w-64'
       }`}
     >
       {/* Brand Header */}
       <div>
-        <div className="h-16 px-5 flex items-center justify-between border-b border-black/10 dark:border-white/10">
+        <div className="h-16 px-5 flex items-center justify-between border-b border-[#E2DACD] dark:border-[#332F2B]">
           {!isCollapsed ? (
             <MomentumLogo size={28} showText={true} />
           ) : (
@@ -67,7 +67,7 @@ export const Sidebar: React.FC = () => {
 
           <button
             onClick={() => setIsCollapsed(!isCollapsed)}
-            className="p-1.5 rounded-lg text-gray-400 hover:text-white hover:bg-white/5 transition-colors"
+            className="p-1.5 rounded-lg text-gray-500 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white hover:bg-black/5 dark:hover:bg-white/5 transition-colors cursor-pointer"
           >
             {isCollapsed ? <ChevronRight className="w-4 h-4" /> : <ChevronLeft className="w-4 h-4" />}
           </button>
@@ -85,26 +85,28 @@ export const Sidebar: React.FC = () => {
                 onClick={() => setActiveTab(item.id)}
                 className={`w-full flex items-center justify-between px-3 py-2.5 rounded-xl transition-all cursor-pointer ${
                   isActive
-                    ? 'bg-gradient-to-r from-indigo-600/90 to-purple-600/90 text-white font-bold shadow-md shadow-indigo-500/20'
-                    : 'text-gray-400 hover:text-white hover:bg-white/5'
+                    ? 'bg-[#C85A32] dark:bg-[#D96B43] text-white font-bold shadow-sm'
+                    : 'text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white hover:bg-black/5 dark:hover:bg-white/5'
                 }`}
                 title={isCollapsed ? item.label : undefined}
               >
                 <div className="flex items-center space-x-3">
-                  <Icon className={`w-4 h-4 shrink-0 ${isActive ? 'text-white' : 'text-gray-400'}`} />
+                  <Icon className={`w-4 h-4 shrink-0 ${isActive ? 'text-white' : 'text-gray-500 dark:text-gray-400'}`} />
                   {!isCollapsed && <span>{item.label}</span>}
                 </div>
 
                 {!isCollapsed && item.badge && (
                   <span
                     className={`px-1.5 py-0.5 rounded text-[10px] font-mono font-bold ${
-                      item.badgeVariant === 'emerald'
-                        ? 'bg-emerald-500/20 text-emerald-400'
+                      isActive
+                        ? 'bg-white/20 text-white'
+                        : item.badgeVariant === 'emerald'
+                        ? 'bg-[#8A9A86]/20 text-[#8A9A86] dark:text-[#9DB098]'
                         : item.badgeVariant === 'indigo'
-                        ? 'bg-indigo-500/20 text-indigo-300'
+                        ? 'bg-[#C85A32]/20 text-[#C85A32] dark:text-[#D96B43]'
                         : item.badgeVariant === 'amber'
-                        ? 'bg-amber-500/20 text-amber-400'
-                        : 'bg-rose-500/20 text-rose-400'
+                        ? 'bg-[#D9A05B]/20 text-[#D9A05B] dark:text-[#E5B574]'
+                        : 'bg-[#C85A32]/20 text-[#C85A32] dark:text-[#D96B43]'
                     }`}
                   >
                     {item.badge}
@@ -118,16 +120,16 @@ export const Sidebar: React.FC = () => {
 
       {/* User Profile Mini Footer */}
       {!isCollapsed && (
-        <div className="p-4 border-t border-black/10 dark:border-white/10 bg-black/20 flex items-center space-x-3">
-          <div className="w-8 h-8 rounded-xl bg-gradient-to-tr from-emerald-500 to-indigo-600 p-0.5 shadow-md">
-            <div className="w-full h-full bg-[#0d111a] rounded-[10px] flex items-center justify-center font-bold text-emerald-400 text-xs font-mono">
+        <div className="p-4 border-t border-[#E2DACD] dark:border-[#332F2B] bg-[#FBF9F5] dark:bg-[#121110] flex items-center space-x-3">
+          <div className="w-8 h-8 rounded-xl bg-gradient-to-tr from-[#C85A32] to-[#D9A05B] p-0.5 shadow-sm">
+            <div className="w-full h-full bg-[#F3EFE6] dark:bg-[#1C1A18] rounded-[10px] flex items-center justify-center font-bold text-[#C85A32] dark:text-[#D96B43] text-xs font-mono">
               L{profile.level}
             </div>
           </div>
 
           <div className="flex-1 min-w-0">
-            <div className="text-xs font-bold text-white truncate">{profile.name}</div>
-            <div className="text-[10px] text-gray-400 truncate">{profile.xp} XP • {profile.coins || 420} 🪙</div>
+            <div className="text-xs font-bold text-gray-900 dark:text-white truncate">{profile.name}</div>
+            <div className="text-[10px] text-gray-500 dark:text-gray-400 truncate">{profile.xp} XP • {profile.coins || 420} 🪙</div>
           </div>
         </div>
       )}

@@ -9,15 +9,15 @@ export interface BadgeProps {
 
 export const Badge: React.FC<BadgeProps> = ({ variant = 'indigo', children, className }) => {
   const variantClasses = {
-    urgent: 'bg-rose-500/20 text-rose-600 dark:text-rose-400 border-rose-500/30',
-    high: 'bg-amber-500/20 text-amber-600 dark:text-amber-400 border-amber-500/30',
-    medium: 'bg-indigo-500/20 text-indigo-600 dark:text-indigo-400 border-indigo-500/30',
-    low: 'bg-gray-500/20 text-gray-600 dark:text-gray-400 border-gray-500/30',
-    emerald: 'bg-emerald-500/20 text-emerald-600 dark:text-emerald-400 border-emerald-500/30',
-    cyan: 'bg-cyan-500/20 text-cyan-600 dark:text-cyan-400 border-cyan-500/30',
-    amber: 'bg-amber-500/20 text-amber-600 dark:text-amber-400 border-amber-500/30',
-    indigo: 'bg-indigo-500/20 text-indigo-600 dark:text-indigo-400 border-indigo-500/30',
-    gray: 'bg-gray-200 dark:bg-white/10 text-gray-700 dark:text-gray-300 border-black/5 dark:border-white/10',
+    urgent: 'bg-[#C85A32]/15 text-[#C85A32] dark:text-[#D96B43] border-[#C85A32]/30',
+    high: 'bg-[#D9A05B]/15 text-[#D9A05B] dark:text-[#E5B574] border-[#D9A05B]/30',
+    medium: 'bg-[#C85A32]/15 text-[#C85A32] dark:text-[#D96B43] border-[#C85A32]/30',
+    low: 'bg-[#78716A]/15 text-[#78716A] dark:text-[#9E958C] border-[#78716A]/30',
+    emerald: 'bg-[#8A9A86]/15 text-[#8A9A86] dark:text-[#9DB098] border-[#8A9A86]/30',
+    cyan: 'bg-[#78899A]/15 text-[#78899A] dark:text-[#90A2B4] border-[#78899A]/30',
+    amber: 'bg-[#D9A05B]/15 text-[#D9A05B] dark:text-[#E5B574] border-[#D9A05B]/30',
+    indigo: 'bg-[#C85A32]/15 text-[#C85A32] dark:text-[#D96B43] border-[#C85A32]/30',
+    gray: 'bg-black/5 dark:bg-white/10 text-gray-700 dark:text-gray-300 border-black/10 dark:border-white/10',
   };
 
   return (
