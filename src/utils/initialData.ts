@@ -23,6 +23,7 @@ export const initialUserProfile: UserProfile = {
     career: 'Career Hub',
     internships: 'Career Opportunities',
   },
+  cgpaGoal: 8.5,
 };
 
 export const initialProjects: Project[] = [];

@@ -158,6 +158,7 @@ export interface UserProfile {
   enabledModules?: LifeModule[];
   customModuleLabels?: Record<string, string>;
   persona?: UserPersona;
+  cgpaGoal?: number;
 }
 
 export interface Course {

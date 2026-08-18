@@ -116,7 +116,12 @@ interface MomentumState {
   addCalendarEvent: (event: Omit<CalendarEvent, 'id'>) => void;
   deleteCalendarEvent: (id: string) => void;
 
-  // Assignments (Semester)
+  // Courses & Assignments (Academic)
+  addCourse: (course: Omit<Course, 'id'>) => void;
+  updateCourse: (id: string, updates: Partial<Course>) => void;
+  deleteCourse: (id: string) => void;
+  setCgpaGoal: (goal: number) => void;
+
   addAssignment: (assignment: Omit<Assignment, 'id'>) => void;
   updateAssignment: (id: string, updates: Partial<Assignment>) => void;
   deleteAssignment: (id: string) => void;
@@ -637,6 +642,44 @@ export const useMomentumStore = create<MomentumState>()((set, get) => ({
       deleteCalendarEvent: (id) => {
         soundEngine.playClick();
         set((state) => ({ calendarEvents: state.calendarEvents.filter((e) => e.id !== id) }));
+      },
+
+      // Courses
+      addCourse: (courseData) => {
+        soundEngine.playSuccess();
+        const newCourse: Course = {
+          id: 'crs_' + Date.now() + '_' + Math.random().toString(36).substring(2, 6),
+          ...courseData,
+        };
+        set((state) => {
+          const updated = [newCourse, ...state.courses];
+          saveCollectionToDexie('courses', updated);
+          return { courses: updated };
+        });
+      },
+      updateCourse: (id, updates) => {
+        soundEngine.playClick();
+        set((state) => {
+          const updated = state.courses.map((c) => (c.id === id ? { ...c, ...updates } : c));
+          saveCollectionToDexie('courses', updated);
+          return { courses: updated };
+        });
+      },
+      deleteCourse: (id) => {
+        soundEngine.playClick();
+        set((state) => {
+          const updated = state.courses.filter((c) => c.id !== id);
+          saveCollectionToDexie('courses', updated);
+          return { courses: updated };
+        });
+      },
+      setCgpaGoal: (goal) => {
+        soundEngine.playSuccess();
+        set((state) => {
+          const updatedProfile = { ...state.profile, cgpaGoal: goal };
+          saveCollectionToDexie('profile', [updatedProfile]);
+          return { profile: updatedProfile };
+        });
       },
 
       // Assignments

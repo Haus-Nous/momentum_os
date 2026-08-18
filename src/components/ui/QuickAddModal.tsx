@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useState } from 'react';
-import { X, CheckSquare, Flame, Target, GraduationCap, Trophy, Briefcase, Plus } from 'lucide-react';
+import { X, CheckSquare, Flame, Target, GraduationCap, Trophy, Briefcase, Plus, BookOpen } from 'lucide-react';
 import { useMomentumStore } from '../../store/useMomentumStore';
 import { TaskCreateModal } from '../tasks/TaskCreateModal';
 import { HabitModal } from '../habits/HabitModal';
@@ -9,6 +9,7 @@ import { GoalModal } from '../goals/GoalModal';
 import { AssignmentModal } from '../academic/AssignmentModal';
 import { HackathonModal } from '../career/HackathonModal';
 import { InternshipModal } from '../career/InternshipModal';
+import { CourseModal } from '../academic/CourseModal';
 
 interface QuickAddModalProps {
   isOpen: boolean;
@@ -16,11 +17,11 @@ interface QuickAddModalProps {
 }
 
 export const QuickAddModal: React.FC<QuickAddModalProps> = ({ isOpen, onClose }) => {
-  const [activeModal, setActiveModal] = useState<'task' | 'habit' | 'goal' | 'assignment' | 'hackathon' | 'internship' | null>(null);
+  const [activeModal, setActiveModal] = useState<'task' | 'habit' | 'goal' | 'assignment' | 'course' | 'hackathon' | 'internship' | null>(null);
 
   if (!isOpen) return null;
 
-  const handleSelect = (type: 'task' | 'habit' | 'goal' | 'assignment' | 'hackathon' | 'internship') => {
+  const handleSelect = (type: 'task' | 'habit' | 'goal' | 'assignment' | 'course' | 'hackathon' | 'internship') => {
     setActiveModal(type);
   };
 
@@ -57,6 +58,14 @@ export const QuickAddModal: React.FC<QuickAddModalProps> = ({ isOpen, onClose })
               </button>
 
               <button
+                onClick={() => handleSelect('course')}
+                className="flex items-center space-x-2.5 p-3 rounded-xl bg-black/5 dark:bg-white/5 hover:bg-[#D85A2A]/10 hover:text-[#D85A2A] dark:hover:text-[#E56B3A] border border-black/5 dark:border-white/10 text-gray-700 dark:text-gray-300 transition-colors cursor-pointer"
+              >
+                <BookOpen className="w-4 h-4 text-[#D85A2A] dark:text-[#E56B3A]" />
+                <span>New Course</span>
+              </button>
+
+              <button
                 onClick={() => handleSelect('goal')}
                 className="flex items-center space-x-2.5 p-3 rounded-xl bg-black/5 dark:bg-white/5 hover:bg-[#8A9A86]/10 hover:text-[#8A9A86] dark:hover:text-[#9DB098] border border-black/5 dark:border-white/10 text-gray-700 dark:text-gray-300 transition-colors cursor-pointer"
               >
@@ -79,14 +88,6 @@ export const QuickAddModal: React.FC<QuickAddModalProps> = ({ isOpen, onClose })
                 <Trophy className="w-4 h-4 text-[#D9A05B] dark:text-[#E5B574]" />
                 <span>Hackathon</span>
               </button>
-
-              <button
-                onClick={() => handleSelect('internship')}
-                className="flex items-center space-x-2.5 p-3 rounded-xl bg-black/5 dark:bg-white/5 hover:bg-[#D85A2A]/10 hover:text-[#D85A2A] dark:hover:text-[#E56B3A] border border-black/5 dark:border-white/10 text-gray-700 dark:text-gray-300 transition-colors cursor-pointer"
-              >
-                <Briefcase className="w-4 h-4 text-[#D85A2A] dark:text-[#E56B3A]" />
-                <span>Internship</span>
-              </button>
             </div>
           </div>
         </div>
@@ -94,6 +95,7 @@ export const QuickAddModal: React.FC<QuickAddModalProps> = ({ isOpen, onClose })
 
       {activeModal === 'task' && <TaskCreateModal isOpen={true} onClose={() => { setActiveModal(null); onClose(); }} />}
       {activeModal === 'habit' && <HabitModal isOpen={true} onClose={() => { setActiveModal(null); onClose(); }} />}
+      {activeModal === 'course' && <CourseModal isOpen={true} onClose={() => { setActiveModal(null); onClose(); }} />}
       {activeModal === 'goal' && <GoalModal isOpen={true} onClose={() => { setActiveModal(null); onClose(); }} />}
       {activeModal === 'assignment' && <AssignmentModal isOpen={true} onClose={() => { setActiveModal(null); onClose(); }} />}
       {activeModal === 'hackathon' && <HackathonModal isOpen={true} onClose={() => { setActiveModal(null); onClose(); }} />}
