@@ -108,7 +108,7 @@ export const GoalModal: React.FC<GoalModalProps> = ({ isOpen, onClose, initialGo
             placeholder="e.g. Secure Principal AI Systems Offer for Fall 2026"
           />
 
-          <div className="grid grid-cols-3 gap-3">
+          <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
             <div>
               <label className="block font-semibold text-gray-700 dark:text-gray-300 mb-1">Time Horizon</label>
               <select

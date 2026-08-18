@@ -25,6 +25,32 @@ export const CareerTrackerView: React.FC = () => {
   const [isHackathonOpen, setIsHackathonOpen] = useState(false);
   const [selectedHackathon, setSelectedHackathon] = useState<Hackathon | undefined>(undefined);
 
+  const [activeMobileStage, setActiveMobileStage] = useState<InternshipStatus>('wishlist');
+
+  const handleDragEnter = (e: React.DragEvent) => {
+    e.preventDefault();
+    e.dataTransfer.dropEffect = 'move';
+  };
+
+  const handleDragOver = (e: React.DragEvent) => {
+    e.preventDefault();
+    e.dataTransfer.dropEffect = 'move';
+  };
+
+  const handleDropStage = (e: React.DragEvent, targetStatus: InternshipStatus) => {
+    e.preventDefault();
+    const appId = e.dataTransfer.getData('text/plain') || e.dataTransfer.getData('appId');
+    if (appId) {
+      updateInternship(appId, { status: targetStatus });
+    }
+  };
+
+  const handleDragStartApp = (e: React.DragEvent, appId: string) => {
+    e.dataTransfer.setData('text/plain', appId);
+    e.dataTransfer.setData('appId', appId);
+    e.dataTransfer.effectAllowed = 'move';
+  };
+
   const pipelineStages: { id: InternshipStatus; title: string; color: string }[] = [
     { id: 'wishlist', title: 'Wishlist 📌', color: 'border-gray-500/30' },
     { id: 'applied', title: 'Applied 🚀', color: 'border-[#D85A2A]/30 dark:border-[#E56B3A]/30' },
@@ -213,67 +239,176 @@ export const CareerTrackerView: React.FC = () => {
         </div>
       ) : (
         /* Internship 6-Stage Kanban Pipeline */
-        <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-6 gap-3 overflow-x-auto pb-4">
-          {pipelineStages.map((stage) => {
-            const stageApplications = internships.filter((i) => i.status === stage.id);
-            return (
-              <div key={stage.id} className={`glass-card rounded-2xl p-3 border ${stage.color} flex flex-col h-[650px]`}>
-                <div className="flex items-center justify-between pb-2 mb-2 border-b border-black/5 dark:border-white/5">
-                  <h3 className="text-xs font-bold text-gray-900 dark:text-white">{stage.title}</h3>
-                  <span className="text-[10px] px-1.5 py-0.5 rounded-full font-bold bg-black/10 dark:bg-white/10 text-gray-400">
-                    {stageApplications.length}
+        <div className="space-y-4">
+          {/* Mobile Stage Selector (< 768px) */}
+          <div className="flex md:hidden items-center space-x-1.5 overflow-x-auto pb-2 scrollbar-none">
+            {pipelineStages.map((stage) => {
+              const count = internships.filter((i) => i.status === stage.id).length;
+              const isActive = activeMobileStage === stage.id;
+              return (
+                <button
+                  key={stage.id}
+                  onClick={() => setActiveMobileStage(stage.id)}
+                  className={`flex items-center space-x-1.5 px-3 py-1.5 rounded-xl text-xs font-semibold shrink-0 transition-all cursor-pointer ${
+                    isActive
+                      ? 'bg-[#D85A2A] dark:bg-[#E56B3A] text-white shadow-sm'
+                      : 'bg-[#F3EFE6] dark:bg-[#1C1A18] text-gray-600 dark:text-gray-400 border border-[#E2DACD] dark:border-[#332F2B]'
+                  }`}
+                >
+                  <span>{stage.title}</span>
+                  <span className={`text-[10px] px-1.5 py-0.2 rounded-full font-bold ${
+                    isActive ? 'bg-white/20 text-white' : 'bg-black/10 dark:bg-white/10 text-gray-500 dark:text-gray-400'
+                  }`}>
+                    {count}
                   </span>
-                </div>
+                </button>
+              );
+            })}
+          </div>
 
-                <div className="flex-1 overflow-y-auto space-y-2 pr-1">
-                  {stageApplications.map((app) => (
-                    <Card key={app.id} className="p-3 border-black/10 dark:border-white/10 space-y-2">
-                      <div className="flex items-start justify-between">
-                        <div>
-                          <h4 className="text-xs font-bold text-gray-900 dark:text-white">{app.company}</h4>
-                          <p className="text-[11px] text-indigo-400 font-semibold">{app.role}</p>
-                          <p className="text-[10px] text-gray-500">{app.location}</p>
-                        </div>
-                      </div>
-
-                      {app.salary && (
-                        <div className="text-[10px] font-bold text-emerald-500 font-mono bg-emerald-500/10 px-1.5 py-0.5 rounded inline-block">
-                          {app.salary}
-                        </div>
-                      )}
-
-                      {app.resumeVersion && (
-                        <div className="text-[10px] text-gray-400 flex items-center space-x-1 font-mono truncate">
-                          <FileText className="w-3 h-3 text-gray-500" />
-                          <span className="truncate">{app.resumeVersion}</span>
-                        </div>
-                      )}
-
-                      {/* Stage Selector */}
-                      <select
-                        value={app.status}
-                        onChange={(e) => updateInternship(app.id, { status: e.target.value as InternshipStatus })}
-                        className="w-full bg-black/5 dark:bg-white/5 border border-black/5 dark:border-white/10 rounded-lg px-2 py-1 text-[10px] text-gray-800 dark:text-gray-200 focus:outline-none"
-                      >
-                        <option value="wishlist" className="dark:bg-[#0d111a]">📌 Wishlist</option>
-                        <option value="applied" className="dark:bg-[#0d111a]">🚀 Applied</option>
-                        <option value="assessment" className="dark:bg-[#0d111a]">⚙️ Assessment</option>
-                        <option value="interview" className="dark:bg-[#0d111a]">🎯 Interview</option>
-                        <option value="offer" className="dark:bg-[#0d111a]">🏆 Offer</option>
-                        <option value="rejected" className="dark:bg-[#0d111a]">❌ Rejected</option>
-                      </select>
-                    </Card>
-                  ))}
-
-                  {stageApplications.length === 0 && (
-                    <div className="p-4 text-center text-[10px] text-gray-500 border border-dashed border-black/5 dark:border-white/5 rounded-xl">
-                      No applications
+          {/* Mobile Single Active Stage View (< 768px) */}
+          <div className="block md:hidden">
+            {pipelineStages
+              .filter((stage) => stage.id === activeMobileStage)
+              .map((stage) => {
+                const stageApplications = internships.filter((i) => i.status === stage.id);
+                return (
+                  <div
+                    key={stage.id}
+                    onDragEnter={handleDragEnter}
+                    onDragOver={handleDragOver}
+                    onDrop={(e) => handleDropStage(e, stage.id)}
+                    className={`rounded-2xl p-4 border ${stage.color} bg-[#F3EFE6] dark:bg-[#1C1A18] flex flex-col min-h-[400px]`}
+                  >
+                    <div className="flex items-center justify-between pb-3 mb-3 border-b border-black/5 dark:border-white/5">
+                      <h3 className="text-sm font-bold text-gray-900 dark:text-white">{stage.title}</h3>
+                      <span className="text-xs px-2 py-0.5 rounded-full font-bold bg-black/10 dark:bg-white/10 text-gray-500 dark:text-gray-400">
+                        {stageApplications.length} apps
+                      </span>
                     </div>
-                  )}
+
+                    <div className="space-y-3 flex-1">
+                      {stageApplications.map((app) => (
+                        <div
+                          key={app.id}
+                          draggable
+                          onDragStart={(e) => handleDragStartApp(e, app.id)}
+                          className="cursor-grab active:cursor-grabbing"
+                        >
+                          <Card className="p-3 border-[#E2DACD] dark:border-[#332F2B] space-y-2">
+                            <div className="flex items-start justify-between">
+                              <div>
+                                <h4 className="text-xs font-bold text-gray-900 dark:text-white">{app.company}</h4>
+                                <p className="text-[11px] text-[#D85A2A] dark:text-[#E56B3A] font-semibold">{app.role}</p>
+                                <p className="text-[10px] text-gray-500">{app.location}</p>
+                              </div>
+                            </div>
+
+                            {app.salary && (
+                              <div className="text-[10px] font-bold text-[#8A9A86] dark:text-[#9DB098] font-mono bg-[#8A9A86]/10 px-1.5 py-0.5 rounded inline-block">
+                                {app.salary}
+                              </div>
+                            )}
+
+                            {/* Stage Selector */}
+                            <select
+                              value={app.status}
+                              onMouseDown={(e) => e.stopPropagation()}
+                              onChange={(e) => updateInternship(app.id, { status: e.target.value as InternshipStatus })}
+                              className="w-full bg-black/5 dark:bg-white/5 border border-black/5 dark:border-white/10 rounded-lg px-2 py-1 text-[10px] text-gray-800 dark:text-gray-200 focus:outline-none cursor-pointer"
+                            >
+                              <option value="wishlist" className="dark:bg-[#1C1A18]">📌 Wishlist</option>
+                              <option value="applied" className="dark:bg-[#1C1A18]">🚀 Applied</option>
+                              <option value="assessment" className="dark:bg-[#1C1A18]">⚙️ Assessment</option>
+                              <option value="interview" className="dark:bg-[#1C1A18]">🎯 Interview</option>
+                              <option value="offer" className="dark:bg-[#1C1A18]">🏆 Offer</option>
+                              <option value="rejected" className="dark:bg-[#1C1A18]">❌ Rejected</option>
+                            </select>
+                          </Card>
+                        </div>
+                      ))}
+
+                      {stageApplications.length === 0 && (
+                        <div className="p-8 text-center text-xs text-gray-500 border border-dashed border-black/10 dark:border-white/10 rounded-xl">
+                          No applications in {stage.title}
+                        </div>
+                      )}
+                    </div>
+                  </div>
+                );
+              })}
+          </div>
+
+          {/* Desktop Multi-Column Pipeline (≥ 768px) */}
+          <div className="hidden md:grid md:grid-cols-3 lg:grid-cols-6 gap-3 pb-4">
+            {pipelineStages.map((stage) => {
+              const stageApplications = internships.filter((i) => i.status === stage.id);
+              return (
+                <div
+                  key={stage.id}
+                  onDragEnter={handleDragEnter}
+                  onDragOver={handleDragOver}
+                  onDrop={(e) => handleDropStage(e, stage.id)}
+                  className={`rounded-2xl p-3 border ${stage.color} bg-[#F3EFE6] dark:bg-[#1C1A18] flex flex-col h-[650px] transition-colors`}
+                >
+                  <div className="flex items-center justify-between pb-2 mb-2 border-b border-black/5 dark:border-white/5">
+                    <h3 className="text-xs font-bold text-gray-900 dark:text-white">{stage.title}</h3>
+                    <span className="text-[10px] px-1.5 py-0.5 rounded-full font-bold bg-black/10 dark:bg-white/10 text-gray-500 dark:text-gray-400">
+                      {stageApplications.length}
+                    </span>
+                  </div>
+
+                  <div className="flex-1 overflow-y-auto space-y-2 pr-1">
+                    {stageApplications.map((app) => (
+                      <div
+                        key={app.id}
+                        draggable
+                        onDragStart={(e) => handleDragStartApp(e, app.id)}
+                        className="cursor-grab active:cursor-grabbing"
+                      >
+                        <Card className="p-3 border-[#E2DACD] dark:border-[#332F2B] space-y-2">
+                          <div className="flex items-start justify-between">
+                            <div>
+                              <h4 className="text-xs font-bold text-gray-900 dark:text-white">{app.company}</h4>
+                              <p className="text-[11px] text-[#D85A2A] dark:text-[#E56B3A] font-semibold">{app.role}</p>
+                              <p className="text-[10px] text-gray-500">{app.location}</p>
+                            </div>
+                          </div>
+
+                          {app.salary && (
+                            <div className="text-[10px] font-bold text-[#8A9A86] dark:text-[#9DB098] font-mono bg-[#8A9A86]/10 px-1.5 py-0.5 rounded inline-block">
+                              {app.salary}
+                            </div>
+                          )}
+
+                          {/* Stage Selector */}
+                          <select
+                            value={app.status}
+                            onMouseDown={(e) => e.stopPropagation()}
+                            onChange={(e) => updateInternship(app.id, { status: e.target.value as InternshipStatus })}
+                            className="w-full bg-black/5 dark:bg-white/5 border border-black/5 dark:border-white/10 rounded-lg px-2 py-1 text-[10px] text-gray-800 dark:text-gray-200 focus:outline-none cursor-pointer"
+                          >
+                            <option value="wishlist" className="dark:bg-[#1C1A18]">📌 Wishlist</option>
+                            <option value="applied" className="dark:bg-[#1C1A18]">🚀 Applied</option>
+                            <option value="assessment" className="dark:bg-[#1C1A18]">⚙️ Assessment</option>
+                            <option value="interview" className="dark:bg-[#1C1A18]">🎯 Interview</option>
+                            <option value="offer" className="dark:bg-[#1C1A18]">🏆 Offer</option>
+                            <option value="rejected" className="dark:bg-[#1C1A18]">❌ Rejected</option>
+                          </select>
+                        </Card>
+                      </div>
+                    ))}
+
+                    {stageApplications.length === 0 && (
+                      <div className="p-4 text-center text-[10px] text-gray-500 border border-dashed border-black/5 dark:border-white/5 rounded-xl">
+                        No applications
+                      </div>
+                    )}
+                  </div>
                 </div>
-              </div>
-            );
-          })}
+              );
+            })}
+          </div>
         </div>
       )}
 
