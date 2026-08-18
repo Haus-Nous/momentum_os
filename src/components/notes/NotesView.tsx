@@ -36,7 +36,7 @@ export const NotesView: React.FC = () => {
   };
 
   return (
-    <div className="space-y-6 pb-12">
+    <div className="space-y-6 pb-12 w-full max-w-full min-w-0 overflow-hidden">
       {/* Mobile Tab Switcher (< 1024px) */}
       <div className="flex lg:hidden items-center space-x-1.5 p-1 rounded-xl bg-[#F3EFE6] dark:bg-[#1C1A18] border border-[#E2DACD] dark:border-[#332F2B] text-xs font-semibold">
         <button

@@ -8,7 +8,7 @@ export const FocusView: React.FC = () => {
   const { focusSessions, ambientSound, toggleAmbientSound, setAmbientVolume } = useMomentumStore();
 
   return (
-    <div className="space-y-6 pb-12">
+    <div className="space-y-6 pb-12 w-full max-w-full min-w-0 overflow-hidden">
       {/* Focus Timer & Sound Mixer Container */}
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
         {/* Main Countdown Timer */}

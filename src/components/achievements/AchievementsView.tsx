@@ -13,7 +13,7 @@ export const AchievementsView: React.FC = () => {
   const xpPct = Math.round((profile.xp / profile.xpToNextLevel) * 100);
 
   return (
-    <div className="space-y-6 pb-12">
+    <div className="space-y-6 pb-12 w-full max-w-full min-w-0 overflow-hidden">
       {/* RPG Level & XP Hero Header */}
       <Card className="p-6 border-[#E2DACD] dark:border-[#332F2B] bg-[#F3EFE6] dark:bg-[#1C1A18]">
         <div className="flex flex-col md:flex-row items-start md:items-center justify-between gap-4">

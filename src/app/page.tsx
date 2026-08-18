@@ -129,7 +129,7 @@ export default function Home() {
         <Header />
 
         {/* Dynamic View Route Container with Snappy Page Transitions */}
-        <main className="flex-1 overflow-y-auto p-6 md:p-8 space-y-6">
+        <main className="flex-1 overflow-y-auto p-3.5 sm:p-6 md:p-8 space-y-6">
           <AnimatePresence mode="wait">
             <motion.div
               key={activeTab}

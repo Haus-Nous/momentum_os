@@ -40,30 +40,30 @@ export const SemesterDashboardView: React.FC = () => {
   });
 
   return (
-    <div className="space-y-6 pb-12">
+    <div className="space-y-6 pb-12 w-full max-w-full min-w-0 overflow-hidden">
       {/* Header Banner */}
-      <Card className="p-6 border-[#E2DACD] dark:border-[#332F2B] bg-[#F3EFE6] dark:bg-[#1C1A18]">
+      <Card className="p-4 sm:p-6 border-[#E2DACD] dark:border-[#332F2B] bg-[#F3EFE6] dark:bg-[#1C1A18] w-full max-w-full min-w-0">
         <div className="flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
-          <div className="flex items-center space-x-4">
-            <div className="p-3.5 rounded-2xl bg-[#D85A2A]/10 text-[#D85A2A] dark:text-[#E56B3A]">
-              <GraduationCap className="w-7 h-7" />
+          <div className="flex items-center space-x-3 sm:space-x-4">
+            <div className="p-3 sm:p-3.5 rounded-2xl bg-[#D85A2A]/10 text-[#D85A2A] dark:text-[#E56B3A] shrink-0">
+              <GraduationCap className="w-6 h-6 sm:w-7 sm:h-7" />
             </div>
             <div>
-              <h2 className="text-xl font-black text-gray-900 dark:text-white">{labels.academicHubTitle}</h2>
+              <h2 className="text-lg sm:text-xl font-black text-gray-900 dark:text-white">{labels.academicHubTitle}</h2>
               <p className="text-xs text-gray-600 dark:text-gray-300 mt-0.5">
                 {labels.academicSubtitle} • Completion Rate: <span className="font-bold text-[#D85A2A] dark:text-[#E56B3A]">{asgRate}%</span>
               </p>
             </div>
           </div>
 
-          <div className="flex items-center space-x-3 text-xs font-mono">
-            <div className="p-3 rounded-xl bg-black/5 dark:bg-white/5 border border-black/5 dark:border-white/10 text-center">
+          <div className="grid grid-cols-2 gap-2 w-full md:w-auto md:flex md:items-center sm:space-x-3 text-xs font-mono">
+            <div className="p-2.5 sm:p-3 rounded-xl bg-black/5 dark:bg-white/5 border border-black/5 dark:border-white/10 text-center">
               <span className="text-gray-400 block text-[10px]">CGPA SCORE</span>
-              <span className="text-xl font-bold text-[#8A9A86] dark:text-[#9DB098]">{calculatedCgpa}</span>
+              <span className="text-lg sm:text-xl font-bold text-[#8A9A86] dark:text-[#9DB098]">{calculatedCgpa}</span>
             </div>
-            <div className="p-3 rounded-xl bg-black/5 dark:bg-white/5 border border-black/5 dark:border-white/10 text-center">
+            <div className="p-2.5 sm:p-3 rounded-xl bg-black/5 dark:bg-white/5 border border-black/5 dark:border-white/10 text-center">
               <span className="text-gray-400 block text-[10px]">SUBMISSION RATE</span>
-              <span className="text-xl font-bold text-[#D85A2A] dark:text-[#E56B3A]">{asgRate}%</span>
+              <span className="text-lg sm:text-xl font-bold text-[#D85A2A] dark:text-[#E56B3A]">{asgRate}%</span>
             </div>
           </div>
         </div>

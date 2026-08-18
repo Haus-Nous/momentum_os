@@ -19,12 +19,12 @@ export const HabitsView: React.FC = () => {
   const pausedOrArchived = habits.filter((h) => h.status === 'paused' || h.status === 'archived');
 
   return (
-    <div className="space-y-6 pb-12">
+    <div className="space-y-6 pb-12 w-full max-w-full min-w-0 overflow-hidden">
       {/* RPG Gamification Level & XP Card */}
       <GamificationCard />
 
       {/* Workspace Header Controls */}
-      <div className="flex flex-col md:flex-row items-start md:items-center justify-between gap-4 p-4 rounded-2xl border border-[#E2DACD] dark:border-[#332F2B] bg-[#F3EFE6] dark:bg-[#1C1A18]">
+      <div className="w-full max-w-full min-w-0 flex flex-col md:flex-row items-start md:items-center justify-between gap-4 p-4 rounded-2xl border border-[#E2DACD] dark:border-[#332F2B] bg-[#F3EFE6] dark:bg-[#1C1A18]">
         <div className="flex items-center space-x-2">
           {/* Tab Switcher */}
           <div className="flex items-center bg-black/5 dark:bg-white/5 p-1 rounded-xl border border-black/5 dark:border-white/10 text-xs">

@@ -31,16 +31,16 @@ export const NASAMissionControlView: React.FC = () => {
     : 0;
 
   return (
-    <div className="space-y-6 pb-12">
+    <div className="space-y-6 pb-12 w-full max-w-full min-w-0 overflow-hidden">
       {/* Home Base Header */}
-      <Card className="p-6 border-[#E2DACD] dark:border-[#332F2B] bg-[#F3EFE6] dark:bg-[#1C1A18]">
+      <Card className="p-4 sm:p-6 border-[#E2DACD] dark:border-[#332F2B] bg-[#F3EFE6] dark:bg-[#1C1A18] w-full max-w-full min-w-0">
         <div className="flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
           <div>
             <div className="flex items-center space-x-2 text-xs font-bold text-[#C85A32] dark:text-[#D96B43] font-mono tracking-widest uppercase">
               <Compass className="w-4 h-4 text-[#C85A32] dark:text-[#D96B43]" />
               <span>HOME BASE</span>
             </div>
-            <h1 className="text-2xl font-black text-gray-900 dark:text-white mt-1 flex items-center space-x-3">
+            <h1 className="text-xl sm:text-2xl font-black text-gray-900 dark:text-white mt-1 flex flex-wrap items-center gap-2">
               <span>Momentum Overview</span>
               <span className="text-xs font-bold font-mono px-2.5 py-1 rounded-lg bg-[#8A9A86]/15 text-[#8A9A86] dark:text-[#9DB098] border border-[#8A9A86]/30">
                 Steady Rhythm ✦
@@ -51,14 +51,14 @@ export const NASAMissionControlView: React.FC = () => {
             </p>
           </div>
 
-          <div className="flex items-center space-x-3 font-mono text-xs">
-            <div className="p-3 rounded-xl bg-[#FBF9F5] dark:bg-[#121110] border border-[#E2DACD] dark:border-[#332F2B] text-center">
+          <div className="grid grid-cols-2 gap-2 w-full md:w-auto md:flex md:items-center sm:space-x-3 font-mono text-xs">
+            <div className="p-2.5 sm:p-3 rounded-xl bg-[#FBF9F5] dark:bg-[#121110] border border-[#E2DACD] dark:border-[#332F2B] text-center">
               <span className="text-gray-500 dark:text-gray-400 block text-[10px] uppercase tracking-wider">URGENCY SCORE</span>
-              <span className="text-xl font-bold text-[#D93829] dark:text-[#ED4B3B]">{urgencyScore}/100</span>
+              <span className="text-lg sm:text-xl font-bold text-[#D93829] dark:text-[#ED4B3B]">{urgencyScore}/100</span>
             </div>
-            <div className="p-3 rounded-xl bg-[#FBF9F5] dark:bg-[#121110] border border-[#E2DACD] dark:border-[#332F2B] text-center">
+            <div className="p-2.5 sm:p-3 rounded-xl bg-[#FBF9F5] dark:bg-[#121110] border border-[#E2DACD] dark:border-[#332F2B] text-center">
               <span className="text-gray-500 dark:text-gray-400 block text-[10px] uppercase tracking-wider">MOMENTUM</span>
-              <span className="text-xl font-bold text-[#8A9A86] dark:text-[#9DB098]">{profile.momentumScore}%</span>
+              <span className="text-lg sm:text-xl font-bold text-[#8A9A86] dark:text-[#9DB098]">{profile.momentumScore}%</span>
             </div>
           </div>
         </div>

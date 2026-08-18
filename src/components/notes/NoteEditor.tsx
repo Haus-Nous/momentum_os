@@ -30,7 +30,7 @@ export const NoteEditor: React.FC<NoteEditorProps> = ({ note, onUpdate, onDelete
   };
 
   return (
-    <div className="rounded-2xl p-5 border border-[#E2DACD] dark:border-[#332F2B] bg-[#F3EFE6] dark:bg-[#1C1A18] flex flex-col h-full space-y-4">
+    <div className="rounded-2xl p-4 sm:p-5 border border-[#E2DACD] dark:border-[#332F2B] bg-[#F3EFE6] dark:bg-[#1C1A18] flex flex-col h-full space-y-4 w-full max-w-full min-w-0 overflow-hidden">
       {/* Note Header Title */}
       <div className="flex items-center justify-between pb-3 border-b border-black/10 dark:border-white/10">
         <input
