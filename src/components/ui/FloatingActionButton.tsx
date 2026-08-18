@@ -11,7 +11,7 @@ export const FloatingActionButton: React.FC = () => {
     <>
       <button
         onClick={() => setIsOpen(true)}
-        className="fixed bottom-6 right-6 z-40 w-14 h-14 rounded-2xl bg-gradient-to-tr from-emerald-500 via-indigo-600 to-cyan-500 text-white shadow-2xl shadow-emerald-500/30 flex items-center justify-center hover:scale-105 active:scale-95 transition-all duration-200 cursor-pointer"
+        className="fixed bottom-6 right-6 z-40 w-14 h-14 rounded-2xl bg-[#D85A2A] hover:bg-[#C44E20] dark:bg-[#E56B3A] dark:hover:bg-[#D85A2A] text-white shadow-xl shadow-[#D85A2A]/25 flex items-center justify-center hover:scale-105 active:scale-95 transition-all duration-200 cursor-pointer"
         title="Quick Add Anything"
       >
         <Plus className="w-7 h-7" />

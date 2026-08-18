@@ -62,8 +62,8 @@ export const MomentumLogo: React.FC<MomentumLogoProps> = ({ size = 28, showText 
 
       {showText && (
         <div className="flex flex-col">
-          <span className="text-sm font-black tracking-widest text-white font-mono leading-none">
-            MOMENTUM<span className="text-emerald-400">OS</span>
+          <span className="text-sm font-black tracking-widest text-gray-900 dark:text-white font-mono leading-none">
+            MOMENTUM<span className="text-[#22d3ee]">OS</span>
           </span>
           <span className="text-[9px] text-gray-500 font-mono tracking-wider leading-none mt-0.5">
             SYSTEMS • V2.5

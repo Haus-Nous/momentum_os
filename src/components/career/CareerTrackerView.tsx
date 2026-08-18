@@ -27,11 +27,11 @@ export const CareerTrackerView: React.FC = () => {
 
   const pipelineStages: { id: InternshipStatus; title: string; color: string }[] = [
     { id: 'wishlist', title: 'Wishlist 📌', color: 'border-gray-500/30' },
-    { id: 'applied', title: 'Applied 🚀', color: 'border-indigo-500/30' },
-    { id: 'assessment', title: 'Assessment ⚙️', color: 'border-cyan-500/30' },
-    { id: 'interview', title: 'Interview 🎯', color: 'border-amber-500/30' },
-    { id: 'offer', title: 'Offer 🏆', color: 'border-emerald-500/30' },
-    { id: 'rejected', title: 'Rejected ❌', color: 'border-rose-500/20' },
+    { id: 'applied', title: 'Applied 🚀', color: 'border-[#D85A2A]/30 dark:border-[#E56B3A]/30' },
+    { id: 'assessment', title: 'Assessment ⚙️', color: 'border-[#D9A05B]/30 dark:border-[#E5B574]/30' },
+    { id: 'interview', title: 'Interview 🎯', color: 'border-[#8A9A86]/30 dark:border-[#9DB098]/30' },
+    { id: 'offer', title: 'Offer 🏆', color: 'border-[#8A9A86]/40 dark:border-[#9DB098]/40' },
+    { id: 'rejected', title: 'Rejected ❌', color: 'border-[#D93829]/20' },
   ];
 
   return (
@@ -62,10 +62,10 @@ export const CareerTrackerView: React.FC = () => {
           <button
             onClick={() => setActiveTab('competitions')}
             className={`flex items-center space-x-1.5 px-3 py-1.5 rounded-lg font-semibold transition-colors ${
-              activeTab === 'competitions' ? 'bg-indigo-600 text-white' : 'text-gray-500 hover:text-gray-900 dark:text-gray-400 dark:hover:text-white'
+              activeTab === 'competitions' ? 'bg-[#D85A2A] dark:bg-[#E56B3A] text-white' : 'text-gray-500 hover:text-gray-900 dark:text-gray-400 dark:hover:text-white'
             }`}
           >
-            <Award className="w-3.5 h-3.5 text-cyan-400" />
+            <Award className="w-3.5 h-3.5 text-[#D9A05B] dark:text-[#E5B574]" />
             <span>Competitions ({competitions.length})</span>
           </button>
 
@@ -193,9 +193,9 @@ export const CareerTrackerView: React.FC = () => {
         /* Competitions Grid */
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           {competitions.map((cmp) => (
-            <Card key={cmp.id} className="p-4 border-cyan-500/30 flex items-center justify-between">
+            <Card key={cmp.id} className="p-4 border-[#E2DACD] dark:border-[#332F2B] flex items-center justify-between">
               <div>
-                <span className="text-xs font-bold text-cyan-500">{cmp.platform}</span>
+                <span className="text-xs font-bold text-[#D85A2A] dark:text-[#E56B3A]">{cmp.platform}</span>
                 <h4 className="text-sm font-bold text-gray-900 dark:text-white mt-0.5">{cmp.title}</h4>
                 <p className="text-[11px] text-gray-500 mt-0.5">Contest Date: {cmp.date}</p>
               </div>

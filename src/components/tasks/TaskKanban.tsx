@@ -13,7 +13,7 @@ export const TaskKanban: React.FC<TaskKanbanProps> = ({ tasks }) => {
     { id: 'todo', title: 'Todo ⏹️', color: 'text-gray-400', bg: 'border-gray-500/30' },
     { id: 'doing', title: 'Doing ⏳', color: 'text-amber-500', bg: 'border-amber-500/30' },
     { id: 'blocked', title: 'Blocked ⛔', color: 'text-rose-500', bg: 'border-rose-500/30' },
-    { id: 'waiting', title: 'Waiting ⏸️', color: 'text-cyan-500', bg: 'border-cyan-500/30' },
+    { id: 'waiting', title: 'Waiting ⏸️', color: 'text-[#D9A05B] dark:text-[#E5B574]', bg: 'border-[#D9A05B]/30' },
     { id: 'completed', title: 'Completed ✅', color: 'text-emerald-500', bg: 'border-emerald-500/30' },
     { id: 'cancelled', title: 'Cancelled ❌', color: 'text-gray-500', bg: 'border-gray-500/20' },
   ];

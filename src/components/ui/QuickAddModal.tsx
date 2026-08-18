@@ -27,14 +27,14 @@ export const QuickAddModal: React.FC<QuickAddModalProps> = ({ isOpen, onClose })
   return (
     <>
       {!activeModal && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/70 backdrop-blur-md p-4">
-          <div className="w-full max-w-sm bg-white dark:bg-[#0d111a] border border-black/10 dark:border-white/15 rounded-2xl shadow-2xl overflow-hidden p-6 animate-in fade-in zoom-in-95 duration-150">
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-md p-4">
+          <div className="w-full max-w-sm bg-[#F3EFE6] dark:bg-[#1C1A18] border border-[#E2DACD] dark:border-[#332F2B] rounded-2xl shadow-xl overflow-hidden p-6 animate-in fade-in zoom-in-95 duration-150">
             <div className="flex items-center justify-between pb-3 border-b border-black/10 dark:border-white/10 mb-4">
               <h3 className="text-sm font-bold text-gray-900 dark:text-white flex items-center space-x-2">
-                <Plus className="w-4 h-4 text-emerald-500" />
+                <Plus className="w-4 h-4 text-[#D85A2A] dark:text-[#E56B3A]" />
                 <span>Quick Create Anything</span>
               </h3>
-              <button onClick={onClose} className="p-1 rounded-lg text-gray-400 hover:text-white">
+              <button onClick={onClose} className="p-1 rounded-lg text-gray-400 hover:text-gray-900 dark:hover:text-white cursor-pointer">
                 <X className="w-4 h-4" />
               </button>
             </div>
@@ -42,49 +42,49 @@ export const QuickAddModal: React.FC<QuickAddModalProps> = ({ isOpen, onClose })
             <div className="grid grid-cols-2 gap-2 text-xs font-semibold">
               <button
                 onClick={() => handleSelect('task')}
-                className="flex items-center space-x-2.5 p-3 rounded-xl bg-black/5 dark:bg-white/5 hover:bg-indigo-500/20 hover:text-indigo-400 border border-black/5 dark:border-white/5 text-gray-700 dark:text-gray-300 transition-colors"
+                className="flex items-center space-x-2.5 p-3 rounded-xl bg-black/5 dark:bg-white/5 hover:bg-[#D85A2A]/10 hover:text-[#D85A2A] dark:hover:text-[#E56B3A] border border-black/5 dark:border-white/10 text-gray-700 dark:text-gray-300 transition-colors cursor-pointer"
               >
-                <CheckSquare className="w-4 h-4 text-indigo-500" />
+                <CheckSquare className="w-4 h-4 text-[#D85A2A] dark:text-[#E56B3A]" />
                 <span>New Task</span>
               </button>
 
               <button
                 onClick={() => handleSelect('habit')}
-                className="flex items-center space-x-2.5 p-3 rounded-xl bg-black/5 dark:bg-white/5 hover:bg-amber-500/20 hover:text-amber-400 border border-black/5 dark:border-white/5 text-gray-700 dark:text-gray-300 transition-colors"
+                className="flex items-center space-x-2.5 p-3 rounded-xl bg-black/5 dark:bg-white/5 hover:bg-[#D9A05B]/10 hover:text-[#D9A05B] dark:hover:text-[#E5B574] border border-black/5 dark:border-white/10 text-gray-700 dark:text-gray-300 transition-colors cursor-pointer"
               >
-                <Flame className="w-4 h-4 text-amber-500" />
+                <Flame className="w-4 h-4 text-[#D9A05B] dark:text-[#E5B574]" />
                 <span>New Habit</span>
               </button>
 
               <button
                 onClick={() => handleSelect('goal')}
-                className="flex items-center space-x-2.5 p-3 rounded-xl bg-black/5 dark:bg-white/5 hover:bg-emerald-500/20 hover:text-emerald-400 border border-black/5 dark:border-white/5 text-gray-700 dark:text-gray-300 transition-colors"
+                className="flex items-center space-x-2.5 p-3 rounded-xl bg-black/5 dark:bg-white/5 hover:bg-[#8A9A86]/10 hover:text-[#8A9A86] dark:hover:text-[#9DB098] border border-black/5 dark:border-white/10 text-gray-700 dark:text-gray-300 transition-colors cursor-pointer"
               >
-                <Target className="w-4 h-4 text-emerald-500" />
+                <Target className="w-4 h-4 text-[#8A9A86] dark:text-[#9DB098]" />
                 <span>New Goal</span>
               </button>
 
               <button
                 onClick={() => handleSelect('assignment')}
-                className="flex items-center space-x-2.5 p-3 rounded-xl bg-black/5 dark:bg-white/5 hover:bg-rose-500/20 hover:text-rose-400 border border-black/5 dark:border-white/5 text-gray-700 dark:text-gray-300 transition-colors"
+                className="flex items-center space-x-2.5 p-3 rounded-xl bg-black/5 dark:bg-white/5 hover:bg-[#D93829]/10 hover:text-[#D93829] dark:hover:text-[#ED4B3B] border border-black/5 dark:border-white/10 text-gray-700 dark:text-gray-300 transition-colors cursor-pointer"
               >
-                <GraduationCap className="w-4 h-4 text-rose-500" />
+                <GraduationCap className="w-4 h-4 text-[#D93829] dark:text-[#ED4B3B]" />
                 <span>Assignment</span>
               </button>
 
               <button
                 onClick={() => handleSelect('hackathon')}
-                className="flex items-center space-x-2.5 p-3 rounded-xl bg-black/5 dark:bg-white/5 hover:bg-purple-500/20 hover:text-purple-400 border border-black/5 dark:border-white/5 text-gray-700 dark:text-gray-300 transition-colors"
+                className="flex items-center space-x-2.5 p-3 rounded-xl bg-black/5 dark:bg-white/5 hover:bg-[#D9A05B]/10 hover:text-[#D9A05B] dark:hover:text-[#E5B574] border border-black/5 dark:border-white/10 text-gray-700 dark:text-gray-300 transition-colors cursor-pointer"
               >
-                <Trophy className="w-4 h-4 text-purple-500" />
+                <Trophy className="w-4 h-4 text-[#D9A05B] dark:text-[#E5B574]" />
                 <span>Hackathon</span>
               </button>
 
               <button
                 onClick={() => handleSelect('internship')}
-                className="flex items-center space-x-2.5 p-3 rounded-xl bg-black/5 dark:bg-white/5 hover:bg-cyan-500/20 hover:text-cyan-400 border border-black/5 dark:border-white/5 text-gray-700 dark:text-gray-300 transition-colors"
+                className="flex items-center space-x-2.5 p-3 rounded-xl bg-black/5 dark:bg-white/5 hover:bg-[#D85A2A]/10 hover:text-[#D85A2A] dark:hover:text-[#E56B3A] border border-black/5 dark:border-white/10 text-gray-700 dark:text-gray-300 transition-colors cursor-pointer"
               >
-                <Briefcase className="w-4 h-4 text-cyan-500" />
+                <Briefcase className="w-4 h-4 text-[#D85A2A] dark:text-[#E56B3A]" />
                 <span>Internship</span>
               </button>
             </div>

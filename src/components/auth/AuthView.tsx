@@ -204,10 +204,10 @@ export const AuthView: React.FC = () => {
           <button
             type="submit"
             disabled={isLoading}
-            className="w-full mt-2 bg-gradient-to-r from-emerald-500 to-teal-600 hover:from-emerald-400 hover:to-teal-500 text-slate-950 font-bold py-3 px-4 rounded-2xl flex items-center justify-center gap-2 shadow-lg shadow-emerald-500/20 active:scale-[0.99] transition duration-200 disabled:opacity-50 cursor-pointer"
+            className="w-full mt-2 bg-[#D85A2A] hover:bg-[#C44E20] dark:bg-[#E56B3A] dark:hover:bg-[#D85A2A] text-white font-bold py-3 px-4 rounded-2xl flex items-center justify-center gap-2 shadow-md shadow-[#D85A2A]/20 active:scale-[0.99] transition duration-200 disabled:opacity-50 cursor-pointer"
           >
             {isLoading ? (
-              <div className="w-5 h-5 border-2 border-slate-950 border-t-transparent rounded-full animate-spin" />
+              <div className="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin" />
             ) : (
               <>
                 <span>{mode === 'login' ? 'Log In to Workspace' : 'Initialize Personal OS'}</span>

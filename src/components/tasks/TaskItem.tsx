@@ -24,7 +24,7 @@ export const TaskItem: React.FC<TaskItemProps> = ({ task, isSelected = false, on
     todo: { label: 'Todo ⏹️', color: 'text-gray-400' },
     doing: { label: 'Doing ⏳', color: 'text-amber-500 font-bold' },
     blocked: { label: 'Blocked ⛔', color: 'text-rose-500 font-bold' },
-    waiting: { label: 'Waiting ⏸️', color: 'text-cyan-500 font-bold' },
+    waiting: { label: 'Waiting ⏸️', color: 'text-[#D9A05B] dark:text-[#E5B574] font-bold' },
     completed: { label: 'Completed ✅', color: 'text-emerald-500 font-bold' },
     cancelled: { label: 'Cancelled ❌', color: 'text-gray-500 line-through' },
   };

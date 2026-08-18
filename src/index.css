@@ -2,24 +2,24 @@
 
 @layer base {
   :root {
-    --bg-primary: #07090e;
-    --bg-secondary: #0d1117;
-    --bg-card: rgba(18, 24, 38, 0.75);
-    --bg-card-hover: rgba(28, 36, 56, 0.85);
+    --bg-primary: #121110;
+    --bg-secondary: #1C1A18;
+    --bg-card: #1C1A18;
+    --bg-card-hover: #262320;
     --border-color: rgba(255, 255, 255, 0.08);
-    --border-glow: rgba(99, 102, 241, 0.3);
+    --border-glow: rgba(216, 90, 42, 0.3);
     
-    --accent-emerald: #10b981;
-    --accent-cyan: #06b6d4;
-    --accent-indigo: #6366f1;
-    --accent-amber: #f59e0b;
-    --accent-rose: #f43f5e;
-    --accent-purple: #a855f7;
+    --accent-emerald: #8A9A86;
+    --accent-cyan: #78899A;
+    --accent-indigo: #D85A2A;
+    --accent-amber: #D9A05B;
+    --accent-rose: #D93829;
+    --accent-purple: #9A7B9B;
   }
 
   body {
     background-color: var(--bg-primary);
-    color: #f3f4f6;
+    color: #F5F2EC;
     font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
     overflow-x: hidden;
   }

@@ -103,7 +103,7 @@ export const HabitCard: React.FC<HabitCardProps> = ({ habit }) => {
                       skipHabit(habit.id);
                       setIsMenuOpen(false);
                     }}
-                    className="w-full flex items-center space-x-2 px-2.5 py-1.5 rounded-lg text-cyan-600 dark:text-cyan-400 hover:bg-black/5 dark:hover:bg-white/10"
+                    className="w-full flex items-center space-x-2 px-2.5 py-1.5 rounded-lg text-[#D9A05B] dark:text-[#E5B574] hover:bg-black/5 dark:hover:bg-white/10"
                   >
                     <FastForward className="w-3.5 h-3.5" />
                     <span>Skip Today</span>

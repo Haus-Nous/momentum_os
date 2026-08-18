@@ -35,7 +35,7 @@ export const SolarSystemMobileView: React.FC = () => {
     if (mod === 'academic') {
       name = profile.customModuleLabels?.semester || 'Academic Hub';
       navTab = 'semester';
-      icon = <GraduationCap className="w-4 h-4 text-cyan-400" />;
+      icon = <GraduationCap className="w-4 h-4 text-[#D85A2A] dark:text-[#E56B3A]" />;
       const pending = assignments.filter((a) => !a.completed);
       const overdue = pending.filter((a) => new Date(a.dueDate) < new Date());
       volumeCount = pending.length;
@@ -45,7 +45,7 @@ export const SolarSystemMobileView: React.FC = () => {
     } else if (mod === 'career') {
       name = profile.customModuleLabels?.career || 'Career Hub';
       navTab = 'career';
-      icon = <Briefcase className="w-4 h-4 text-amber-400" />;
+      icon = <Briefcase className="w-4 h-4 text-[#D9A05B] dark:text-[#E5B574]" />;
       const activeApps = (internships || []).filter((i) => i.status === 'applied' || i.status === 'interviewing');
       const upcomingHackathons = (hackathons || []).filter((h) => h.status === 'registered');
       volumeCount = activeApps.length + upcomingHackathons.length;
@@ -55,7 +55,7 @@ export const SolarSystemMobileView: React.FC = () => {
     } else if (mod === 'fitness') {
       name = 'Fitness & Health';
       navTab = 'habits';
-      icon = <Activity className="w-4 h-4 text-emerald-400" />;
+      icon = <Activity className="w-4 h-4 text-[#8A9A86] dark:text-[#9DB098]" />;
       const activeHabits = habits.filter((h) => h.status === 'active');
       volumeCount = activeHabits.length;
       const avgStreak = activeHabits.length > 0 
@@ -67,7 +67,7 @@ export const SolarSystemMobileView: React.FC = () => {
     } else if (mod === 'finance') {
       name = 'Finance Hub';
       navTab = 'goals';
-      icon = <DollarSign className="w-4 h-4 text-purple-400" />;
+      icon = <DollarSign className="w-4 h-4 text-[#D9A05B] dark:text-[#E5B574]" />;
       const financeGoals = goals.filter((g) => g.category === 'finance');
       const financeTasks = tasks.filter((t) => t.category === 'finance' && t.status !== 'completed');
       volumeCount = financeGoals.length + financeTasks.length;
@@ -76,7 +76,7 @@ export const SolarSystemMobileView: React.FC = () => {
     } else if (mod === 'creative') {
       name = 'Creative Studio';
       navTab = 'notes';
-      icon = <Palette className="w-4 h-4 text-indigo-400" />;
+      icon = <Palette className="w-4 h-4 text-[#D85A2A] dark:text-[#E56B3A]" />;
       const activeProjects = projects.filter((p) => p.status === 'active');
       volumeCount = activeProjects.length + (notes || []).length;
       if (activeProjects.some((p) => p.status === 'blocked')) healthState = 'needs_attention';
@@ -88,23 +88,23 @@ export const SolarSystemMobileView: React.FC = () => {
   };
 
   const stateBadges = {
-    needs_attention: { label: 'Needs Attention ⚠️', color: 'bg-rose-500/20 text-rose-300 border-rose-500/30' },
-    steady: { label: 'Steady ⚡', color: 'bg-cyan-500/20 text-cyan-300 border-cyan-500/30' },
-    thriving: { label: 'Thriving 🚀', color: 'bg-emerald-500/20 text-emerald-300 border-emerald-500/30' },
+    needs_attention: { label: 'Needs Attention ⚠️', color: 'bg-[#D93829]/20 text-[#D93829] dark:text-[#ED4B3B] border-[#D93829]/30' },
+    steady: { label: 'Steady ⚡', color: 'bg-[#D9A05B]/20 text-[#D9A05B] dark:text-[#E5B574] border-[#D9A05B]/30' },
+    thriving: { label: 'Thriving 🚀', color: 'bg-[#8A9A86]/20 text-[#8A9A86] dark:text-[#9DB098] border-[#8A9A86]/30' },
   };
 
   return (
-    <Card className="p-4 border-indigo-500/30 bg-[#0d111a] space-y-4">
-      <div className="flex items-center justify-between pb-3 border-b border-white/10">
+    <Card className="p-4 border-[#E2DACD] dark:border-[#332F2B] bg-[#F3EFE6] dark:bg-[#1C1A18] space-y-4">
+      <div className="flex items-center justify-between pb-3 border-b border-black/10 dark:border-white/10">
         <div className="flex items-center space-x-3">
-          <div className="w-10 h-10 rounded-xl bg-gradient-to-tr from-amber-500 to-emerald-500 p-0.5 shadow-lg shadow-emerald-500/20">
-            <div className="w-full h-full bg-[#07090e] rounded-[10px] flex items-center justify-center text-xs font-black text-white font-mono">
+          <div className="w-10 h-10 rounded-xl bg-[#D85A2A] dark:bg-[#E56B3A] p-0.5 shadow-sm">
+            <div className="w-full h-full bg-[#F3EFE6] dark:bg-[#1C1A18] rounded-[10px] flex items-center justify-center text-xs font-black text-[#D85A2A] dark:text-[#E56B3A] font-mono">
               {profile.name ? profile.name.slice(0, 2).toUpperCase() : 'ME'}
             </div>
           </div>
           <div>
-            <h3 className="text-xs font-bold text-white uppercase tracking-wider">System Orbital Telemetry</h3>
-            <p className="text-[10px] text-emerald-400 font-mono">Velocity: {momentumScore}% • Level {profile.level || 1}</p>
+            <h3 className="text-xs font-bold text-gray-900 dark:text-white uppercase tracking-wider">System Orbital Telemetry</h3>
+            <p className="text-[10px] text-[#8A9A86] dark:text-[#9DB098] font-mono">Velocity: {momentumScore}% • Level {profile.level || 1}</p>
           </div>
         </div>
       </div>
@@ -117,15 +117,15 @@ export const SolarSystemMobileView: React.FC = () => {
             <div
               key={mod}
               onClick={() => setActiveTab(cfg.navTab)}
-              className="p-3 rounded-xl bg-black/30 border border-white/10 hover:border-white/20 flex items-center justify-between text-xs cursor-pointer transition-all active:scale-[0.98]"
+              className="p-3 rounded-xl bg-black/5 dark:bg-white/5 border border-black/5 dark:border-white/10 hover:border-black/20 dark:hover:border-white/20 flex items-center justify-between text-xs cursor-pointer transition-all active:scale-[0.98]"
             >
               <div className="flex items-center space-x-3">
-                <div className="p-2 rounded-lg bg-white/5 border border-white/10">
+                <div className="p-2 rounded-lg bg-black/5 dark:bg-white/5 border border-black/5 dark:border-white/10">
                   {cfg.icon}
                 </div>
                 <div>
-                  <h4 className="font-bold text-white text-xs">{cfg.name}</h4>
-                  <p className="text-[10px] text-gray-400 font-mono">Active Items: {cfg.volumeCount}</p>
+                  <h4 className="font-bold text-gray-900 dark:text-white text-xs">{cfg.name}</h4>
+                  <p className="text-[10px] text-gray-500 font-mono">Active Items: {cfg.volumeCount}</p>
                 </div>
               </div>
 
@@ -133,7 +133,7 @@ export const SolarSystemMobileView: React.FC = () => {
                 <span className={`text-[9px] px-2 py-0.5 rounded-md border font-mono font-bold ${badge.color}`}>
                   {badge.label}
                 </span>
-                <ChevronRight className="w-4 h-4 text-gray-500" />
+                <ChevronRight className="w-4 h-4 text-gray-400" />
               </div>
             </div>
           );
