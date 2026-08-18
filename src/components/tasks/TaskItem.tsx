@@ -58,6 +58,7 @@ export const TaskItem: React.FC<TaskItemProps> = ({ task, isSelected = false, on
             {/* Status Change Selector */}
             <select
               value={task.status}
+              onMouseDown={(e) => e.stopPropagation()}
               onChange={(e) => toggleTaskStatus(task.id, e.target.value as TaskStatus)}
               className="bg-transparent text-xs focus:outline-none cursor-pointer border-none font-semibold text-gray-700 dark:text-gray-300"
             >

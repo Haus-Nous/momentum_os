@@ -41,7 +41,16 @@ export const TasksView: React.FC = () => {
   const todayStr = new Date().toISOString().split('T')[0];
 
   let filteredTasks = tasks.filter((task) => {
-    // Bucket filtering
+    // In Kanban view, preserve tasks across all status columns so dragging moves cards visibly
+    if (viewMode === 'kanban') {
+      if (activeBucket === 'inbox') return !task.dueDate;
+      if (activeBucket === 'today') return task.dueDate === todayStr;
+      if (activeBucket === 'upcoming') return task.dueDate && task.dueDate > todayStr;
+      if (activeBucket === 'completed') return task.status === 'completed';
+      return true;
+    }
+
+    // List / Table / Timeline Bucket filtering
     if (activeBucket === 'inbox') return !task.dueDate && task.status !== 'completed';
     if (activeBucket === 'today') return task.dueDate === todayStr && task.status !== 'completed';
     if (activeBucket === 'upcoming') return task.dueDate && task.dueDate > todayStr && task.status !== 'completed';
