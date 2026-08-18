@@ -16,31 +16,31 @@ export const RoutineCard: React.FC<RoutineCardProps> = ({ routine }) => {
   const progressPercent = totalCount > 0 ? Math.round((completedCount / totalCount) * 100) : 0;
 
   return (
-    <div className="glass-card rounded-2xl p-5 border border-white/10 relative overflow-hidden transition-all">
+    <div className="rounded-2xl p-5 border border-[#E2DACD] dark:border-[#332F2B] bg-[#F3EFE6] dark:bg-[#1C1A18] relative overflow-hidden transition-all">
       {/* Top Bar Header */}
       <div className="flex items-start justify-between mb-3">
         <div className="flex items-center space-x-3">
           <div
-            className="w-10 h-10 rounded-xl flex items-center justify-center font-bold text-white shadow-lg"
+            className="w-10 h-10 rounded-xl flex items-center justify-center font-bold text-white shadow-sm"
             style={{ backgroundColor: `${routine.color}25`, border: `1px solid ${routine.color}50` }}
           >
             <Zap className="w-5 h-5" style={{ color: routine.color }} />
           </div>
           <div>
-            <h3 className="text-base font-bold text-white flex items-center space-x-2">
+            <h3 className="text-base font-bold text-gray-900 dark:text-white flex items-center space-x-2">
               <span>{routine.title}</span>
               {routine.isCompletedToday && (
-                <span className="text-[10px] px-2 py-0.5 rounded-full bg-emerald-500/20 text-emerald-400 font-bold border border-emerald-500/30">
+                <span className="text-[10px] px-2 py-0.5 rounded-full bg-[#8A9A86]/20 text-[#8A9A86] dark:text-[#9DB098] font-bold border border-[#8A9A86]/30">
                   EXECUTED TODAY
                 </span>
               )}
             </h3>
-            <p className="text-xs text-gray-400 font-medium">{routine.tagline}</p>
+            <p className="text-xs text-gray-500 dark:text-gray-400 font-medium">{routine.tagline}</p>
           </div>
         </div>
 
         <div className="text-right">
-          <span className="text-xs font-mono font-bold text-gray-300">
+          <span className="text-xs font-mono font-bold text-gray-700 dark:text-gray-300">
             {completedCount}/{totalCount}
           </span>
           <div className="text-[10px] text-gray-400 font-semibold">{progressPercent}% Stack</div>
@@ -48,7 +48,7 @@ export const RoutineCard: React.FC<RoutineCardProps> = ({ routine }) => {
       </div>
 
       {/* Progress Bar */}
-      <div className="w-full bg-gray-800/80 h-1.5 rounded-full mb-4 overflow-hidden">
+      <div className="w-full bg-black/10 dark:bg-white/10 h-1.5 rounded-full mb-4 overflow-hidden">
         <div
           className="h-full rounded-full transition-all duration-500"
           style={{ width: `${progressPercent}%`, backgroundColor: routine.color }}
@@ -62,8 +62,8 @@ export const RoutineCard: React.FC<RoutineCardProps> = ({ routine }) => {
             key={item.id}
             className={`flex items-center justify-between p-3 rounded-xl border transition-all ${
               item.isCompleted
-                ? 'bg-white/5 border-white/5 text-gray-400'
-                : 'bg-white/5 border-white/10 text-gray-200 hover:border-white/20'
+                ? 'bg-black/5 dark:bg-white/5 border-transparent text-gray-400'
+                : 'bg-black/5 dark:bg-white/5 border-black/5 dark:border-white/10 text-gray-800 dark:text-gray-200 hover:border-black/20 dark:hover:border-white/20'
             }`}
           >
             <div
@@ -71,11 +71,11 @@ export const RoutineCard: React.FC<RoutineCardProps> = ({ routine }) => {
               className="flex items-center space-x-3 cursor-pointer flex-1"
             >
               {item.isCompleted ? (
-                <CheckCircle2 className="w-5 h-5 text-emerald-400 shrink-0" />
+                <CheckCircle2 className="w-5 h-5 text-[#8A9A86] dark:text-[#9DB098] shrink-0" />
               ) : (
-                <Circle className="w-5 h-5 text-gray-500 shrink-0 hover:text-white" />
+                <Circle className="w-5 h-5 text-gray-400 shrink-0 hover:text-gray-900 dark:hover:text-white" />
               )}
-              <span className={`text-xs font-semibold ${item.isCompleted ? 'line-through text-gray-500' : ''}`}>
+              <span className={`text-xs font-semibold ${item.isCompleted ? 'line-through text-gray-400' : ''}`}>
                 {item.title}
               </span>
             </div>

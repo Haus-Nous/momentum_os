@@ -13,27 +13,27 @@ export const SystemsView: React.FC = () => {
   return (
     <div className="space-y-6 pb-12">
       {/* Top Banner: The Systems Philosophy */}
-      <div className="glass-card rounded-2xl p-6 border border-indigo-500/30 bg-gradient-to-r from-indigo-900/30 via-[#0d111a] to-emerald-900/20 relative overflow-hidden">
+      <div className="rounded-2xl p-6 border border-[#E2DACD] dark:border-[#332F2B] bg-[#F3EFE6] dark:bg-[#1C1A18] relative overflow-hidden">
         <div className="flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
           <div>
-            <div className="flex items-center space-x-2 text-xs font-bold text-indigo-400 uppercase tracking-wider mb-1">
-              <Sparkles className="w-4 h-4 text-indigo-400" />
-              <span>THE MOMENTUM OS CORE ENGINE</span>
+            <div className="flex items-center space-x-2 text-xs font-bold text-[#D85A2A] dark:text-[#E56B3A] uppercase tracking-wider mb-1">
+              <Sparkles className="w-4 h-4 text-[#D85A2A] dark:text-[#E56B3A]" />
+              <span>Daily Routines & Habits</span>
             </div>
-            <h2 className="text-xl font-black text-white">Routines & Stack Protocols</h2>
-            <p className="text-xs text-gray-300 max-w-xl mt-1 leading-relaxed">
+            <h2 className="text-xl font-black text-gray-900 dark:text-white">Routines & Stack Protocols</h2>
+            <p className="text-xs text-gray-600 dark:text-gray-300 max-w-xl mt-1 leading-relaxed">
               Motivation gets you started; automated systems keep you executing. Run these pre-built stacks to eliminate decision fatigue and friction.
             </p>
           </div>
 
-          <div className="flex items-center space-x-4 bg-white/5 border border-white/10 p-3 rounded-xl shrink-0">
+          <div className="flex items-center space-x-4 bg-black/5 dark:bg-white/5 border border-black/5 dark:border-white/10 p-3 rounded-xl shrink-0">
             <div>
               <div className="text-[10px] uppercase tracking-wider font-bold text-gray-400">Daily Execution Rate</div>
-              <div className="text-xl font-black text-emerald-400">{executionRatio}%</div>
+              <div className="text-xl font-black text-[#8A9A86] dark:text-[#9DB098]">{executionRatio}%</div>
             </div>
             <button
               onClick={resetRoutinesForToday}
-              className="p-2 rounded-lg bg-white/10 hover:bg-white/20 text-white transition-colors flex items-center space-x-1 text-xs font-semibold"
+              className="p-2 rounded-lg bg-[#D85A2A] hover:bg-[#C44E20] dark:bg-[#E56B3A] dark:hover:bg-[#D85A2A] text-white transition-colors flex items-center space-x-1 text-xs font-semibold cursor-pointer"
               title="Reset Stacks for Today"
             >
               <RefreshCw className="w-3.5 h-3.5" />
@@ -51,25 +51,25 @@ export const SystemsView: React.FC = () => {
       </div>
 
       {/* Friction Reduction Rulebook Card */}
-      <div className="glass-card rounded-2xl p-6 border border-white/10">
-        <h3 className="text-base font-bold text-white mb-3 flex items-center space-x-2">
-          <ShieldAlert className="w-5 h-5 text-amber-400" />
+      <div className="rounded-2xl p-6 border border-[#E2DACD] dark:border-[#332F2B] bg-[#F3EFE6] dark:bg-[#1C1A18]">
+        <h3 className="text-base font-bold text-gray-900 dark:text-white mb-3 flex items-center space-x-2">
+          <ShieldAlert className="w-5 h-5 text-[#D9A05B] dark:text-[#E5B574]" />
           <span>Friction Elimination Protocols</span>
         </h3>
         <div className="grid grid-cols-1 md:grid-cols-3 gap-4 text-xs">
-          <div className="p-4 rounded-xl bg-white/5 border border-white/5">
-            <div className="font-bold text-indigo-300 mb-1">1. Default Path Minimization</div>
-            <p className="text-gray-400">Remove all physical and digital steps required to initiate the target habit. (e.g. open IDE automatically on morning boot).</p>
+          <div className="p-4 rounded-xl bg-black/5 dark:bg-white/5 border border-black/5 dark:border-white/10">
+            <div className="font-bold text-[#D85A2A] dark:text-[#E56B3A] mb-1">1. Default Path Minimization</div>
+            <p className="text-gray-600 dark:text-gray-300">Remove all physical and digital steps required to initiate the target habit. (e.g. open IDE automatically on morning boot).</p>
           </div>
 
-          <div className="p-4 rounded-xl bg-white/5 border border-white/5">
-            <div className="font-bold text-emerald-300 mb-1">2. Single-Task Anchoring</div>
-            <p className="text-gray-400">Never start a Deep Work stack without a single predefined Priority 1 task ready before closing Slack.</p>
+          <div className="p-4 rounded-xl bg-black/5 dark:bg-white/5 border border-black/5 dark:border-white/10">
+            <div className="font-bold text-[#8A9A86] dark:text-[#9DB098] mb-1">2. Single-Task Anchoring</div>
+            <p className="text-gray-600 dark:text-gray-300">Never start a Deep Work stack without a single predefined Priority 1 task ready before closing communication apps.</p>
           </div>
 
-          <div className="p-4 rounded-xl bg-white/5 border border-white/5">
-            <div className="font-bold text-amber-300 mb-1">3. Daily Rollover Friction Log</div>
-            <p className="text-gray-400">When a task is missed, log why. Was energy too low? Was task size too large? Deconstruct the system.</p>
+          <div className="p-4 rounded-xl bg-black/5 dark:bg-white/5 border border-black/5 dark:border-white/10">
+            <div className="font-bold text-[#D9A05B] dark:text-[#E5B574] mb-1">3. Daily Rollover Friction Log</div>
+            <p className="text-gray-600 dark:text-gray-300">When a task is missed, log why. Was energy too low? Was task size too large? Deconstruct the system.</p>
           </div>
         </div>
       </div>

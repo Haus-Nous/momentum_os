@@ -49,12 +49,12 @@ export const getPersonaLabels = (persona: UserPersona = 'student'): PersonaLabel
 
   // Default: student
   return {
-    careerHubTitle: 'Career & Placement Command Center',
-    careerSubtitle: 'Active Internship Pipeline',
+    careerHubTitle: 'Career & Growth',
+    careerSubtitle: 'Active Internship & Opportunity Pipeline',
     internshipButton: 'Log Internship',
     hackathonButton: 'Log Hackathon',
-    pipelineTitle: '6-Stage Internship Pipeline Kanban',
-    academicHubTitle: 'Academic & Semester Command Center',
+    pipelineTitle: 'Opportunity Pipeline',
+    academicHubTitle: 'Learning & Coursework',
     academicSubtitle: 'Enrolled Courses & Academic Track',
     semesterNavLabel: 'Semester Hub',
     careerNavLabel: 'Career Hub',

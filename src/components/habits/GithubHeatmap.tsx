@@ -31,10 +31,10 @@ export const GithubHeatmap: React.FC<GithubHeatmapProps> = ({ completionHistory 
   if (currentWeek.length > 0) weeks.push(currentWeek);
 
   const getColor = (count: number) => {
-    if (count === 0) return 'bg-gray-900 border-white/5';
-    if (count === 1) return 'bg-emerald-950 border-emerald-800 text-emerald-300';
-    if (count === 2) return 'bg-emerald-700 border-emerald-600 text-white';
-    return 'bg-emerald-400 border-emerald-300 shadow-md shadow-emerald-400/40 text-black';
+    if (count === 0) return 'bg-[#F3EFE6] dark:bg-[#1C1A18] border-[#E2DACD] dark:border-[#332F2B]';
+    if (count === 1) return 'bg-[#D85A2A]/25 dark:bg-[#E56B3A]/30 border-[#D85A2A]/40 dark:border-[#E56B3A]/40 text-gray-900 dark:text-white';
+    if (count === 2) return 'bg-[#D85A2A]/60 dark:bg-[#E56B3A]/60 border-[#D85A2A]/75 dark:border-[#E56B3A]/75 text-white';
+    return 'bg-[#D85A2A] dark:bg-[#E56B3A] border-[#C44E20] dark:border-[#D85A2A] shadow-sm text-white';
   };
 
   return (
@@ -53,7 +53,7 @@ export const GithubHeatmap: React.FC<GithubHeatmapProps> = ({ completionHistory 
                 >
                   {/* Hover Tooltip */}
                   <div className="absolute bottom-full left-1/2 transform -translate-x-1/2 mb-1 hidden group-hover:block z-30 pointer-events-none">
-                    <div className="bg-[#0d111a] border border-white/20 text-white text-[10px] px-2 py-1 rounded-lg whitespace-nowrap font-mono shadow-xl">
+                    <div className="bg-[#1C1A18] border border-[#332F2B] text-white text-[10px] px-2 py-1 rounded-lg whitespace-nowrap font-mono shadow-xl">
                       {day.dateStr}: {day.count} execution{day.count === 1 ? '' : 's'}
                     </div>
                   </div>
@@ -66,10 +66,10 @@ export const GithubHeatmap: React.FC<GithubHeatmapProps> = ({ completionHistory 
         {/* Legend Footer */}
         <div className="flex items-center justify-end space-x-2 mt-3 text-[10px] text-gray-400">
           <span>Less</span>
-          <div className="w-2.5 h-2.5 rounded-[2px] bg-gray-900 border border-white/5" />
-          <div className="w-2.5 h-2.5 rounded-[2px] bg-emerald-950 border border-emerald-800" />
-          <div className="w-2.5 h-2.5 rounded-[2px] bg-emerald-700 border border-emerald-600" />
-          <div className="w-2.5 h-2.5 rounded-[2px] bg-emerald-400 border border-emerald-300" />
+          <div className="w-2.5 h-2.5 rounded-[2px] bg-[#F3EFE6] dark:bg-[#1C1A18] border border-[#E2DACD] dark:border-[#332F2B]" />
+          <div className="w-2.5 h-2.5 rounded-[2px] bg-[#D85A2A]/25 dark:bg-[#E56B3A]/30 border border-[#D85A2A]/40" />
+          <div className="w-2.5 h-2.5 rounded-[2px] bg-[#D85A2A]/60 dark:bg-[#E56B3A]/60 border border-[#D85A2A]/75" />
+          <div className="w-2.5 h-2.5 rounded-[2px] bg-[#D85A2A] dark:bg-[#E56B3A] border border-[#C44E20]" />
           <span>More Consistency</span>
         </div>
       </div>

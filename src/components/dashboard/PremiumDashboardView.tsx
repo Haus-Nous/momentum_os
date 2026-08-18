@@ -44,25 +44,25 @@ export const PremiumDashboardView: React.FC = () => {
   return (
     <div className="space-y-6 pb-12">
       {/* Good Morning Header & Live Clock Banner */}
-      <Card gradient glow="indigo" className="p-6 border-indigo-500/30">
+      <Card className="p-6 border-[#E2DACD] dark:border-[#332F2B] bg-[#F3EFE6] dark:bg-[#1C1A18]">
         <div className="flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
           <div>
-            <div className="flex items-center space-x-2 text-xs font-bold text-indigo-400">
-              <Sun className="w-4 h-4 text-amber-400" />
-              <span>GOOD MORNING • OPTIMAL SYSTEM STATE</span>
+            <div className="flex items-center space-x-2 text-xs font-bold text-[#D85A2A] dark:text-[#E56B3A]">
+              <Sun className="w-4 h-4 text-[#D9A05B] dark:text-[#E5B574]" />
+              <span>OVERVIEW • STEADY PROGRESS</span>
             </div>
             <h1 className="text-2xl font-black text-gray-900 dark:text-white mt-1">
               Welcome Back, {profile.name}
             </h1>
             <p className="text-xs text-gray-600 dark:text-gray-300 mt-1 max-w-lg italic flex items-center space-x-1.5">
-              <Quote className="w-3.5 h-3.5 text-indigo-400 shrink-0" />
+              <Quote className="w-3.5 h-3.5 text-[#D85A2A] dark:text-[#E56B3A] shrink-0" />
               <span>"You do not rise to the level of your goals. You fall to the level of your systems."</span>
             </p>
           </div>
 
           <div className="flex items-center space-x-4">
             <div className="text-right">
-              <div className="text-2xl font-black font-mono text-indigo-400">{timeString || '09:41:00 AM'}</div>
+              <div className="text-2xl font-black font-mono text-[#D85A2A] dark:text-[#E56B3A]">{timeString || '09:41:00 AM'}</div>
               <div className="text-[10px] text-gray-400 uppercase tracking-widest font-mono">
                 {typeof window !== 'undefined' ? Intl.DateTimeFormat().resolvedOptions().timeZone.toUpperCase() : 'LOCAL TIME'}
               </div>
@@ -79,11 +79,11 @@ export const PremiumDashboardView: React.FC = () => {
         <LifeScoreGauge />
 
         {/* Today's Habits */}
-        <Card className="p-5 border-black/10 dark:border-white/10 space-y-4">
+        <Card className="p-5 border-[#E2DACD] dark:border-[#332F2B] space-y-4">
           <div className="flex items-center justify-between pb-2 border-b border-black/5 dark:border-white/5">
             <h3 className="text-xs font-bold text-gray-500 uppercase tracking-wider flex items-center space-x-1.5">
-              <Flame className="w-4 h-4 text-amber-500" />
-              <span>Active Habits Protocol</span>
+              <Flame className="w-4 h-4 text-[#D9A05B] dark:text-[#E5B574]" />
+              <span>Active Habits</span>
             </h3>
             <Badge variant="amber">{activeHabits.length} HABITS</Badge>
           </div>
@@ -96,21 +96,21 @@ export const PremiumDashboardView: React.FC = () => {
         </Card>
 
         {/* Pomodoro Focus Sanctuary */}
-        <Card className="p-5 border-indigo-500/30 flex flex-col justify-between">
+        <Card className="p-5 border-[#E2DACD] dark:border-[#332F2B] flex flex-col justify-between">
           <div>
-            <div className="flex items-center space-x-2 text-xs font-bold text-indigo-400">
+            <div className="flex items-center space-x-2 text-xs font-bold text-[#D85A2A] dark:text-[#E56B3A]">
               <Clock className="w-4 h-4" />
-              <span>Focus Sanctuary</span>
+              <span>Focus Block</span>
             </div>
-            <h3 className="text-base font-bold text-gray-900 dark:text-white mt-1">Initiate Focus Block</h3>
-            <p className="text-xs text-gray-500 mt-1">50-min Pomodoro block with procedural rain soundscapes.</p>
+            <h3 className="text-base font-bold text-gray-900 dark:text-white mt-1">Start 50-Min Focus</h3>
+            <p className="text-xs text-gray-500 mt-1">50-min Focus block with procedural rain soundscapes.</p>
           </div>
 
           <div className="my-4 text-center">
-            <div className="text-3xl font-black font-mono text-indigo-400">50:00</div>
+            <div className="text-3xl font-black font-mono text-[#D85A2A] dark:text-[#E56B3A]">50:00</div>
           </div>
 
-          <Button onClick={() => startFocusTimer('Dashboard Sprint', 50)} variant="emerald" size="md" className="w-full justify-center">
+          <Button onClick={() => startFocusTimer('Dashboard Sprint', 50)} variant="primary" size="md" className="w-full justify-center">
             <Play className="w-4 h-4 mr-1.5 fill-white" /> Start 50-Min Sprint
           </Button>
         </Card>

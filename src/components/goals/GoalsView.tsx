@@ -89,7 +89,7 @@ export const GoalsView: React.FC = () => {
                 onClick={() => setActiveHorizonFilter(h.id)}
                 className={`px-3 py-1.5 rounded-xl font-bold transition-all shrink-0 cursor-pointer ${
                   activeHorizonFilter === h.id
-                    ? 'bg-[#8A9A86] text-white shadow-sm'
+                    ? 'bg-[#D85A2A] dark:bg-[#E56B3A] text-white shadow-sm'
                     : 'bg-black/5 dark:bg-white/5 text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white border border-black/5 dark:border-white/5'
                 }`}
               >

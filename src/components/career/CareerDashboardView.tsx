@@ -22,12 +22,12 @@ export const CareerDashboardView: React.FC = () => {
   const labels = getPersonaLabels(profile.persona);
 
   const pipelineStages: { id: InternshipStatus; label: string; color: string }[] = [
-    { id: 'wishlist', label: 'Wishlist', color: 'border-slate-500/30' },
-    { id: 'applied', label: 'Applied', color: 'border-indigo-500/30' },
-    { id: 'assessment', label: 'Assessment', color: 'border-amber-500/30' },
-    { id: 'interview', label: 'Interview', color: 'border-purple-500/30' },
-    { id: 'offer', label: 'Offer Received', color: 'border-emerald-500/30' },
-    { id: 'rejected', label: 'Archived', color: 'border-rose-500/30' },
+    { id: 'wishlist', label: 'Wishlist', color: 'border-[#E2DACD] dark:border-[#332F2B]' },
+    { id: 'applied', label: 'Applied', color: 'border-[#D85A2A]/30 dark:border-[#E56B3A]/30' },
+    { id: 'assessment', label: 'Assessment', color: 'border-[#D9A05B]/30 dark:border-[#E5B574]/30' },
+    { id: 'interview', label: 'Interview', color: 'border-[#8A9A86]/30 dark:border-[#9DB098]/30' },
+    { id: 'offer', label: 'Offer Received', color: 'border-[#8A9A86]/40 dark:border-[#9DB098]/40' },
+    { id: 'rejected', label: 'Archived', color: 'border-[#E2DACD] dark:border-[#332F2B]' },
   ];
 
   const careerVelocity = Math.min(

@@ -102,17 +102,17 @@ export const AnalyticsView: React.FC = () => {
         </Card>
 
         {/* Task Completion % */}
-        <Card className="p-4 border-[#78899A]/30 dark:border-[#90A2B4]/30">
+        <Card className="p-4 border-[#8A9A86]/30 dark:border-[#9DB098]/30">
           <div className="text-[10px] font-bold text-gray-500 uppercase">Task Completion</div>
-          <div className="text-2xl text-[#78899A] dark:text-[#90A2B4] font-bold font-mono mt-1">
+          <div className="text-2xl text-[#8A9A86] dark:text-[#9DB098] font-bold font-mono mt-1">
             <AnimatedCounter value={metrics.taskCompletionRate} suffix="%" />
           </div>
         </Card>
 
         {/* Sleep Architecture */}
-        <Card className="p-4 border-[#E2DACD] dark:border-[#332F2B]">
+        <Card className="p-4 border-[#D9A05B]/30 dark:border-[#E5B574]/30">
           <div className="text-[10px] font-bold text-gray-500 uppercase">Avg Sleep</div>
-          <div className="text-2xl text-gray-900 dark:text-white font-bold font-mono mt-1">
+          <div className="text-2xl text-[#D9A05B] dark:text-[#E5B574] font-bold font-mono mt-1">
             <AnimatedCounter value={metrics.avgSleepHours} suffix=" hrs" decimals={1} />
           </div>
         </Card>
