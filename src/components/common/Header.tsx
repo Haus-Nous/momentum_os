@@ -2,7 +2,7 @@
 
 import React from 'react';
 import { 
-  Sparkles, Search, Bell, Flame, Zap, Command, Volume2, VolumeX, Shield, LogOut, User as UserIcon
+  Sparkles, Search, Bell, Flame, Zap, Command, Volume2, VolumeX, Shield, LogOut, User as UserIcon, Menu
 } from 'lucide-react';
 import { useMomentumStore } from '../../store/useMomentumStore';
 import { useAuthStore } from '../../store/useAuthStore';
@@ -17,7 +17,8 @@ export const Header: React.FC = () => {
     notifications,
     ambientSound,
     toggleAmbientSound,
-    setAIAssistantOpen
+    setAIAssistantOpen,
+    setMobileSidebarOpen
   } = useMomentumStore();
 
   const { currentUser, logout } = useAuthStore();
@@ -25,9 +26,17 @@ export const Header: React.FC = () => {
   const unreadCount = notifications.filter((n) => !n.read).length;
 
   return (
-    <header className="h-16 border-b border-[#E2DACD] dark:border-[#332F2B] bg-[#F3EFE6] dark:bg-[#1C1A18] sticky top-0 z-30 px-6 flex items-center justify-between transition-colors">
-      {/* Left: Quick Search Trigger & Command Hint */}
-      <div className="flex items-center space-x-4">
+    <header className="h-16 border-b border-[#E2DACD] dark:border-[#332F2B] bg-[#F3EFE6] dark:bg-[#1C1A18] sticky top-0 z-30 px-3 md:px-6 flex items-center justify-between transition-colors">
+      {/* Left: Hamburger (Mobile) + Quick Search Trigger & Command Hint */}
+      <div className="flex items-center space-x-2 md:space-x-4">
+        {/* Mobile Hamburger Trigger */}
+        <button
+          onClick={() => setMobileSidebarOpen(true)}
+          className="md:hidden p-2 rounded-xl bg-black/5 dark:bg-white/5 hover:bg-black/10 dark:hover:bg-white/10 text-gray-700 dark:text-gray-200 transition-colors cursor-pointer"
+          title="Open Menu"
+        >
+          <Menu className="w-5 h-5" />
+        </button>
         <button
           onClick={() => setCommandPaletteOpen(true)}
           className="flex items-center space-x-2.5 px-3 py-1.5 rounded-xl bg-black/5 dark:bg-white/5 hover:bg-black/10 dark:hover:bg-white/10 border border-black/5 dark:border-white/5 text-gray-500 text-xs transition-colors cursor-pointer"

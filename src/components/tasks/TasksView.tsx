@@ -95,11 +95,11 @@ export const TasksView: React.FC = () => {
   ];
 
   return (
-    <div className="space-y-6 pb-12">
+    <div className="space-y-6 pb-12 w-full max-w-full min-w-0 overflow-hidden">
       {/* Workspace Controls Header */}
-      <div className="flex flex-col lg:flex-row items-start lg:items-center justify-between gap-4 p-4 rounded-2xl bg-[#F3EFE6] dark:bg-[#1C1A18] border border-[#E2DACD] dark:border-[#332F2B]">
+      <div className="w-full max-w-full min-w-0 flex flex-col lg:flex-row items-start lg:items-center justify-between gap-4 p-4 rounded-2xl bg-[#F3EFE6] dark:bg-[#1C1A18] border border-[#E2DACD] dark:border-[#332F2B]">
         {/* Bucket Filter Buttons */}
-        <div className="flex items-center space-x-1.5 bg-black/5 dark:bg-white/5 p-1 rounded-xl border border-black/5 dark:border-white/10 text-xs overflow-x-auto">
+        <div className="w-full lg:w-auto max-w-full min-w-0 flex items-center space-x-1.5 bg-black/5 dark:bg-white/5 p-1 rounded-xl border border-black/5 dark:border-white/10 text-xs overflow-x-auto scrollbar-none">
           {buckets.map((b) => {
             const Icon = b.icon;
             const isActive = activeBucket === b.id;
@@ -119,7 +119,7 @@ export const TasksView: React.FC = () => {
         </div>
 
         {/* View Switcher Controls */}
-        <div className="flex items-center space-x-3">
+        <div className="flex items-center justify-between w-full lg:w-auto space-x-3">
           <div className="flex items-center bg-black/5 dark:bg-white/5 p-1 rounded-xl border border-black/5 dark:border-white/10 text-xs">
             <button
               onClick={() => setViewMode('list')}
@@ -170,8 +170,8 @@ export const TasksView: React.FC = () => {
       </div>
 
       {/* Smart Filters Bar */}
-      <div className="flex flex-wrap items-center justify-between gap-3 text-xs">
-        <div className="flex items-center space-x-2 flex-1 min-w-[200px] bg-black/5 dark:bg-white/5 border border-black/5 dark:border-white/10 px-3 py-1.5 rounded-xl">
+      <div className="w-full max-w-full flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-3 text-xs">
+        <div className="flex items-center space-x-2 w-full sm:w-auto flex-1 bg-black/5 dark:bg-white/5 border border-black/5 dark:border-white/10 px-3 py-1.5 rounded-xl">
           <Search className="w-4 h-4 text-gray-400" />
           <input
             type="text"
@@ -182,28 +182,28 @@ export const TasksView: React.FC = () => {
           />
         </div>
 
-        <div className="flex items-center space-x-2">
+        <div className="grid grid-cols-3 gap-2 w-full sm:w-auto sm:flex sm:items-center sm:space-x-2">
           <select
             value={filterPriority}
             onChange={(e) => setFilterPriority(e.target.value)}
-            className="bg-black/5 dark:bg-white/5 border border-black/5 dark:border-white/10 rounded-xl px-2.5 py-1.5 text-gray-700 dark:text-gray-300 focus:outline-none"
+            className="w-full sm:w-auto bg-black/5 dark:bg-white/5 border border-black/5 dark:border-white/10 rounded-xl px-2.5 py-1.5 text-gray-700 dark:text-gray-300 focus:outline-none"
           >
-            <option value="all" className="dark:bg-[#0d111a]">All Priorities</option>
-            <option value="urgent" className="dark:bg-[#0d111a]">Urgent P1</option>
-            <option value="high" className="dark:bg-[#0d111a]">High P2</option>
-            <option value="medium" className="dark:bg-[#0d111a]">Medium P3</option>
-            <option value="low" className="dark:bg-[#0d111a]">Low P4</option>
+            <option value="all" className="dark:bg-[#1C1A18]">All Priorities</option>
+            <option value="urgent" className="dark:bg-[#1C1A18]">Urgent P1</option>
+            <option value="high" className="dark:bg-[#1C1A18]">High P2</option>
+            <option value="medium" className="dark:bg-[#1C1A18]">Medium P3</option>
+            <option value="low" className="dark:bg-[#1C1A18]">Low P4</option>
           </select>
 
           <select
             value={filterEnergy}
             onChange={(e) => setFilterEnergy(e.target.value)}
-            className="bg-black/5 dark:bg-white/5 border border-black/5 dark:border-white/10 rounded-xl px-2.5 py-1.5 text-gray-700 dark:text-gray-300 focus:outline-none"
+            className="w-full sm:w-auto bg-black/5 dark:bg-white/5 border border-black/5 dark:border-white/10 rounded-xl px-2.5 py-1.5 text-gray-700 dark:text-gray-300 focus:outline-none"
           >
-            <option value="all" className="dark:bg-[#0d111a]">All Energy Levels</option>
-            <option value="high" className="dark:bg-[#0d111a]">⚡ High Energy</option>
-            <option value="medium" className="dark:bg-[#0d111a]">⚙️ Medium Energy</option>
-            <option value="low" className="dark:bg-[#0d111a]">🌿 Low Energy</option>
+            <option value="all" className="dark:bg-[#1C1A18]">All Energy</option>
+            <option value="high" className="dark:bg-[#1C1A18]">⚡ High</option>
+            <option value="medium" className="dark:bg-[#1C1A18]">⚙️ Medium</option>
+            <option value="low" className="dark:bg-[#1C1A18]">🌿 Low</option>
           </select>
 
           <select

@@ -37,6 +37,8 @@ interface MomentumState {
   setNotificationsOpen: (isOpen: boolean) => void;
   isAIAssistantOpen: boolean;
   setAIAssistantOpen: (isOpen: boolean) => void;
+  isMobileSidebarOpen: boolean;
+  setMobileSidebarOpen: (isOpen: boolean) => void;
 
   // Data Collections
   profile: UserProfile;
@@ -208,7 +210,7 @@ export const useMomentumStore = create<MomentumState>()((set, get) => ({
   activeTab: 'mission_control',
   setActiveTab: (tab) => {
     soundEngine.playClick();
-    set({ activeTab: tab });
+    set({ activeTab: tab, isMobileSidebarOpen: false });
   },
 
       isCommandPaletteOpen: false,
@@ -221,6 +223,8 @@ export const useMomentumStore = create<MomentumState>()((set, get) => ({
       setNotificationsOpen: (isOpen) => set({ isNotificationsOpen: isOpen }),
       isAIAssistantOpen: false,
       setAIAssistantOpen: (isOpen) => set({ isAIAssistantOpen: isOpen }),
+      isMobileSidebarOpen: false,
+      setMobileSidebarOpen: (isOpen) => set({ isMobileSidebarOpen: isOpen }),
 
       profile: initialUserProfile,
       projects: initialProjects,

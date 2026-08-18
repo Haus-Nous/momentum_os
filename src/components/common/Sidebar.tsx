@@ -3,10 +3,11 @@
 import React from 'react';
 import { 
   Compass, LayoutDashboard, CheckSquare, Layers, Flame, Calendar, Clock, BookOpen, BarChart2, 
-  GraduationCap, Briefcase, Target, Award, Settings, ChevronLeft, ChevronRight, Sparkles 
+  GraduationCap, Briefcase, Target, Award, Settings, ChevronLeft, ChevronRight, Sparkles, X
 } from 'lucide-react';
 import { useMomentumStore, TabType } from '../../store/useMomentumStore';
 import { MomentumLogo } from './MomentumLogo';
+import { getPersonaLabels } from '../../utils/personaHelpers';
 
 interface NavItem {
   id: TabType;
@@ -16,10 +17,17 @@ interface NavItem {
   badgeVariant?: 'emerald' | 'indigo' | 'amber' | 'rose';
 }
 
-import { getPersonaLabels } from '../../utils/personaHelpers';
-
 export const Sidebar: React.FC = () => {
-  const { activeTab, setActiveTab, profile, tasks, habits, assignments } = useMomentumStore();
+  const { 
+    activeTab, 
+    setActiveTab, 
+    profile, 
+    tasks, 
+    habits, 
+    assignments, 
+    isMobileSidebarOpen, 
+    setMobileSidebarOpen 
+  } = useMomentumStore();
   const [isCollapsed, setIsCollapsed] = React.useState(false);
 
   const personaLabels = getPersonaLabels(profile.persona);
@@ -50,27 +58,31 @@ export const Sidebar: React.FC = () => {
 
   const navItems = allNavItems.filter((item) => !item.module || enabledModules.includes(item.module as any));
 
-  return (
-    <aside
-      className={`h-screen sticky top-0 z-40 bg-[#F3EFE6] dark:bg-[#1C1A18] border-r border-[#E2DACD] dark:border-[#332F2B] flex flex-col justify-between transition-all duration-300 ${
-        isCollapsed ? 'w-20' : 'w-64'
-      }`}
-    >
-      {/* Brand Header */}
+  const renderNavContent = (collapsed: boolean, isMobile: boolean = false) => (
+    <div className="flex flex-col justify-between h-full">
       <div>
         <div className="h-16 px-5 flex items-center justify-between border-b border-[#E2DACD] dark:border-[#332F2B]">
-          {!isCollapsed ? (
+          {!collapsed ? (
             <MomentumLogo size={28} showText={true} />
           ) : (
             <MomentumLogo size={28} showText={false} />
           )}
 
-          <button
-            onClick={() => setIsCollapsed(!isCollapsed)}
-            className="p-1.5 rounded-lg text-gray-500 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white hover:bg-black/5 dark:hover:bg-white/5 transition-colors cursor-pointer"
-          >
-            {isCollapsed ? <ChevronRight className="w-4 h-4" /> : <ChevronLeft className="w-4 h-4" />}
-          </button>
+          {!isMobile ? (
+            <button
+              onClick={() => setIsCollapsed(!isCollapsed)}
+              className="p-1.5 rounded-lg text-gray-500 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white hover:bg-black/5 dark:hover:bg-white/5 transition-colors cursor-pointer"
+            >
+              {isCollapsed ? <ChevronRight className="w-4 h-4" /> : <ChevronLeft className="w-4 h-4" />}
+            </button>
+          ) : (
+            <button
+              onClick={() => setMobileSidebarOpen(false)}
+              className="p-1.5 rounded-lg text-gray-500 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white hover:bg-black/5 dark:hover:bg-white/5 transition-colors cursor-pointer"
+            >
+              <X className="w-5 h-5" />
+            </button>
+          )}
         </div>
 
         {/* Navigation Items List */}
@@ -82,20 +94,23 @@ export const Sidebar: React.FC = () => {
             return (
               <button
                 key={item.id}
-                onClick={() => setActiveTab(item.id)}
+                onClick={() => {
+                  setActiveTab(item.id);
+                  if (isMobile) setMobileSidebarOpen(false);
+                }}
                 className={`w-full flex items-center justify-between px-3 py-2.5 rounded-xl transition-all cursor-pointer ${
                   isActive
                     ? 'bg-[#D85A2A] dark:bg-[#E56B3A] text-white font-bold shadow-sm'
                     : 'text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white hover:bg-black/5 dark:hover:bg-white/5'
                 }`}
-                title={isCollapsed ? item.label : undefined}
+                title={collapsed ? item.label : undefined}
               >
                 <div className="flex items-center space-x-3">
                   <Icon className={`w-4 h-4 shrink-0 ${isActive ? 'text-white' : 'text-gray-500 dark:text-gray-400'}`} />
-                  {!isCollapsed && <span>{item.label}</span>}
+                  {!collapsed && <span>{item.label}</span>}
                 </div>
 
-                {!isCollapsed && item.badge && (
+                {!collapsed && item.badge && (
                   <span
                     className={`px-1.5 py-0.5 rounded text-[10px] font-mono font-bold ${
                       isActive
@@ -119,7 +134,7 @@ export const Sidebar: React.FC = () => {
       </div>
 
       {/* User Profile Mini Footer */}
-      {!isCollapsed && (
+      {!collapsed && (
         <div className="p-4 border-t border-[#E2DACD] dark:border-[#332F2B] bg-[#FBF9F5] dark:bg-[#121110] flex items-center space-x-3">
           <div className="w-8 h-8 rounded-xl bg-gradient-to-tr from-[#C85A32] to-[#D9A05B] p-0.5 shadow-sm">
             <div className="w-full h-full bg-[#F3EFE6] dark:bg-[#1C1A18] rounded-[10px] flex items-center justify-center font-bold text-[#C85A32] dark:text-[#D96B43] text-xs font-mono">
@@ -133,6 +148,35 @@ export const Sidebar: React.FC = () => {
           </div>
         </div>
       )}
-    </aside>
+    </div>
+  );
+
+  return (
+    <>
+      {/* Desktop & Tablet Sidebar (Hidden on Mobile) */}
+      <aside
+        className={`hidden md:flex h-screen sticky top-0 z-40 bg-[#F3EFE6] dark:bg-[#1C1A18] border-r border-[#E2DACD] dark:border-[#332F2B] flex-col justify-between transition-all duration-300 ${
+          isCollapsed ? 'w-20' : 'w-64'
+        }`}
+      >
+        {renderNavContent(isCollapsed, false)}
+      </aside>
+
+      {/* Mobile Slide-Over Overlay Drawer (< 768px) */}
+      {isMobileSidebarOpen && (
+        <div className="fixed inset-0 z-50 md:hidden flex">
+          {/* Backdrop Blur Overlay */}
+          <div
+            onClick={() => setMobileSidebarOpen(false)}
+            className="fixed inset-0 bg-black/60 backdrop-blur-sm animate-in fade-in duration-200"
+          />
+
+          {/* Slide-In Drawer Panel */}
+          <aside className="relative z-10 w-72 h-full bg-[#F3EFE6] dark:bg-[#1C1A18] border-r border-[#E2DACD] dark:border-[#332F2B] shadow-2xl flex flex-col justify-between animate-in slide-in-from-left duration-250">
+            {renderNavContent(false, true)}
+          </aside>
+        </div>
+      )}
+    </>
   );
 };
