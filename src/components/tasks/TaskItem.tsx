@@ -55,20 +55,34 @@ export const TaskItem: React.FC<TaskItemProps> = ({ task, isSelected = false, on
               />
             )}
 
-            {/* Status Change Selector */}
-            <select
-              value={task.status}
-              onMouseDown={(e) => e.stopPropagation()}
-              onChange={(e) => toggleTaskStatus(task.id, e.target.value as TaskStatus)}
-              className="bg-transparent text-xs focus:outline-none cursor-pointer border-none font-semibold text-gray-700 dark:text-gray-300"
-            >
-              <option value="todo" className="dark:bg-[#1C1A18]">⏹️ Todo</option>
-              <option value="doing" className="dark:bg-[#1C1A18]">⏳ Doing</option>
-              <option value="blocked" className="dark:bg-[#1C1A18]">⛔ Blocked</option>
-              <option value="waiting" className="dark:bg-[#1C1A18]">⏸️ Waiting</option>
-              <option value="completed" className="dark:bg-[#1C1A18]">✅ Completed</option>
-              <option value="cancelled" className="dark:bg-[#1C1A18]">❌ Cancelled</option>
-            </select>
+            {/* Status Change Selector Tag */}
+            <div className={`px-2 py-0.5 rounded-lg border text-xs font-bold transition-colors shrink-0 ${
+              task.status === 'doing'
+                ? 'bg-[#D9A05B]/15 border-[#D9A05B]/30 text-[#D9A05B] dark:text-[#E5B574]'
+                : task.status === 'blocked'
+                ? 'bg-[#D93829]/15 border-[#D93829]/30 text-[#D93829] dark:text-[#ED4B3B]'
+                : task.status === 'waiting'
+                ? 'bg-[#D9A05B]/15 border-[#D9A05B]/30 text-[#D9A05B] dark:text-[#E5B574]'
+                : task.status === 'completed'
+                ? 'bg-[#8A9A86]/15 border-[#8A9A86]/30 text-[#8A9A86] dark:text-[#9DB098]'
+                : task.status === 'cancelled'
+                ? 'bg-black/5 dark:bg-white/5 border-black/10 dark:border-white/10 text-gray-400 line-through'
+                : 'bg-black/5 dark:bg-white/5 border-black/10 dark:border-white/10 text-gray-700 dark:text-gray-300'
+            }`}>
+              <select
+                value={task.status}
+                onMouseDown={(e) => e.stopPropagation()}
+                onChange={(e) => toggleTaskStatus(task.id, e.target.value as TaskStatus)}
+                className="bg-transparent text-xs focus:outline-none cursor-pointer border-none font-bold text-current"
+              >
+                <option value="todo" className="dark:bg-[#1C1A18] text-gray-900 dark:text-white">⏹️ Todo</option>
+                <option value="doing" className="dark:bg-[#1C1A18] text-gray-900 dark:text-white">⏳ Doing</option>
+                <option value="blocked" className="dark:bg-[#1C1A18] text-gray-900 dark:text-white">⛔ Blocked</option>
+                <option value="waiting" className="dark:bg-[#1C1A18] text-gray-900 dark:text-white">⏸️ Waiting</option>
+                <option value="completed" className="dark:bg-[#1C1A18] text-gray-900 dark:text-white">✅ Completed</option>
+                <option value="cancelled" className="dark:bg-[#1C1A18] text-gray-900 dark:text-white">❌ Cancelled</option>
+              </select>
+            </div>
 
             <div className="flex-1 min-w-0">
               <div className="flex items-center space-x-2">

@@ -48,73 +48,17 @@ export const TaskKanban: React.FC<TaskKanbanProps> = ({ tasks }) => {
 
   return (
     <div className="space-y-4">
-      {/* Mobile Column Filter Pill Switcher (< 768px) */}
-      <div className="flex md:hidden items-center space-x-1.5 overflow-x-auto pb-2 scrollbar-none">
-        {columns.map((col) => {
-          const count = tasks.filter((t) => t.status === col.id).length;
-          const isActive = activeMobileStatus === col.id;
-          return (
-            <button
-              key={col.id}
-              onClick={() => setActiveMobileStatus(col.id)}
-              className={`flex items-center space-x-1.5 px-3 py-1.5 rounded-xl text-xs font-semibold shrink-0 transition-all cursor-pointer ${
-                isActive
-                  ? 'bg-[#D85A2A] dark:bg-[#E56B3A] text-white shadow-sm'
-                  : 'bg-[#F3EFE6] dark:bg-[#1C1A18] text-gray-600 dark:text-gray-400 border border-[#E2DACD] dark:border-[#332F2B]'
-              }`}
-            >
-              <span>{col.title}</span>
-              <span className={`text-[10px] px-1.5 py-0.2 rounded-full font-bold ${
-                isActive ? 'bg-white/20 text-white' : 'bg-black/10 dark:bg-white/10 text-gray-500 dark:text-gray-400'
-              }`}>
-                {count}
-              </span>
-            </button>
-          );
-        })}
-      </div>
+      {/* Mobile Flat List View (< 768px): All tasks in a single continuous list */}
+      <div className="block md:hidden space-y-3">
+        {tasks.map((task) => (
+          <TaskItem key={task.id} task={task} />
+        ))}
 
-      {/* Mobile Single Active Column View (< 768px) */}
-      <div className="block md:hidden">
-        {columns
-          .filter((col) => col.id === activeMobileStatus)
-          .map((col) => {
-            const colTasks = tasks.filter((t) => t.status === col.id);
-            return (
-              <div
-                key={col.id}
-                onDragOver={handleDragOver}
-                onDrop={(e) => handleDrop(e, col.id)}
-                className="rounded-2xl p-4 border border-[#E2DACD] dark:border-[#332F2B] bg-[#F3EFE6] dark:bg-[#1C1A18] flex flex-col min-h-[400px]"
-              >
-                <div className="flex items-center justify-between pb-3 mb-3 border-b border-black/5 dark:border-white/5">
-                  <h3 className={`text-sm font-bold ${col.color}`}>{col.title}</h3>
-                  <span className="text-xs px-2 py-0.5 rounded-full font-bold bg-black/10 dark:bg-white/10 text-gray-500 dark:text-gray-400">
-                    {colTasks.length} tasks
-                  </span>
-                </div>
-
-                <div className="space-y-3 flex-1">
-                  {colTasks.map((task) => (
-                    <div
-                      key={task.id}
-                      draggable
-                      onDragStart={(e) => handleDragStart(e, task.id)}
-                      className="cursor-grab active:cursor-grabbing"
-                    >
-                      <TaskItem task={task} />
-                    </div>
-                  ))}
-
-                  {colTasks.length === 0 && (
-                    <div className="p-8 text-center text-xs text-gray-500 border border-dashed border-black/10 dark:border-white/10 rounded-xl">
-                      No tasks in {col.title}
-                    </div>
-                  )}
-                </div>
-              </div>
-            );
-          })}
+        {tasks.length === 0 && (
+          <div className="p-8 text-center text-xs text-gray-500 border border-dashed border-[#E2DACD] dark:border-[#332F2B] rounded-2xl bg-[#F3EFE6] dark:bg-[#1C1A18]">
+            No tasks found matching current filters
+          </div>
+        )}
       </div>
 
       {/* Desktop & Tablet Multi-Column View (≥ 768px) */}
