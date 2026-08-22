@@ -144,7 +144,7 @@ export const Sidebar: React.FC = () => {
 
           <div className="flex-1 min-w-0">
             <div className="text-xs font-bold text-gray-900 dark:text-white truncate">{profile.name}</div>
-            <div className="text-[10px] text-gray-500 dark:text-gray-400 truncate">{profile.xp} XP • {profile.coins || 420} 🪙</div>
+            <div className="text-[10px] text-gray-500 dark:text-gray-400 truncate">{profile.xp} XP • {profile.coins ?? 0} 🪙</div>
           </div>
         </div>
       )}

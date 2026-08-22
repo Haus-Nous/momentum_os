@@ -876,7 +876,7 @@ export const useMomentumStore = create<MomentumState>()((set, get) => ({
       awardXP: (amount, coinsAmount = 10) => {
         set((state) => {
           const newXP = state.profile.xp + amount;
-          const newCoins = (state.profile.coins || 420) + coinsAmount;
+          const newCoins = (state.profile.coins ?? 0) + coinsAmount;
           let level = state.profile.level;
           let xpToNext = state.profile.xpToNextLevel;
 

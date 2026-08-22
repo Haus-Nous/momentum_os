@@ -27,7 +27,7 @@ export const AssignmentModal: React.FC<AssignmentModalProps> = ({ isOpen, onClos
   const [weightPercent, setWeightPercent] = useState<number>(initialAssignment?.weightPercent || 20);
   const [submissionLink, setSubmissionLink] = useState(initialAssignment?.submissionLink || '');
   const [notes, setNotes] = useState(initialAssignment?.notes || '');
-  const [progressPercent, setProgressPercent] = useState<number>(initialAssignment?.progressPercent || 50);
+  const [progressPercent, setProgressPercent] = useState<number>(initialAssignment?.progressPercent || 0);
 
   if (!isOpen) return null;
 

@@ -185,7 +185,7 @@ export const CareerTrackerView: React.FC = () => {
 
               {/* Progress & Actions */}
               <div className="space-y-2 pt-2 border-t border-black/5 dark:border-white/5">
-                <ProgressBar progress={hk.progressPercent || 70} color="amber" label="Build Completion" />
+                <ProgressBar progress={hk.progressPercent || 0} color="amber" label="Build Completion" />
 
                 <div className="flex items-center justify-between text-xs pt-1">
                   {hk.link ? (

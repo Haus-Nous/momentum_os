@@ -27,10 +27,7 @@ export const GoalModal: React.FC<GoalModalProps> = ({ isOpen, onClose, initialGo
   const [motivationNote, setMotivationNote] = useState(initialGoal?.motivationNote || '');
   const [milestoneInput, setMilestoneInput] = useState('');
   const [milestones, setMilestones] = useState<{ id: string; title: string; completed: boolean }[]>(
-    initialGoal?.milestones || [
-      { id: 'm1', title: 'Complete initial architecture specification', completed: false },
-      { id: 'm2', title: 'Validate milestone performance metric', completed: false },
-    ]
+    initialGoal?.milestones || []
   );
 
   if (!isOpen) return null;

@@ -11,14 +11,73 @@ import { ProgressBar } from '../ui/ProgressBar';
 import { Award } from 'lucide-react';
 
 export const AchievementCenterView: React.FC = () => {
-  const { profile, achievements } = useMomentumStore();
+  const { profile, achievements, focusSessions, habits, tasks } = useMomentumStore();
 
   const xpPct = Math.round((profile.xp / profile.xpToNextLevel) * 100);
 
+  // Dynamic calculations for seasonal challenges
+  const totalFocusMinutes = focusSessions.reduce((acc, s) => acc + (s.durationMinutes || 0), 0);
+  const totalFocusHours = totalFocusMinutes / 60;
+  const q3Progress = Math.min(100, Math.round((totalFocusHours / 100) * 100));
+
+  const currentStreak = profile.streakDays || 0;
+  const streakProgress = Math.min(100, Math.round((currentStreak / 30) * 100));
+
   const seasonalChallenges = [
-    { title: "Q3 Engineering Sprint 🚀", description: "Complete 100 deep focus hours before October 1", progress: 68, xpReward: 1500, coinsReward: 250 },
-    { title: "Habit Streak Master 👑", description: "Maintain a 30-day streak on Deep Work habit", progress: 80, xpReward: 1000, coinsReward: 150 },
+    { 
+      title: "Q3 Engineering Sprint 🚀", 
+      description: `Complete 100 deep focus hours before October 1 (${totalFocusHours.toFixed(1)}/100 hrs)`, 
+      progress: q3Progress, 
+      xpReward: 1500, 
+      coinsReward: 250 
+    },
+    { 
+      title: "Habit Streak Master 👑", 
+      description: `Maintain a 30-day streak on Deep Work habit (${currentStreak}/30 days)`, 
+      progress: streakProgress, 
+      xpReward: 1000, 
+      coinsReward: 150 
+    },
   ];
+
+  // Fallback unlockable badges if store achievements are empty
+  const completedTaskCount = tasks.filter((t) => t.status === 'completed').length;
+  const defaultBadges = [
+    {
+      id: 'ach_1',
+      title: 'First Step Architect',
+      description: 'Create your first task or habit in Momentum OS',
+      unlocked: tasks.length > 0 || habits.length > 0,
+      xpReward: 100,
+      unlockedAt: (tasks.length > 0 || habits.length > 0) ? 'Unlocked' : undefined,
+    },
+    {
+      id: 'ach_2',
+      title: 'Deep Focus Pioneer',
+      description: 'Complete your first distraction-free focus session',
+      unlocked: focusSessions.length > 0,
+      xpReward: 250,
+      unlockedAt: focusSessions.length > 0 ? 'Unlocked' : undefined,
+    },
+    {
+      id: 'ach_3',
+      title: '7-Day Streak Warrior',
+      description: 'Maintain a 7-day continuous momentum streak',
+      unlocked: currentStreak >= 7,
+      xpReward: 500,
+      unlockedAt: currentStreak >= 7 ? 'Unlocked' : undefined,
+    },
+    {
+      id: 'ach_4',
+      title: 'Task Crusher',
+      description: 'Complete 10 tasks across any project or bucket',
+      unlocked: completedTaskCount >= 10,
+      xpReward: 750,
+      unlockedAt: completedTaskCount >= 10 ? 'Unlocked' : undefined,
+    },
+  ];
+
+  const displayBadges = achievements.length > 0 ? achievements : defaultBadges;
 
   const handleCelebrateAchievement = (ach: any) => {
     if (ach.unlocked) {
@@ -45,7 +104,7 @@ export const AchievementCenterView: React.FC = () => {
                 <Badge variant="indigo">LEVEL {profile.level} ARCHITECT</Badge>
               </h2>
               <p className="text-xs text-gray-600 dark:text-gray-400 mt-0.5">
-                XP: <span className="font-bold text-[#D85A2A] dark:text-[#E56B3A]">{profile.xp}</span> / {profile.xpToNextLevel} XP • Coins Balance: <span className="font-bold text-[#D9A05B] dark:text-[#E5B574]">{profile.coins || 420} 🪙</span>
+                XP: <span className="font-bold text-[#D85A2A] dark:text-[#E56B3A]">{profile.xp}</span> / {profile.xpToNextLevel} XP • Coins Balance: <span className="font-bold text-[#D9A05B] dark:text-[#E5B574]">{profile.coins ?? 0} 🪙</span>
               </p>
             </div>
           </div>
@@ -82,7 +141,7 @@ export const AchievementCenterView: React.FC = () => {
         <h3 className="text-xs font-bold text-gray-500 uppercase tracking-wider">Unlockable Badges & Milestones</h3>
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-          {achievements.map((ach) => (
+          {displayBadges.map((ach) => (
             <motion.div
               key={ach.id}
               whileHover={{ scale: ach.unlocked ? 1.03 : 1.01 }}

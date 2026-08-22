@@ -3,15 +3,26 @@ import { ShieldCheck, Award, Zap, Snowflake, Star, Sparkles } from 'lucide-react
 import { useMomentumStore } from '../../store/useMomentumStore';
 
 export const GamificationCard: React.FC = () => {
-  const { profile } = useMomentumStore();
+  const { profile, focusSessions, habits } = useMomentumStore();
 
   const xpPercent = Math.round((profile.xp / profile.xpToNextLevel) * 100);
 
+  const totalFocusMins = focusSessions.reduce((acc, s) => acc + (s.durationMinutes || 0), 0);
+  const streakDays = profile.streakDays || 0;
+
+  // Calculate total habit completion entries across all habits
+  let totalHabitLogs = 0;
+  habits.forEach((h) => {
+    Object.values(h.completionHistory || {}).forEach((status) => {
+      if (status === 'completed') totalHabitLogs++;
+    });
+  });
+
   const achievements = [
-    { title: 'System Architect', desc: 'Maintain 14+ day streak across routines', unlocked: true, icon: Zap },
-    { title: 'Deep Work Titan', desc: 'Log 500+ mins of distraction-free focus', unlocked: true, icon: Award },
-    { title: 'Consistency Overlord', desc: 'Fill 50+ boxes on GitHub contribution graph', unlocked: true, icon: Star },
-    { title: 'Friction Destroyer', desc: 'Complete shutdown ritual 7 days in a row', unlocked: false, icon: Sparkles },
+    { title: 'System Architect', desc: 'Maintain 14+ day streak across routines', unlocked: streakDays >= 14, icon: Zap },
+    { title: 'Deep Work Titan', desc: `Log 500+ mins of focus (${totalFocusMins}/500m)`, unlocked: totalFocusMins >= 500, icon: Award },
+    { title: 'Consistency Overlord', desc: `Fill 50+ habit check-ins (${totalHabitLogs}/50)`, unlocked: totalHabitLogs >= 50, icon: Star },
+    { title: 'Friction Destroyer', desc: 'Maintain 7+ day momentum streak', unlocked: streakDays >= 7, icon: Sparkles },
   ];
 
   return (

@@ -64,7 +64,7 @@ export const SemesterTrackerView: React.FC = () => {
               <div>
                 <div className="flex items-center justify-between">
                   <span className="text-xs font-bold text-rose-500 font-mono">{course.code}</span>
-                  <Badge variant="emerald">{course.grade || 'A'}</Badge>
+                  <Badge variant={course.grade ? 'emerald' : 'secondary'}>{course.grade || '--'}</Badge>
                 </div>
                 <h3 className="text-sm font-bold text-gray-900 dark:text-white mt-1">{course.name}</h3>
                 <p className="text-[11px] text-gray-500 mt-0.5">{course.professor || 'Faculty Advisor'}</p>
@@ -112,7 +112,7 @@ export const SemesterTrackerView: React.FC = () => {
 
               {/* Progress & Actions */}
               <div className="space-y-2 pt-2 border-t border-black/5 dark:border-white/5">
-                <ProgressBar progress={asg.progressPercent || 40} color="rose" label="Execution Progress" />
+                <ProgressBar progress={asg.progressPercent || 0} color="rose" label="Execution Progress" />
 
                 <div className="flex items-center justify-between text-xs pt-1">
                   {asg.submissionLink ? (

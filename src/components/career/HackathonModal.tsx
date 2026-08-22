@@ -28,7 +28,7 @@ export const HackathonModal: React.FC<HackathonModalProps> = ({ isOpen, onClose,
   const [techStackInput, setTechStackInput] = useState(initialHackathon?.techStack?.join(', ') || 'Next.js 15, Tailwind v4, Zustand');
   const [prizePool, setPrizePool] = useState(initialHackathon?.prizePool || '$100,000');
   const [link, setLink] = useState(initialHackathon?.link || 'https://vercel.com/ai-hackathon');
-  const [progressPercent, setProgressPercent] = useState<number>(initialHackathon?.progressPercent || 70);
+  const [progressPercent, setProgressPercent] = useState<number>(initialHackathon?.progressPercent || 0);
   const [ideaDescription, setIdeaDescription] = useState(initialHackathon?.ideaDescription || '');
 
   if (!isOpen) return null;
