@@ -252,10 +252,82 @@ interface MomentumState {
   setPersona: (persona: UserPersona) => void;
   clearAllUserData: () => void;
   checkDailyStreakAndFreeze: () => void;
+  syncFromSupabase: () => Promise<void>;
 }
 
 export const useMomentumStore = create<MomentumState>()((set, get) => ({
   isDexieLoaded: false,
+
+  syncFromSupabase: async () => {
+    if (!isSupabaseConfigured || typeof window === 'undefined') return;
+    try {
+      const { data: hkData } = await supabase.from('hackathons').select('*');
+      if (hkData && hkData.length > 0) {
+        const fetchedHackathons: Hackathon[] = hkData.map((r: any) => ({
+          id: r.id,
+          title: r.title,
+          theme: r.theme || undefined,
+          organizer: r.organizer,
+          startDate: r.start_date,
+          endDate: r.end_date,
+          registrationDeadline: r.registration_deadline || undefined,
+          submissionDeadline: r.submission_deadline || undefined,
+          projectTitle: r.project_title || undefined,
+          teamRoster: Array.isArray(r.team_members) ? r.team_members.join(', ') : (r.team_members || undefined),
+          techStack: Array.isArray(r.tech_stack) ? r.tech_stack.join(', ') : (r.tech_stack || undefined),
+          status: r.status || 'upcoming',
+          prizePool: r.prize_pool || undefined,
+          website: r.link || undefined,
+          progressPercent: r.progress_percent || 0,
+          notes: r.idea_description || undefined,
+        }));
+        set({ hackathons: fetchedHackathons });
+        saveCollectionToDexie('hackathons', fetchedHackathons);
+      }
+
+      const { data: intData } = await supabase.from('internships').select('*');
+      if (intData && intData.length > 0) {
+        const fetchedInternships: Internship[] = intData.map((r: any) => ({
+          id: r.id,
+          company: r.company,
+          role: r.role,
+          status: r.status || 'applied',
+          appliedDate: r.apply_date,
+          deadlineDate: r.deadline_date || undefined,
+          salary: r.salary || undefined,
+          location: r.location || undefined,
+          resumeVersion: r.resume_version || undefined,
+          portfolioLink: r.portfolio_link || undefined,
+          notes: r.notes || undefined,
+        }));
+        set({ internships: fetchedInternships });
+        saveCollectionToDexie('internships', fetchedInternships);
+      }
+
+      const { data: taskData } = await supabase.from('tasks').select('*');
+      if (taskData && taskData.length > 0) {
+        const fetchedTasks: Task[] = taskData.map((r: any) => ({
+          id: r.id,
+          title: r.title,
+          description: r.description || undefined,
+          status: r.status || 'todo',
+          priority: r.priority || 'medium',
+          category: r.category || 'general',
+          dueDate: r.due_date || undefined,
+          dueTime: r.due_time || undefined,
+          timeEstimateMinutes: r.time_estimate_minutes || 0,
+          timeSpentMinutes: r.time_spent_minutes || 0,
+          subtasks: r.subtasks || [],
+          tags: r.tags || [],
+          completedAt: r.completed_at || undefined,
+        }));
+        set({ tasks: fetchedTasks });
+        saveCollectionToDexie('tasks', fetchedTasks);
+      }
+    } catch (e) {
+      console.error('Error syncing from Supabase:', e);
+    }
+  },
 
   loadDexieState: async () => {
     try {
@@ -286,8 +358,15 @@ export const useMomentumStore = create<MomentumState>()((set, get) => ({
       } else {
         set({ isDexieLoaded: true });
       }
+
+      if (isSupabaseConfigured) {
+        get().syncFromSupabase();
+      }
     } catch {
       set({ isDexieLoaded: true });
+      if (isSupabaseConfigured) {
+        get().syncFromSupabase();
+      }
     }
   },
 
