@@ -9,7 +9,7 @@ CREATE TABLE IF NOT EXISTS public.profiles (
   level INT DEFAULT 1,
   xp INT DEFAULT 0,
   xp_to_next_level INT DEFAULT 1000,
-  coins INT DEFAULT 420,
+  coins INT DEFAULT 0,
   streak_days INT DEFAULT 0,
   freeze_tokens INT DEFAULT 2,
   momentum_score INT DEFAULT 0,

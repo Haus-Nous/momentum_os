@@ -10,7 +10,7 @@ export const initialUserProfile: UserProfile = {
   level: 1,
   xp: 0,
   xpToNextLevel: 1000,
-  coins: 100,
+  coins: 0,
   streakDays: 0,
   freezeTokens: 2,
   momentumScore: 0,
