@@ -13,8 +13,33 @@ import {
 } from '../utils/initialData';
 import { calculateMomentumScore, getTodayDateString, exportToCSV } from '../utils/analyticsHelpers';
 import { soundEngine } from '../utils/soundEngine';
-import { loadStateFromDexie, saveCollectionToDexie, processSyncQueue } from '../lib/db';
-import { isSupabaseConfigured } from '../lib/supabase';
+import { loadStateFromDexie, saveCollectionToDexie, processSyncQueue, queueOfflineMutation } from '../lib/db';
+import { isSupabaseConfigured, supabase } from '../lib/supabase';
+
+const syncToSupabase = async (table: string, action: 'upsert' | 'delete', record: any) => {
+  if (!isSupabaseConfigured || typeof window === 'undefined') return;
+  try {
+    const authData = localStorage.getItem('momentum_auth_storage');
+    let userId = '00000000-0000-0000-0000-000000000001';
+    if (authData) {
+      try {
+        const parsed = JSON.parse(authData);
+        if (parsed?.state?.currentUser?.id) {
+          userId = parsed.state.currentUser.id;
+        }
+      } catch (e) {}
+    }
+
+    if (action === 'upsert') {
+      await supabase.from(table).upsert({ ...record, user_id: userId, id: record.id });
+    } else if (action === 'delete') {
+      await supabase.from(table).delete().eq('id', record.id).eq('user_id', userId);
+    }
+  } catch (err) {
+    console.error(`Supabase sync error for ${table}:`, err);
+    queueOfflineMutation(table, action === 'upsert' ? 'update' : 'delete', record.id, record);
+  }
+};
 
 export type TabType = 
   | 'mission_control' | 'dashboard' | 'tasks' | 'systems' | 'habits' | 'calendar' | 'focus' | 'notes' | 'analytics'
@@ -369,13 +394,17 @@ export const useMomentumStore = create<MomentumState>()((set, get) => ({
           updatedCalendar = [...updatedCalendar, newEvent];
         }
 
+        syncToSupabase('tasks', 'upsert', newTask);
         set((state) => ({ tasks: [newTask, ...state.tasks], calendarEvents: updatedCalendar }));
         get().recalculateMomentum();
       },
       updateTask: (id, updates) => {
-        set((state) => ({
-          tasks: state.tasks.map((t) => (t.id === id ? { ...t, ...updates } : t)),
-        }));
+        set((state) => {
+          const updatedTasks = state.tasks.map((t) => (t.id === id ? { ...t, ...updates } : t));
+          const targetTask = updatedTasks.find((t) => t.id === id);
+          if (targetTask) syncToSupabase('tasks', 'upsert', targetTask);
+          return { tasks: updatedTasks };
+        });
         get().recalculateMomentum();
       },
       toggleTaskStatus: (id, explicitStatus) => {
@@ -403,6 +432,9 @@ export const useMomentumStore = create<MomentumState>()((set, get) => ({
             : t
         );
 
+        const updatedTask = newTasks.find(t => t.id === id);
+        if (updatedTask) syncToSupabase('tasks', 'upsert', updatedTask);
+
         set({ tasks: newTasks });
         get().recalculateMomentum();
       },
@@ -410,22 +442,24 @@ export const useMomentumStore = create<MomentumState>()((set, get) => ({
         soundEngine.playClick();
         set((state) => {
           if (action === 'delete') {
+            taskIds.forEach(id => syncToSupabase('tasks', 'delete', { id }));
             return { tasks: state.tasks.filter((t) => !taskIds.includes(t.id)) };
           }
-          return {
-            tasks: state.tasks.map((t) => {
-              if (!taskIds.includes(t.id)) return t;
-              if (action === 'complete') return { ...t, status: 'completed' as TaskStatus, completedAt: new Date().toISOString() };
-              if (action === 'status') return { ...t, status: value as TaskStatus };
-              if (action === 'priority') return { ...t, priority: value };
-              return t;
-            }),
-          };
+          const updated = state.tasks.map((t) => {
+            if (!taskIds.includes(t.id)) return t;
+            if (action === 'complete') return { ...t, status: 'completed' as TaskStatus, completedAt: new Date().toISOString() };
+            if (action === 'status') return { ...t, status: value as TaskStatus };
+            if (action === 'priority') return { ...t, priority: value };
+            return t;
+          });
+          updated.filter(t => taskIds.includes(t.id)).forEach(t => syncToSupabase('tasks', 'upsert', t));
+          return { tasks: updated };
         });
         get().recalculateMomentum();
       },
       deleteTask: (id) => {
         soundEngine.playClick();
+        syncToSupabase('tasks', 'delete', { id });
         set((state) => ({
           tasks: state.tasks.filter((t) => t.id !== id),
           calendarEvents: state.calendarEvents.filter((e) => e.taskId !== id),
@@ -737,6 +771,7 @@ export const useMomentumStore = create<MomentumState>()((set, get) => ({
             color: '#6B8E62',
           };
         }
+        syncToSupabase('internships', 'upsert', internship);
         set((state) => {
           const updatedInternships = [internship, ...state.internships];
           const updatedCalEvents = calEvent ? [...state.calendarEvents, calEvent] : state.calendarEvents;
@@ -749,6 +784,7 @@ export const useMomentumStore = create<MomentumState>()((set, get) => ({
         set((state) => {
           const updatedInternships = state.internships.map((i) => (i.id === id ? { ...i, ...updates } : i));
           const targetInt = updatedInternships.find((i) => i.id === id);
+          if (targetInt) syncToSupabase('internships', 'upsert', targetInt);
           let updatedCalEvents = state.calendarEvents;
           if (targetInt && targetInt.deadlineDate) {
             const existingEvt = state.calendarEvents.find((e) => e.id === 'evt_int_' + id);
@@ -780,6 +816,7 @@ export const useMomentumStore = create<MomentumState>()((set, get) => ({
       },
       deleteInternship: (id) => {
         soundEngine.playClick();
+        syncToSupabase('internships', 'delete', { id });
         set((state) => {
           const updatedInternships = state.internships.filter((i) => i.id !== id);
           const updatedCalEvents = state.calendarEvents.filter((e) => e.id !== 'evt_int_' + id);
@@ -806,6 +843,7 @@ export const useMomentumStore = create<MomentumState>()((set, get) => ({
           category: 'hackathon',
           color: '#a855f7',
         };
+        syncToSupabase('hackathons', 'upsert', hackathon);
         set((state) => {
           const updatedHackathons = [hackathon, ...state.hackathons];
           const updatedCalEvents = [...state.calendarEvents, calEvent];
@@ -821,6 +859,7 @@ export const useMomentumStore = create<MomentumState>()((set, get) => ({
         set((state) => {
           const updatedHackathons = state.hackathons.map((h) => (h.id === id ? { ...h, ...updates } : h));
           const targetHk = updatedHackathons.find((h) => h.id === id);
+          if (targetHk) syncToSupabase('hackathons', 'upsert', targetHk);
           let updatedCalEvents = state.calendarEvents;
           if (targetHk) {
             const targetDate = targetHk.submissionDeadline || targetHk.registrationDeadline || targetHk.startDate || new Date().toISOString().split('T')[0];
@@ -838,6 +877,7 @@ export const useMomentumStore = create<MomentumState>()((set, get) => ({
       },
       deleteHackathon: (id) => {
         soundEngine.playClick();
+        syncToSupabase('hackathons', 'delete', { id });
         set((state) => {
           const updatedHackathons = state.hackathons.filter((h) => h.id !== id);
           const updatedCalEvents = state.calendarEvents.filter((e) => e.id !== 'evt_hk_' + id);
