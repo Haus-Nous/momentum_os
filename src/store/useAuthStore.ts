@@ -81,7 +81,7 @@ export const useAuthStore = create<AuthState>()((set, get) => ({
     }
   },
 
-  register: async (name, email, password, role = 'Architect / Engineer') => {
+  register: async (name, email, password, role = 'Architect / Engineer', persona: string = 'academic') => {
     const cleanEmail = email.trim().toLowerCase();
     if (!cleanEmail || !password || !name) {
       return { success: false, error: 'All fields are required.' };
@@ -108,6 +108,7 @@ export const useAuthStore = create<AuthState>()((set, get) => ({
           data: {
             name: name.trim(),
             role: role.trim() || 'Systems Architect',
+            persona: persona,
           },
         },
       });

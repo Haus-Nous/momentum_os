@@ -15,11 +15,12 @@ export const AuthView: React.FC = () => {
   const [password, setPassword] = useState('');
   const [name, setName] = useState('');
   const [role, setRole] = useState('');
+  const [persona, setPersona] = useState<string>('professional');
   const [error, setError] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState(false);
 
   const { login, register } = useAuthStore();
-  const { updateSettings } = useMomentumStore();
+  const { updateSettings, syncUserProfile } = useMomentumStore();
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -33,9 +34,11 @@ export const AuthView: React.FC = () => {
           setError(res.error || 'Failed to authenticate.');
         }
       } else {
-        const res = await register(name, email, password, role);
+        const res = await register(name, email, password, role, persona);
         if (!res.success) {
           setError(res.error || 'Failed to create account.');
+        } else {
+          syncUserProfile(name, role, persona as any);
         }
       }
     } catch {
@@ -162,6 +165,24 @@ export const AuthView: React.FC = () => {
                     onChange={(e) => setRole(e.target.value)}
                     className="w-full bg-slate-950/80 border border-slate-800/80 rounded-2xl py-2.5 pl-10 pr-4 text-sm text-slate-100 placeholder-slate-600 focus:outline-none focus:border-emerald-500/60 focus:ring-1 focus:ring-emerald-500/40 transition"
                   />
+                </div>
+              </div>
+
+              <div>
+                <label className="block text-xs font-semibold text-slate-300 mb-1.5 ml-1">
+                  Operating Persona
+                </label>
+                <div className="relative">
+                  <Sparkles className="w-4 h-4 text-slate-500 absolute left-3.5 top-1/2 -translate-y-1/2" />
+                  <select
+                    value={persona}
+                    onChange={(e) => setPersona(e.target.value)}
+                    className="w-full bg-slate-950/80 border border-slate-800/80 rounded-2xl py-2.5 pl-10 pr-4 text-sm text-slate-100 focus:outline-none focus:border-emerald-500/60 focus:ring-1 focus:ring-emerald-500/40 transition cursor-pointer"
+                  >
+                    <option value="professional" className="bg-slate-900 text-slate-100">Professional / Industry</option>
+                    <option value="academic" className="bg-slate-900 text-slate-100">Student / Academic</option>
+                    <option value="creative" className="bg-slate-900 text-slate-100">Creative / Freelancer</option>
+                  </select>
                 </div>
               </div>
             </motion.div>
