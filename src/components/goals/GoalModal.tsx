@@ -49,11 +49,13 @@ export const GoalModal: React.FC<GoalModalProps> = ({ isOpen, onClose, initialGo
       if (parsed.horizon) setHorizon(parsed.horizon as GoalHorizon);
       if (parsed.category) setCategory(parsed.category as any);
       if (parsed.targetDate || parsed.dueDate) setTargetDate(parsed.targetDate || parsed.dueDate);
-      if (parsed.vision) setVision(parsed.vision);
-      if (parsed.why) setWhy(parsed.why);
-      if (parsed.reward) setReward(parsed.reward);
+      setVision(parsed.vision || '');
+      setWhy(parsed.why || '');
+      setReward(parsed.reward || '');
       if (parsed.milestones && Array.isArray(parsed.milestones) && parsed.milestones.length > 0) {
         setMilestones(parsed.milestones.map((m: string, i: number) => ({ id: `m_${Date.now()}_${i}`, title: m, completed: false })));
+      } else {
+        setMilestones([]);
       }
 
       setAiSuccessMessage('Pre-filled by AI — review & edit fields below before saving.');

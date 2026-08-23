@@ -27,13 +27,10 @@ export const TaskCreateModal: React.FC<TaskCreateModalProps> = ({ isOpen, onClos
   const [dueDate, setDueDate] = useState<string>(initialTask?.dueDate || new Date().toISOString().split('T')[0]);
   const [dueTime, setDueTime] = useState<string>(initialTask?.dueTime || '17:00');
   const [projectId, setProjectId] = useState<string>(initialTask?.projectId || projects[0]?.id || '');
-  const [tagInput, setTagInput] = useState<string>(initialTask?.tags?.join(', ') || 'Architecture, Deep Work');
+  const [tagInput, setTagInput] = useState<string>(initialTask?.tags?.join(', ') || '');
   const [subtaskInput, setSubtaskInput] = useState<string>('');
   const [subtasks, setSubtasks] = useState<{ id: string; title: string; completed: boolean }[]>(
-    initialTask?.subtasks || [
-      { id: 'st_1', title: 'Review core architecture specs', completed: false },
-      { id: 'st_2', title: 'Write unit tests & verification', completed: false },
-    ]
+    initialTask?.subtasks || []
   );
   const [notes, setNotes] = useState<string>(initialTask?.notes || '');
 
@@ -53,12 +50,12 @@ export const TaskCreateModal: React.FC<TaskCreateModalProps> = ({ isOpen, onClos
       const provider = new GroqAIProvider();
       const parsed: any = await provider.parseNaturalLanguageCommand(aiInput);
       if (parsed.title) setTitle(parsed.title);
-      if (parsed.description) setDescription(parsed.description);
+      setDescription(parsed.description || '');
       if (parsed.priority) setPriority(parsed.priority);
       if (parsed.dueDate) setDueDate(parsed.dueDate);
       if (parsed.dueTime) setDueTime(parsed.dueTime);
       if (parsed.energyLevel) setEnergyLevel(parsed.energyLevel);
-      if (parsed.category) setCategory(parsed.category);
+      setCategory(parsed.category || 'Engineering');
       if (parsed.timeEstimateMinutes) setTimeEstimateMinutes(parsed.timeEstimateMinutes);
 
       setAiSuccessMessage('Pre-filled by AI — review & edit fields below before saving.');

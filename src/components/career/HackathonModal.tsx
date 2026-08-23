@@ -17,17 +17,17 @@ export const HackathonModal: React.FC<HackathonModalProps> = ({ isOpen, onClose,
   const { addHackathon, updateHackathon } = useMomentumStore();
 
   const [title, setTitle] = useState(initialHackathon?.title || '');
-  const [theme, setTheme] = useState(initialHackathon?.theme || 'Autonomous AI Platforms');
-  const [organizer, setOrganizer] = useState(initialHackathon?.organizer || 'Vercel & Next.js Core');
+  const [theme, setTheme] = useState(initialHackathon?.theme || '');
+  const [organizer, setOrganizer] = useState(initialHackathon?.organizer || '');
   const [startDate, setStartDate] = useState(initialHackathon?.startDate || new Date().toISOString().split('T')[0]);
   const [endDate, setEndDate] = useState(initialHackathon?.endDate || '');
-  const [registrationDeadline, setRegistrationDeadline] = useState(initialHackathon?.registrationDeadline || '');
-  const [submissionDeadline, setSubmissionDeadline] = useState(initialHackathon?.submissionDeadline || '');
-  const [projectTitle, setProjectTitle] = useState(initialHackathon?.projectTitle || 'MOMENTUM OS');
-  const [teamMembersInput, setTeamMembersInput] = useState(initialHackathon?.teamMembers?.join(', ') || 'Alex Mercer (Lead)');
-  const [techStackInput, setTechStackInput] = useState(initialHackathon?.techStack?.join(', ') || 'Next.js 15, Tailwind v4, Zustand');
-  const [prizePool, setPrizePool] = useState(initialHackathon?.prizePool || '$100,000');
-  const [link, setLink] = useState(initialHackathon?.link || 'https://vercel.com/ai-hackathon');
+  const [registrationDeadline, setRegistrationDeadline] = useState(initialHackathon?.registrationDeadline || initialHackathon?.submissionDeadline || '');
+  const [submissionDeadline, setSubmissionDeadline] = useState(initialHackathon?.submissionDeadline || initialHackathon?.registrationDeadline || '');
+  const [projectTitle, setProjectTitle] = useState(initialHackathon?.projectTitle || '');
+  const [teamMembersInput, setTeamMembersInput] = useState(initialHackathon?.teamMembers?.join(', ') || '');
+  const [techStackInput, setTechStackInput] = useState(initialHackathon?.techStack?.join(', ') || '');
+  const [prizePool, setPrizePool] = useState(initialHackathon?.prizePool || '');
+  const [link, setLink] = useState(initialHackathon?.link || '');
   const [progressPercent, setProgressPercent] = useState<number>(initialHackathon?.progressPercent || 0);
   const [ideaDescription, setIdeaDescription] = useState(initialHackathon?.ideaDescription || '');
 
@@ -45,21 +45,24 @@ export const HackathonModal: React.FC<HackathonModalProps> = ({ isOpen, onClose,
     setAiSuccessMessage(null);
     try {
       const provider = new GroqAIProvider();
-      const parsed = await provider.parseHackathonCommand(aiInput);
+      const parsed: any = await provider.parseHackathonCommand(aiInput);
       if (parsed.title) setTitle(parsed.title);
-      if (parsed.theme) setTheme(parsed.theme);
-      if (parsed.organizer) setOrganizer(parsed.organizer);
+      setTheme(parsed.theme || '');
+      setOrganizer(parsed.organizer || '');
       if (parsed.startDate) setStartDate(parsed.startDate);
       if (parsed.endDate) setEndDate(parsed.endDate);
-      if (parsed.registrationDeadline) setRegistrationDeadline(parsed.registrationDeadline);
-      if (parsed.submissionDeadline) setSubmissionDeadline(parsed.submissionDeadline);
-      if (parsed.projectTitle) setProjectTitle(parsed.projectTitle);
-      if (parsed.teamMembers && parsed.teamMembers.length > 0) setTeamMembersInput(parsed.teamMembers.join(', '));
-      if (parsed.techStack && parsed.techStack.length > 0) setTechStackInput(parsed.techStack.join(', '));
-      if (parsed.prizePool) setPrizePool(parsed.prizePool);
-      if (parsed.link) setLink(parsed.link);
+      
+      const deadline = parsed.submissionDeadline || parsed.registrationDeadline || parsed.dueDate || '';
+      setSubmissionDeadline(deadline);
+      setRegistrationDeadline(parsed.registrationDeadline || deadline);
+
+      setProjectTitle(parsed.projectTitle || '');
+      setTeamMembersInput(Array.isArray(parsed.teamMembers) ? parsed.teamMembers.join(', ') : (parsed.teamMembers || ''));
+      setTechStackInput(Array.isArray(parsed.techStack) ? parsed.techStack.join(', ') : (parsed.techStack || ''));
+      setPrizePool(parsed.prizePool || '');
+      setLink(parsed.link || '');
       if (parsed.progressPercent !== undefined) setProgressPercent(parsed.progressPercent);
-      if (parsed.ideaDescription) setIdeaDescription(parsed.ideaDescription);
+      setIdeaDescription(parsed.ideaDescription || '');
 
       setAiSuccessMessage('Pre-filled by AI — review & edit fields below before saving.');
     } catch (err: any) {

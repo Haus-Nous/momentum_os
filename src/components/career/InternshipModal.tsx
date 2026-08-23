@@ -17,14 +17,14 @@ export const InternshipModal: React.FC<InternshipModalProps> = ({ isOpen, onClos
   const { addInternship, updateInternship } = useMomentumStore();
 
   const [company, setCompany] = useState(initialInternship?.company || '');
-  const [role, setRole] = useState(initialInternship?.role || 'AI Systems Engineering Intern');
+  const [role, setRole] = useState(initialInternship?.role || '');
   const [status, setStatus] = useState<InternshipStatus>(initialInternship?.status || 'applied');
-  const [location, setLocation] = useState(initialInternship?.location || 'San Francisco, CA / Hybrid');
-  const [salary, setSalary] = useState(initialInternship?.salary || '$55/hr');
+  const [location, setLocation] = useState(initialInternship?.location || '');
+  const [salary, setSalary] = useState(initialInternship?.salary || '');
   const [applyDate, setApplyDate] = useState(initialInternship?.applyDate || new Date().toISOString().split('T')[0]);
   const [deadlineDate, setDeadlineDate] = useState(initialInternship?.deadlineDate || '');
-  const [resumeVersion, setResumeVersion] = useState(initialInternship?.resumeVersion || 'Res_v4.2_AI_Systems.pdf');
-  const [portfolioLink, setPortfolioLink] = useState(initialInternship?.portfolioLink || 'https://alexmercer.dev');
+  const [resumeVersion, setResumeVersion] = useState(initialInternship?.resumeVersion || '');
+  const [portfolioLink, setPortfolioLink] = useState(initialInternship?.portfolioLink || '');
   const [notes, setNotes] = useState(initialInternship?.notes || '');
 
   // AI Quick-Add State
@@ -41,17 +41,17 @@ export const InternshipModal: React.FC<InternshipModalProps> = ({ isOpen, onClos
     setAiSuccessMessage(null);
     try {
       const provider = new GroqAIProvider();
-      const parsed = await provider.parseInternshipCommand(aiInput);
+      const parsed: any = await provider.parseInternshipCommand(aiInput);
       if (parsed.company) setCompany(parsed.company);
-      if (parsed.role) setRole(parsed.role);
+      setRole(parsed.role || '');
       if (parsed.status) setStatus(parsed.status as any);
-      if (parsed.location) setLocation(parsed.location);
-      if (parsed.salary) setSalary(parsed.salary);
+      setLocation(parsed.location || '');
+      setSalary(parsed.salary || '');
       if (parsed.applyDate) setApplyDate(parsed.applyDate);
       if (parsed.deadlineDate) setDeadlineDate(parsed.deadlineDate);
-      if (parsed.notes) setNotes(parsed.notes);
-      if (parsed.resumeVersion) setResumeVersion(parsed.resumeVersion);
-      if (parsed.portfolioLink) setPortfolioLink(parsed.portfolioLink);
+      setNotes(parsed.notes || '');
+      setResumeVersion(parsed.resumeVersion || '');
+      setPortfolioLink(parsed.portfolioLink || '');
 
       setAiSuccessMessage('Pre-filled by AI — review & edit fields below before saving.');
     } catch (err: any) {
