@@ -28,9 +28,10 @@ import { CareerDashboardView } from '../components/career/CareerDashboardView';
 import { GoalsView } from '../components/goals/GoalsView';
 import { AchievementCenterView } from '../components/achievements/AchievementCenterView';
 import { SettingsView } from '../components/settings/SettingsView';
+import AuthViewLoading from '../components/auth/AuthViewLoading';
 
 export default function Home() {
-  const { isAuthenticated, currentUser, initializeAuth } = useAuthStore();
+  const { isAuthenticated, currentUser, isLoading, initializeAuth } = useAuthStore();
   const { 
     activeTab, 
     tickFocusTimer, 
@@ -114,8 +115,12 @@ export default function Home() {
     return () => window.removeEventListener('keydown', handleKeyDown);
   }, [isCommandPaletteOpen, isShortcutsOpen, isDailyReviewOpen, setCommandPaletteOpen, setShortcutsOpen, setDailyReviewOpen]);
 
+//   if (isLoading){
+//     return <AuthViewLoading />
+//   }
+
   if (!isAuthenticated) {
-    return <AuthView />;
+    return <AuthView isAuthLoading={isLoading} />;
   }
 
   return (
