@@ -18,8 +18,8 @@ export const AssignmentModal: React.FC<AssignmentModalProps> = ({ isOpen, onClos
 
   const [title, setTitle] = useState(initialAssignment?.title || '');
   const [courseId, setCourseId] = useState(initialAssignment?.courseId || courses[0]?.id || '');
-  const [subjectName, setSubjectName] = useState(initialAssignment?.subjectName || 'Distributed Systems');
-  const [professorName, setProfessorName] = useState(initialAssignment?.professorName || 'Dr. Katherine Vance');
+  const [subjectName, setSubjectName] = useState(initialAssignment?.subjectName || '');
+  const [professorName, setProfessorName] = useState(initialAssignment?.professorName || '');
   const [dueDate, setDueDate] = useState(initialAssignment?.dueDate || new Date().toISOString().split('T')[0]);
   const [dueTime, setDueTime] = useState(initialAssignment?.dueTime || '23:59');
   const [priority, setPriority] = useState<Priority>(initialAssignment?.priority || 'urgent');

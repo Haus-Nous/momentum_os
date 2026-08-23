@@ -50,7 +50,7 @@ export const ProductivityCharts: React.FC<ProductivityChartsProps> = ({ timefram
     const catHabits = habits.filter((h) => h.category === cat);
     return catHabits.length > 0
       ? Math.round(catHabits.reduce((acc, h) => acc + h.successPercent, 0) / catHabits.length)
-      : (tasks.length > 0 ? 30 : 0);
+      : 0;
   };
 
   const radarData = [
@@ -62,14 +62,24 @@ export const ProductivityCharts: React.FC<ProductivityChartsProps> = ({ timefram
     { subject: 'Fitness', A: getCategorySuccess('fitness') },
   ];
 
-  // Pie Data: Time Allocation
-  const pieData = [
-    { name: 'Deep Coding', value: 40 },
-    { name: 'Academic Study', value: 25 },
-    { name: 'Rest & Sleep', value: 20 },
-    { name: 'Routines & Fitness', value: 15 },
-  ];
-  const pieColors = ['#D85A2A', '#8A9A86', '#D9A05B', '#78899A'];
+  // Pie Data: Time Allocation (Computed from real focus sessions)
+  const codingMins = focusSessions.filter((s) => s.category === 'coding' || s.category === 'engineering').reduce((acc, s) => acc + s.durationMinutes, 0);
+  const studyMins = focusSessions.filter((s) => s.category === 'academic' || s.category === 'study').reduce((acc, s) => acc + s.durationMinutes, 0);
+  const healthMins = focusSessions.filter((s) => s.category === 'fitness' || s.category === 'health').reduce((acc, s) => acc + s.durationMinutes, 0);
+  const totalMins = focusSessions.reduce((acc, s) => acc + s.durationMinutes, 0);
+  const otherMins = Math.max(0, totalMins - (codingMins + studyMins + healthMins));
+
+  const hasFocusData = totalMins > 0;
+  const pieData = hasFocusData
+    ? [
+        { name: 'Deep Coding', value: Math.round(codingMins / 60) },
+        { name: 'Academic Study', value: Math.round(studyMins / 60) },
+        { name: 'Routines & Fitness', value: Math.round(healthMins / 60) },
+        { name: 'Other Focus', value: Math.round(otherMins / 60) },
+      ].filter((d) => d.value > 0)
+    : [{ name: 'No Time Logged Yet', value: 1 }];
+
+  const pieColors = hasFocusData ? ['#D85A2A', '#8A9A86', '#D9A05B', '#78899A'] : ['#6B7280'];
 
   return (
     <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">

@@ -67,7 +67,7 @@ export const SemesterTrackerView: React.FC = () => {
                   <Badge variant={course.grade ? 'emerald' : 'secondary'}>{course.grade || '--'}</Badge>
                 </div>
                 <h3 className="text-sm font-bold text-gray-900 dark:text-white mt-1">{course.name}</h3>
-                <p className="text-[11px] text-gray-500 mt-0.5">{course.professor || 'Faculty Advisor'}</p>
+                <p className="text-[11px] text-gray-500 mt-0.5">{course.professor || ''}</p>
               </div>
 
               <div className="mt-4 pt-3 border-t border-black/5 dark:border-white/5 flex items-center justify-between text-xs">

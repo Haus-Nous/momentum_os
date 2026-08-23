@@ -11,13 +11,13 @@ interface CgpaGoalModalProps {
 
 export const CgpaGoalModal: React.FC<CgpaGoalModalProps> = ({ isOpen, onClose }) => {
   const { profile, setCgpaGoal } = useMomentumStore();
-  const [goal, setGoal] = useState<string>('8.50');
+  const [goal, setGoal] = useState<string>('');
 
   useEffect(() => {
     if (profile.cgpaGoal) {
       setGoal(profile.cgpaGoal.toFixed(2));
     } else {
-      setGoal('8.50');
+      setGoal('');
     }
   }, [profile.cgpaGoal, isOpen]);
 

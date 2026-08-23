@@ -30,7 +30,7 @@ export const SemesterDashboardView: React.FC = () => {
 
   // Calculate actual CGPA from graded courses using Indian 10-point credit-weighted formula
   const cgpaStats = calculateCGPA(courses);
-  const targetGoal = profile.cgpaGoal ? profile.cgpaGoal.toFixed(2) : '8.50';
+  const targetGoal = profile.cgpaGoal ? profile.cgpaGoal.toFixed(2) : '--';
 
   // Study habit completion history for study heatmap
   const studyHabits = habits.filter((h) => h.category === 'study' || h.category === 'coding');

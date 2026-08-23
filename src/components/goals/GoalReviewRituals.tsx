@@ -8,9 +8,9 @@ import { Sparkles, Award, CheckCircle2 } from 'lucide-react';
 
 export const GoalReviewRituals: React.FC = () => {
   const [reviewType, setReviewType] = useState<'weekly' | 'monthly' | 'yearly'>('weekly');
-  const [wins, setWins] = useState('Shipped MOMENTUM OS 25-module expansion and completed 24-day habit streak.');
-  const [bottlenecks, setBottlenecks] = useState('Context switching between deep engineering and administrative tasks.');
-  const [adjustments, setAdjustments] = useState('Enforce strict 2-hour morning deep work block before opening email.');
+  const [wins, setWins] = useState('');
+  const [bottlenecks, setBottlenecks] = useState('');
+  const [adjustments, setAdjustments] = useState('');
 
   const [saved, setSaved] = useState(false);
 
