@@ -722,20 +722,71 @@ export const useMomentumStore = create<MomentumState>()((set, get) => ({
         }));
       },
 
-      // Internships, Hackathons, Competitions, Research, Certifications
       addInternship: (newInt) => {
         soundEngine.playClick();
         const internship: Internship = { ...newInt, id: 'int_' + Date.now() };
-        set((state) => ({ internships: [internship, ...state.internships] }));
+        let calEvent: CalendarEvent | null = null;
+        if (internship.deadlineDate) {
+          calEvent = {
+            id: 'evt_int_' + internship.id,
+            title: `Internship Deadline: ${internship.company} (${internship.role})`,
+            startTime: '09:00',
+            endTime: '17:00',
+            date: internship.deadlineDate,
+            category: 'internship',
+            color: '#6B8E62',
+          };
+        }
+        set((state) => {
+          const updatedInternships = [internship, ...state.internships];
+          const updatedCalEvents = calEvent ? [...state.calendarEvents, calEvent] : state.calendarEvents;
+          saveCollectionToDexie('internships', updatedInternships);
+          saveCollectionToDexie('calendarEvents', updatedCalEvents);
+          return { internships: updatedInternships, calendarEvents: updatedCalEvents };
+        });
       },
       updateInternship: (id, updates) => {
-        set((state) => ({
-          internships: state.internships.map((i) => (i.id === id ? { ...i, ...updates } : i)),
-        }));
+        set((state) => {
+          const updatedInternships = state.internships.map((i) => (i.id === id ? { ...i, ...updates } : i));
+          const targetInt = updatedInternships.find((i) => i.id === id);
+          let updatedCalEvents = state.calendarEvents;
+          if (targetInt && targetInt.deadlineDate) {
+            const existingEvt = state.calendarEvents.find((e) => e.id === 'evt_int_' + id);
+            if (existingEvt) {
+              updatedCalEvents = state.calendarEvents.map((e) =>
+                e.id === 'evt_int_' + id
+                  ? { ...e, title: `Internship Deadline: ${targetInt.company} (${targetInt.role})`, date: targetInt.deadlineDate! }
+                  : e
+              );
+            } else {
+              updatedCalEvents = [
+                ...state.calendarEvents,
+                {
+                  id: 'evt_int_' + id,
+                  title: `Internship Deadline: ${targetInt.company} (${targetInt.role})`,
+                  startTime: '09:00',
+                  endTime: '17:00',
+                  date: targetInt.deadlineDate,
+                  category: 'internship',
+                  color: '#6B8E62',
+                },
+              ];
+            }
+          }
+          saveCollectionToDexie('internships', updatedInternships);
+          saveCollectionToDexie('calendarEvents', updatedCalEvents);
+          return { internships: updatedInternships, calendarEvents: updatedCalEvents };
+        });
       },
       deleteInternship: (id) => {
         soundEngine.playClick();
-        set((state) => ({ internships: state.internships.filter((i) => i.id !== id) }));
+        set((state) => {
+          const updatedInternships = state.internships.filter((i) => i.id !== id);
+          const updatedCalEvents = state.calendarEvents.filter((e) => e.id !== 'evt_int_' + id);
+          saveCollectionToDexie('internships', updatedInternships);
+          saveCollectionToDexie('calendarEvents', updatedCalEvents);
+          return { internships: updatedInternships, calendarEvents: updatedCalEvents };
+        });
       },
 
       addHackathon: (newHk) => {

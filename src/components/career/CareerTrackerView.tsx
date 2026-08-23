@@ -301,7 +301,11 @@ export const CareerTrackerView: React.FC = () => {
                       <Edit className="w-3.5 h-3.5" />
                     </button>
                     <button
-                      onClick={() => deleteInternship(app.id)}
+                      onClick={() => {
+                        if (window.confirm(`Are you sure you want to delete the application for "${app.company} - ${app.role}"?`)) {
+                          deleteInternship(app.id);
+                        }
+                      }}
                       className="p-1 rounded-lg text-gray-400 hover:text-[#D93829] dark:hover:text-[#ED4B3B] transition-colors cursor-pointer"
                     >
                       <Trash2 className="w-3.5 h-3.5" />
@@ -346,11 +350,34 @@ export const CareerTrackerView: React.FC = () => {
                         className="cursor-grab active:cursor-grabbing"
                       >
                         <Card className="p-3 border-[#E2DACD] dark:border-[#332F2B] space-y-2">
-                          <div className="flex items-start justify-between">
-                            <div>
-                              <h4 className="text-xs font-bold text-gray-900 dark:text-white">{app.company}</h4>
-                              <p className="text-[11px] text-[#D85A2A] dark:text-[#E56B3A] font-semibold">{app.role}</p>
-                              <p className="text-[10px] text-gray-500">{app.location}</p>
+                          <div className="flex items-start justify-between gap-1">
+                            <div className="min-w-0 flex-1">
+                              <h4 className="text-xs font-bold text-gray-900 dark:text-white truncate">{app.company}</h4>
+                              <p className="text-[11px] text-[#D85A2A] dark:text-[#E56B3A] font-semibold truncate">{app.role}</p>
+                              {app.location && <p className="text-[10px] text-gray-500 truncate">{app.location}</p>}
+                            </div>
+                            <div className="flex items-center space-x-1 shrink-0">
+                              <button
+                                onClick={() => {
+                                  setSelectedInternship(app);
+                                  setIsInternshipOpen(true);
+                                }}
+                                className="p-0.5 text-gray-400 hover:text-gray-900 dark:hover:text-white transition-colors cursor-pointer"
+                                title="Edit Application"
+                              >
+                                <Edit className="w-3.5 h-3.5" />
+                              </button>
+                              <button
+                                onClick={() => {
+                                  if (window.confirm(`Are you sure you want to delete the application for "${app.company} - ${app.role}"?`)) {
+                                    deleteInternship(app.id);
+                                  }
+                                }}
+                                className="p-0.5 text-gray-400 hover:text-[#D93829] dark:hover:text-[#ED4B3B] transition-colors cursor-pointer"
+                                title="Delete Application"
+                              >
+                                <Trash2 className="w-3.5 h-3.5" />
+                              </button>
                             </div>
                           </div>
 

@@ -17,6 +17,7 @@ import { getPersonaLabels } from '../../utils/personaHelpers';
 export const CareerDashboardView: React.FC = () => {
   const { profile, internships, hackathons, researchPapers, certifications, deleteInternship, deleteHackathon } = useMomentumStore();
   const [isInternshipModalOpen, setIsInternshipModalOpen] = useState(false);
+  const [selectedInternship, setSelectedInternship] = useState<Internship | undefined>(undefined);
   const [isHackathonModalOpen, setIsHackathonModalOpen] = useState(false);
   const [selectedHackathon, setSelectedHackathon] = useState<Hackathon | undefined>(undefined);
 
@@ -59,10 +60,10 @@ export const CareerDashboardView: React.FC = () => {
           </div>
 
           <div className="flex items-center space-x-2">
-            <Button onClick={() => setIsInternshipModalOpen(true)} variant="primary" size="md">
+            <Button onClick={() => { setSelectedInternship(undefined); setIsInternshipModalOpen(true); }} variant="primary" size="md">
               <Plus className="w-4 h-4 mr-1.5" /> {labels.internshipButton}
             </Button>
-            <Button onClick={() => setIsHackathonModalOpen(true)} variant="secondary" size="md">
+            <Button onClick={() => { setSelectedHackathon(undefined); setIsHackathonModalOpen(true); }} variant="secondary" size="md">
               <Trophy className="w-4 h-4 mr-1.5 text-[#D85A2A] dark:text-[#E56B3A]" /> {labels.hackathonButton}
             </Button>
           </div>
@@ -85,9 +86,31 @@ export const CareerDashboardView: React.FC = () => {
 
                 <div className="p-2.5 rounded-2xl bg-black/5 dark:bg-white/5 border border-[#E2DACD] dark:border-[#332F2B] min-h-[160px] space-y-2">
                   {stageInternships.map((int) => (
-                    <Card key={int.id} className="p-3 border-[#E2DACD] dark:border-[#332F2B] space-y-1 text-xs">
-                      <div className="font-bold text-gray-900 dark:text-white">{int.company}</div>
-                      <div className="text-[11px] text-gray-400">{int.role}</div>
+                    <Card key={int.id} className="p-3 border-[#E2DACD] dark:border-[#332F2B] space-y-1.5 text-xs">
+                      <div className="flex items-start justify-between gap-1">
+                        <div className="font-bold text-gray-900 dark:text-white truncate">{int.company}</div>
+                        <div className="flex items-center space-x-1 shrink-0">
+                          <button
+                            onClick={() => { setSelectedInternship(int); setIsInternshipModalOpen(true); }}
+                            className="p-0.5 text-gray-400 hover:text-gray-900 dark:hover:text-white transition-colors cursor-pointer"
+                            title="Edit Application"
+                          >
+                            <Edit className="w-3.5 h-3.5" />
+                          </button>
+                          <button
+                            onClick={() => {
+                              if (window.confirm(`Are you sure you want to delete the application for "${int.company} - ${int.role}"?`)) {
+                                deleteInternship(int.id);
+                              }
+                            }}
+                            className="p-0.5 text-gray-400 hover:text-[#D93829] dark:hover:text-[#ED4B3B] transition-colors cursor-pointer"
+                            title="Delete Application"
+                          >
+                            <Trash2 className="w-3.5 h-3.5" />
+                          </button>
+                        </div>
+                      </div>
+                      <div className="text-[11px] text-[#D85A2A] dark:text-[#E56B3A] font-semibold truncate">{int.role}</div>
                       {int.salary && <div className="text-[10px] text-[#8A9A86] dark:text-[#9DB098] font-mono">{int.salary}</div>}
                     </Card>
                   ))}
@@ -223,7 +246,11 @@ export const CareerDashboardView: React.FC = () => {
         </Card>
       </div>
 
-      <InternshipModal isOpen={isInternshipModalOpen} onClose={() => setIsInternshipModalOpen(false)} />
+      <InternshipModal
+        isOpen={isInternshipModalOpen}
+        initialInternship={selectedInternship}
+        onClose={() => { setIsInternshipModalOpen(false); setSelectedInternship(undefined); }}
+      />
       <HackathonModal
         isOpen={isHackathonModalOpen}
         initialHackathon={selectedHackathon}
