@@ -1,11 +1,10 @@
-"use client";
-
 import React, { useState } from 'react';
-import { X, Briefcase, DollarSign, MapPin, FileText, Link as LinkIcon, Calendar } from 'lucide-react';
+import { X, Briefcase, DollarSign, MapPin, FileText, Link as LinkIcon, Calendar, Sparkles, CheckCircle2 } from 'lucide-react';
 import type { Internship, InternshipStatus } from '../../types';
 import { useMomentumStore } from '../../store/useMomentumStore';
 import { Button } from '../ui/Button';
 import { Input, Textarea } from '../ui/Input';
+import { GroqAIProvider } from '../../utils/aiAssistantEngine';
 
 interface InternshipModalProps {
   isOpen: boolean;
@@ -27,7 +26,39 @@ export const InternshipModal: React.FC<InternshipModalProps> = ({ isOpen, onClos
   const [portfolioLink, setPortfolioLink] = useState(initialInternship?.portfolioLink || 'https://alexmercer.dev');
   const [notes, setNotes] = useState(initialInternship?.notes || '');
 
+  // AI Quick-Add State
+  const [aiInput, setAiInput] = useState('');
+  const [isParsing, setIsParsing] = useState(false);
+  const [aiSuccessMessage, setAiSuccessMessage] = useState<string | null>(null);
+
   if (!isOpen) return null;
+
+  const handleAiParse = async (e?: React.FormEvent) => {
+    if (e) e.preventDefault();
+    if (!aiInput.trim() || isParsing) return;
+    setIsParsing(true);
+    setAiSuccessMessage(null);
+    try {
+      const provider = new GroqAIProvider();
+      const parsed = await provider.parseInternshipCommand(aiInput);
+      if (parsed.company) setCompany(parsed.company);
+      if (parsed.role) setRole(parsed.role);
+      if (parsed.status) setStatus(parsed.status as any);
+      if (parsed.location) setLocation(parsed.location);
+      if (parsed.salary) setSalary(parsed.salary);
+      if (parsed.applyDate) setApplyDate(parsed.applyDate);
+      if (parsed.deadlineDate) setDeadlineDate(parsed.deadlineDate);
+      if (parsed.notes) setNotes(parsed.notes);
+      if (parsed.resumeVersion) setResumeVersion(parsed.resumeVersion);
+      if (parsed.portfolioLink) setPortfolioLink(parsed.portfolioLink);
+
+      setAiSuccessMessage('Pre-filled by AI — review & edit fields below before saving.');
+    } catch (err: any) {
+      console.error('AI Parse error:', err);
+    } finally {
+      setIsParsing(false);
+    }
+  };
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -66,7 +97,7 @@ export const InternshipModal: React.FC<InternshipModalProps> = ({ isOpen, onClos
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-md p-4">
-      <div className="w-full max-w-lg bg-[#F3EFE6] dark:bg-[#1C1A18] border border-[#E2DACD] dark:border-[#332F2B] rounded-2xl shadow-xl overflow-hidden p-6 animate-in fade-in zoom-in-95 duration-150">
+      <div className="w-full max-w-lg bg-[#F3EFE6] dark:bg-[#1C1A18] border border-[#E2DACD] dark:border-[#332F2B] rounded-2xl shadow-xl overflow-hidden p-6 animate-in fade-in zoom-in-95 duration-150 max-h-[90vh] overflow-y-auto">
         <div className="flex items-center justify-between pb-4 border-b border-black/10 dark:border-white/10">
           <h2 className="text-base font-bold text-gray-900 dark:text-white flex items-center space-x-2">
             <Briefcase className="w-5 h-5 text-[#D85A2A] dark:text-[#E56B3A]" />
@@ -75,6 +106,48 @@ export const InternshipModal: React.FC<InternshipModalProps> = ({ isOpen, onClos
           <button onClick={onClose} className="p-1 rounded-lg text-gray-400 hover:text-gray-900 dark:hover:text-white cursor-pointer">
             <X className="w-4 h-4" />
           </button>
+        </div>
+
+        {/* Prominent AI Quick-Add Natural Language Box */}
+        <div className="mt-4 p-3.5 rounded-2xl bg-[#D85A2A]/10 dark:bg-[#E56B3A]/10 border border-[#D85A2A]/20 dark:border-[#E56B3A]/30 space-y-2">
+          <div className="flex items-center justify-between">
+            <label className="text-[11px] font-bold text-[#D85A2A] dark:text-[#E56B3A] flex items-center space-x-1.5 uppercase tracking-wider">
+              <Sparkles className="w-3.5 h-3.5" />
+              <span>Describe it in plain language (Groq AI Auto-Fill)</span>
+            </label>
+          </div>
+          <div className="flex items-center gap-2">
+            <input
+              type="text"
+              value={aiInput}
+              onChange={(e) => setAiInput(e.target.value)}
+              onKeyDown={(e) => { if (e.key === 'Enter') { e.preventDefault(); handleAiParse(); } }}
+              placeholder="e.g. Applied to SWE internship at Google DeepMind, deadline next Friday, $65/hr..."
+              className="flex-1 bg-black/5 dark:bg-white/5 border border-black/10 dark:border-white/10 rounded-xl px-3 py-2 text-xs text-gray-900 dark:text-white placeholder-gray-400 focus:outline-none"
+            />
+            <Button
+              type="button"
+              onClick={() => handleAiParse()}
+              disabled={isParsing || !aiInput.trim()}
+              size="sm"
+              className="shrink-0 bg-[#D85A2A] hover:bg-[#C44E20] text-white text-xs font-bold px-3.5 py-2 rounded-xl flex items-center space-x-1"
+            >
+              {isParsing ? (
+                <Sparkles className="w-3.5 h-3.5 animate-spin" />
+              ) : (
+                <>
+                  <Sparkles className="w-3.5 h-3.5 mr-1" />
+                  <span>Auto-Fill</span>
+                </>
+              )}
+            </Button>
+          </div>
+          {aiSuccessMessage && (
+            <p className="text-[11px] font-semibold text-[#8A9A86] dark:text-[#9DB098] flex items-center space-x-1 pt-1">
+              <CheckCircle2 className="w-3.5 h-3.5 shrink-0" />
+              <span>{aiSuccessMessage}</span>
+            </p>
+          )}
         </div>
 
         <form onSubmit={handleSubmit} className="py-4 space-y-4 text-xs">

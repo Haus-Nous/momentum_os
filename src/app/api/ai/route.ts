@@ -86,6 +86,80 @@ Return ONLY valid JSON with no extra markdown wrapping.`
       return NextResponse.json(JSON.parse(responseText));
     }
 
+    if (action === 'parseInternship') {
+      console.error('[API/AI LOG] Executing action parseInternship');
+      const todayStr = new Date().toISOString().split('T')[0];
+      const completion = await groq.chat.completions.create({
+        model,
+        messages: [
+          {
+            role: 'system',
+            content: `You are an AI internship application parser for Momentum OS.
+Parse the user's natural language input describing an internship/job application and extract structured JSON matching this schema:
+{
+  "company": string (e.g. "Google", "Anthropic", "Stripe"),
+  "role": string (e.g. "Software Engineering Intern", "AI Research Intern"),
+  "status": "wishlist" | "applied" | "assessment" | "interview" | "offer" | "rejected",
+  "location": string (e.g. "San Francisco, CA", "Remote", "" if not specified),
+  "salary": string (e.g. "$55/hr", "$10,000/mo", "" if not specified),
+  "applyDate": string ("YYYY-MM-DD" format, assume current date is ${todayStr}),
+  "deadlineDate": string ("YYYY-MM-DD" format or "" if none),
+  "resumeVersion": string (e.g. "Res_v4_AI.pdf" or "" if none),
+  "portfolioLink": string (e.g. "https://..." or "" if none),
+  "notes": string (brief summary of notes, prep points or details)
+}
+Return ONLY valid JSON object with no extra markdown wrapping.`
+          },
+          { role: 'user', content: payload.text || '' }
+        ],
+        temperature: 0.1,
+        response_format: { type: 'json_object' }
+      });
+
+      const responseText = completion.choices[0]?.message?.content || '{}';
+      console.error('[API/AI LOG] parseInternship success');
+      return NextResponse.json(JSON.parse(responseText));
+    }
+
+    if (action === 'parseHackathon') {
+      console.error('[API/AI LOG] Executing action parseHackathon');
+      const todayStr = new Date().toISOString().split('T')[0];
+      const completion = await groq.chat.completions.create({
+        model,
+        messages: [
+          {
+            role: 'system',
+            content: `You are an AI hackathon event parser for Momentum OS.
+Parse the user's natural language input describing a hackathon or engineering competition and extract structured JSON matching this schema:
+{
+  "title": string (e.g. "Solana AI Hackathon", "Vercel AI World Cup"),
+  "theme": string (e.g. "Autonomous AI Agents", "Web3"),
+  "organizer": string (e.g. "Solana Foundation", "Vercel"),
+  "startDate": string ("YYYY-MM-DD" format, assume current date is ${todayStr}),
+  "endDate": string ("YYYY-MM-DD" format or "" if none),
+  "registrationDeadline": string ("YYYY-MM-DD" format or "" if none),
+  "submissionDeadline": string ("YYYY-MM-DD" format or "" if none),
+  "projectTitle": string (e.g. "Momentum OS", "AutoAgent"),
+  "teamMembers": array of strings (e.g. ["Alex (Lead)", "Sarah (UX)"]),
+  "techStack": array of strings (e.g. ["Next.js 15", "Tailwind", "Zustand"]),
+  "prizePool": string (e.g. "$100,000", "$50k cash"),
+  "link": string (e.g. "https://..." or "" if none),
+  "progressPercent": number (0 to 100),
+  "ideaDescription": string (brief description of project or track)
+}
+Return ONLY valid JSON object with no extra markdown wrapping.`
+          },
+          { role: 'user', content: payload.text || '' }
+        ],
+        temperature: 0.1,
+        response_format: { type: 'json_object' }
+      });
+
+      const responseText = completion.choices[0]?.message?.content || '{}';
+      console.error('[API/AI LOG] parseHackathon success');
+      return NextResponse.json(JSON.parse(responseText));
+    }
+
     if (action === 'predictRisks') {
       console.error('[API/AI LOG] Executing action predictRisks');
       const completion = await groq.chat.completions.create({

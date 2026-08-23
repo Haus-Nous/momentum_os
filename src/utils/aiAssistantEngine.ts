@@ -206,6 +206,76 @@ export class GroqAIProvider implements AIProvider {
     }
   }
 
+  async parseInternshipCommand(text: string): Promise<Partial<Internship>> {
+    try {
+      const res = await fetch('/api/ai', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ action: 'parseInternship', payload: { text } }),
+      });
+      if (!res.ok) throw new Error(`HTTP error ${res.status}`);
+      const data = await res.json();
+      if (data.fallback) throw new Error(data.error || 'Groq parse fallback');
+      return data;
+    } catch (err: any) {
+      console.warn('[GroqAIProvider] Internship AI parse fallback:', err.message);
+      // Fallback local heuristic parse
+      const lower = text.toLowerCase();
+      let company = 'Target Company';
+      if (lower.includes('google')) company = 'Google';
+      else if (lower.includes('meta')) company = 'Meta';
+      else if (lower.includes('stripe')) company = 'Stripe';
+      else if (lower.includes('anthropic')) company = 'Anthropic';
+      else if (lower.includes('openai')) company = 'OpenAI';
+      else {
+        const parts = text.split(/at\s+/i);
+        if (parts.length > 1) {
+          company = parts[1].split(/[\s,.]+/)[0];
+        }
+      }
+
+      let status = 'applied';
+      if (lower.includes('interview')) status = 'interview';
+      else if (lower.includes('offer')) status = 'offer';
+      else if (lower.includes('wishlist') || lower.includes('plan')) status = 'wishlist';
+
+      return {
+        company,
+        role: lower.includes('swe') || lower.includes('software') ? 'Software Engineering Intern' : 'AI Systems Intern',
+        status: status as any,
+        notes: text,
+      };
+    }
+  }
+
+  async parseHackathonCommand(text: string): Promise<Partial<Hackathon>> {
+    try {
+      const res = await fetch('/api/ai', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ action: 'parseHackathon', payload: { text } }),
+      });
+      if (!res.ok) throw new Error(`HTTP error ${res.status}`);
+      const data = await res.json();
+      if (data.fallback) throw new Error(data.error || 'Groq parse fallback');
+      return data;
+    } catch (err: any) {
+      console.warn('[GroqAIProvider] Hackathon AI parse fallback:', err.message);
+      const lower = text.toLowerCase();
+      let title = 'Hackathon Challenge';
+      if (lower.includes('solana')) title = 'Solana AI Hackathon';
+      else if (lower.includes('vercel')) title = 'Vercel AI World Cup';
+      else if (lower.includes('eth')) title = 'ETH Global Hackathon';
+
+      return {
+        title,
+        theme: lower.includes('ai') ? 'Autonomous AI Agents' : 'Web3 Systems',
+        organizer: title.split(' ')[0] || 'Tech Core',
+        ideaDescription: text,
+      };
+    }
+  }
+
   async predictDeadlineRisks(assignments: Assignment[], hackathons: Hackathon[], internships: Internship[]): Promise<RiskReport[]> {
     try {
       const res = await fetch('/api/ai', {
