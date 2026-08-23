@@ -16,11 +16,68 @@ import { soundEngine } from '../utils/soundEngine';
 import { loadStateFromDexie, saveCollectionToDexie, processSyncQueue, queueOfflineMutation } from '../lib/db';
 import { isSupabaseConfigured, supabase } from '../lib/supabase';
 
+const mapToSupabasePayload = (table: string, record: any, userId: string) => {
+  const base = { id: record.id, user_id: userId };
+  if (table === 'internships') {
+    return {
+      ...base,
+      company: record.company,
+      role: record.role,
+      status: record.status || 'applied',
+      apply_date: record.appliedDate || record.apply_date || new Date().toISOString().split('T')[0],
+      deadline_date: record.deadlineDate || record.deadline_date || null,
+      salary: record.salary || null,
+      location: record.location || null,
+      resume_version: record.resumeVersion || record.resume_version || null,
+      portfolio_link: record.portfolioLink || record.portfolio_link || null,
+      notes: record.notes || null,
+    };
+  }
+  if (table === 'hackathons') {
+    const subDate = record.submissionDeadline || record.registrationDeadline || record.startDate || new Date().toISOString().split('T')[0];
+    return {
+      ...base,
+      title: record.title,
+      organizer: record.organizer,
+      start_date: record.startDate || record.start_date || subDate,
+      end_date: record.endDate || record.end_date || subDate,
+      registration_deadline: record.registrationDeadline || record.registration_deadline || null,
+      submission_deadline: record.submissionDeadline || record.submission_deadline || null,
+      project_title: record.projectTitle || record.project_title || null,
+      team_members: Array.isArray(record.teamMembers) ? record.teamMembers : (record.teamRoster ? [record.teamRoster] : []),
+      tech_stack: Array.isArray(record.techStack) ? record.techStack : (typeof record.techStack === 'string' ? record.techStack.split(',').map((s: string) => s.trim()) : []),
+      status: record.status || 'upcoming',
+      prize_pool: record.prizePool || record.prize_pool || null,
+      link: record.website || record.link || null,
+      progress_percent: record.progressPercent || record.progress_percent || 0,
+      idea_description: record.notes || record.ideaDescription || null,
+    };
+  }
+  if (table === 'tasks') {
+    return {
+      ...base,
+      title: record.title,
+      description: record.description || null,
+      status: record.status || 'todo',
+      priority: record.priority || 'medium',
+      category: record.category || 'general',
+      due_date: record.dueDate || null,
+      due_time: record.dueTime || null,
+      time_estimate_minutes: record.timeEstimateMinutes || 0,
+      time_spent_minutes: record.timeSpentMinutes || 0,
+      subtasks: record.subtasks || [],
+      tags: record.tags || [],
+      completed_at: record.completedAt || null,
+    };
+  }
+  return { ...record, user_id: userId };
+};
+
 const syncToSupabase = async (table: string, action: 'upsert' | 'delete', record: any) => {
   if (!isSupabaseConfigured || typeof window === 'undefined') return;
   try {
     const authData = localStorage.getItem('momentum_auth_storage');
-    let userId = '00000000-0000-0000-0000-000000000001';
+    let userId = '12e52328-6b1e-4435-87be-711e17e81b15';
     if (authData) {
       try {
         const parsed = JSON.parse(authData);
@@ -31,7 +88,8 @@ const syncToSupabase = async (table: string, action: 'upsert' | 'delete', record
     }
 
     if (action === 'upsert') {
-      await supabase.from(table).upsert({ ...record, user_id: userId, id: record.id });
+      const payload = mapToSupabasePayload(table, record, userId);
+      await supabase.from(table).upsert(payload);
     } else if (action === 'delete') {
       await supabase.from(table).delete().eq('id', record.id).eq('user_id', userId);
     }
