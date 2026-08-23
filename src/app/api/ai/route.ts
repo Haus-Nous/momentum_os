@@ -56,22 +56,47 @@ export async function POST(req: NextRequest) {
 
     if (action === 'parseCommand') {
       console.error('[API/AI LOG] Executing action parseCommand');
+      const todayStr = new Date().toISOString().split('T')[0];
       const completion = await groq.chat.completions.create({
         model,
         messages: [
           {
             role: 'system',
             content: `You are an AI command parser for Momentum OS productivity system.
-Parse the user's natural language input and extract structured JSON matching this schema:
+Parse the user's natural language input into a structured item creation JSON.
+Detect the item type ("task" | "goal" | "habit" | "assignment" | "hackathon" | "internship" | "course") from context or keywords (e.g. "goal", "target", "cgpa", "hit", "mrr", "achieve" -> "goal"; "task", "fix", "build", "do", "architect" -> "task"; "habit", "daily", "streak", "every day" -> "habit"; "assignment", "hw", "lab", "midterm" -> "assignment"; "hackathon" -> "hackathon"; "internship", "job", "applied" -> "internship").
+
+Return JSON matching this schema:
 {
-  "type": "task" | "assignment" | "habit" | "reminder" | "query",
+  "type": "task" | "goal" | "habit" | "assignment" | "hackathon" | "internship" | "course",
   "title": string,
-  "dueDate": string ("YYYY-MM-DD" format, assume current date is ${new Date().toISOString().split('T')[0]}),
+  "description": string,
+  "dueDate": string ("YYYY-MM-DD" format, assume current date is ${todayStr}),
   "dueTime": string ("HH:MM" format 24h),
   "priority": "urgent" | "high" | "medium" | "low",
   "energyLevel": "high" | "medium" | "low",
-  "category": string,
-  "timeEstimateMinutes": number
+  "category": string (e.g. "Engineering", "academic", "career", "fitness", "financial", "personal"),
+  "timeEstimateMinutes": number,
+  
+  // Goal specific fields (if type is "goal")
+  "horizon": "daily" | "weekly" | "monthly" | "quarterly" | "yearly" | "life",
+  "targetDate": string ("YYYY-MM-DD" format, assume current date is ${todayStr}),
+  "vision": string,
+  "why": string,
+  "reward": string,
+  "milestones": array of strings,
+
+  // Internship specific fields (if type is "internship")
+  "company": string,
+  "role": string,
+  "salary": string,
+  "location": string,
+  "status": string,
+
+  // Hackathon specific fields (if type is "hackathon")
+  "organizer": string,
+  "prizePool": string,
+  "techStack": array of strings
 }
 Return ONLY valid JSON with no extra markdown wrapping.`
           },
