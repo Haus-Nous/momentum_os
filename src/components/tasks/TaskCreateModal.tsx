@@ -5,6 +5,7 @@ import { useMomentumStore } from '../../store/useMomentumStore';
 import { Button } from '../ui/Button';
 import { Input, Textarea } from '../ui/Input';
 import { GroqAIProvider } from '../../utils/aiAssistantEngine';
+import { VoiceRecorderButton } from '../notes/VoiceRecorderButton';
 
 interface TaskCreateModalProps {
   isOpen: boolean;
@@ -150,14 +151,22 @@ export const TaskCreateModal: React.FC<TaskCreateModalProps> = ({ isOpen, onClos
             </label>
           </div>
           <div className="flex items-center gap-2">
-            <input
-              type="text"
-              value={aiInput}
-              onChange={(e) => setAiInput(e.target.value)}
-              onKeyDown={(e) => { if (e.key === 'Enter') { e.preventDefault(); handleAiParse(); } }}
-              placeholder="e.g. Fix vector index sharding bug by tomorrow 5pm high priority..."
-              className="flex-1 bg-black/5 dark:bg-white/5 border border-black/10 dark:border-white/10 rounded-xl px-3 py-2 text-xs text-gray-900 dark:text-white placeholder-gray-400 focus:outline-none"
-            />
+            <div className="flex-1 relative flex items-center">
+              <input
+                type="text"
+                value={aiInput}
+                onChange={(e) => setAiInput(e.target.value)}
+                onKeyDown={(e) => { if (e.key === 'Enter') { e.preventDefault(); handleAiParse(); } }}
+                placeholder="e.g. Fix vector index sharding bug by tomorrow 5pm high priority..."
+                className="w-full bg-black/5 dark:bg-white/5 border border-black/10 dark:border-white/10 rounded-xl pl-3 pr-10 py-2 text-xs text-gray-900 dark:text-white placeholder-gray-400 focus:outline-none"
+              />
+              <div className="absolute right-1 top-1/2 -translate-y-1/2">
+                <VoiceRecorderButton
+                  compact
+                  onTranscribeComplete={(text) => setAiInput((prev) => (prev ? `${prev} ${text}` : text))}
+                />
+              </div>
+            </div>
             <Button
               type="button"
               onClick={() => handleAiParse()}
