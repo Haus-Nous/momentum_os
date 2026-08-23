@@ -740,32 +740,63 @@ export const useMomentumStore = create<MomentumState>()((set, get) => ({
 
       addHackathon: (newHk) => {
         soundEngine.playClick();
-        const hackathon: Hackathon = { ...newHk, id: 'hk_' + Date.now() };
+        const submissionDate = newHk.submissionDeadline || newHk.registrationDeadline || newHk.startDate || new Date().toISOString().split('T')[0];
+        const hackathon: Hackathon = {
+          ...newHk,
+          id: 'hk_' + Date.now(),
+          startDate: newHk.startDate || submissionDate,
+        };
         const calEvent: CalendarEvent = {
           id: 'evt_hk_' + hackathon.id,
           title: `Hackathon: ${hackathon.title}`,
           startTime: '09:00',
           endTime: '18:00',
-          date: hackathon.startDate,
+          date: submissionDate,
           category: 'hackathon',
           color: '#a855f7',
         };
-        set((state) => ({
-          hackathons: [hackathon, ...state.hackathons],
-          calendarEvents: [...state.calendarEvents, calEvent],
-        }));
+        set((state) => {
+          const updatedHackathons = [hackathon, ...state.hackathons];
+          const updatedCalEvents = [...state.calendarEvents, calEvent];
+          saveCollectionToDexie('hackathons', updatedHackathons);
+          saveCollectionToDexie('calendarEvents', updatedCalEvents);
+          return {
+            hackathons: updatedHackathons,
+            calendarEvents: updatedCalEvents,
+          };
+        });
       },
       updateHackathon: (id, updates) => {
-        set((state) => ({
-          hackathons: state.hackathons.map((h) => (h.id === id ? { ...h, ...updates } : h)),
-        }));
+        set((state) => {
+          const updatedHackathons = state.hackathons.map((h) => (h.id === id ? { ...h, ...updates } : h));
+          const targetHk = updatedHackathons.find((h) => h.id === id);
+          let updatedCalEvents = state.calendarEvents;
+          if (targetHk) {
+            const targetDate = targetHk.submissionDeadline || targetHk.registrationDeadline || targetHk.startDate || new Date().toISOString().split('T')[0];
+            updatedCalEvents = state.calendarEvents.map((e) =>
+              e.id === 'evt_hk_' + id ? { ...e, title: `Hackathon: ${targetHk.title}`, date: targetDate } : e
+            );
+          }
+          saveCollectionToDexie('hackathons', updatedHackathons);
+          saveCollectionToDexie('calendarEvents', updatedCalEvents);
+          return {
+            hackathons: updatedHackathons,
+            calendarEvents: updatedCalEvents,
+          };
+        });
       },
       deleteHackathon: (id) => {
         soundEngine.playClick();
-        set((state) => ({
-          hackathons: state.hackathons.filter((h) => h.id !== id),
-          calendarEvents: state.calendarEvents.filter((e) => e.id !== 'evt_hk_' + id),
-        }));
+        set((state) => {
+          const updatedHackathons = state.hackathons.filter((h) => h.id !== id);
+          const updatedCalEvents = state.calendarEvents.filter((e) => e.id !== 'evt_hk_' + id);
+          saveCollectionToDexie('hackathons', updatedHackathons);
+          saveCollectionToDexie('calendarEvents', updatedCalEvents);
+          return {
+            hackathons: updatedHackathons,
+            calendarEvents: updatedCalEvents,
+          };
+        });
       },
 
       addCompetition: (newCmp) => {

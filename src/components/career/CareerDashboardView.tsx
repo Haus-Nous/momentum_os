@@ -2,7 +2,7 @@
 
 import React, { useState } from 'react';
 import { 
-  Briefcase, Trophy, Award, FileText, Globe, Plus, Layers, Sparkles, CheckCircle2 
+  Briefcase, Trophy, Award, FileText, Globe, Plus, Layers, Sparkles, CheckCircle2, Calendar, Trash2, Edit 
 } from 'lucide-react';
 import { useMomentumStore } from '../../store/useMomentumStore';
 import { Card } from '../ui/Card';
@@ -10,7 +10,7 @@ import { Button } from '../ui/Button';
 import { Badge } from '../ui/Badge';
 import { InternshipModal } from './InternshipModal';
 import { HackathonModal } from './HackathonModal';
-import type { InternshipStatus } from '../../types';
+import type { InternshipStatus, Hackathon } from '../../types';
 
 import { getPersonaLabels } from '../../utils/personaHelpers';
 
@@ -18,6 +18,7 @@ export const CareerDashboardView: React.FC = () => {
   const { profile, internships, hackathons, researchPapers, certifications, deleteInternship, deleteHackathon } = useMomentumStore();
   const [isInternshipModalOpen, setIsInternshipModalOpen] = useState(false);
   const [isHackathonModalOpen, setIsHackathonModalOpen] = useState(false);
+  const [selectedHackathon, setSelectedHackathon] = useState<Hackathon | undefined>(undefined);
 
   const labels = getPersonaLabels(profile.persona);
 
@@ -97,6 +98,89 @@ export const CareerDashboardView: React.FC = () => {
         </div>
       </div>
 
+      {/* Hackathons & Competitions Section */}
+      <div className="space-y-3">
+        <div className="flex items-center justify-between">
+          <h3 className="text-xs font-bold text-gray-500 uppercase tracking-wider flex items-center space-x-1.5">
+            <Trophy className="w-4 h-4 text-[#D85A2A] dark:text-[#E56B3A]" />
+            <span>Hackathons & Competitions ({hackathons.length})</span>
+          </h3>
+          <Button
+            size="sm"
+            variant="ghost"
+            onClick={() => { setSelectedHackathon(undefined); setIsHackathonModalOpen(true); }}
+            className="text-xs text-[#D85A2A] dark:text-[#E56B3A] font-bold cursor-pointer"
+          >
+            + Add Hackathon
+          </Button>
+        </div>
+
+        {hackathons.length === 0 ? (
+          <Card className="p-6 text-center border-dashed border-[#E2DACD] dark:border-[#332F2B] bg-black/5 dark:bg-white/5 space-y-2">
+            <Trophy className="w-8 h-8 mx-auto text-gray-400 opacity-60" />
+            <p className="text-xs font-semibold text-gray-500">No hackathons or competitions logged yet.</p>
+            <Button
+              size="sm"
+              onClick={() => { setSelectedHackathon(undefined); setIsHackathonModalOpen(true); }}
+              className="bg-[#D85A2A] text-white text-xs font-bold px-3 py-1.5 rounded-xl cursor-pointer"
+            >
+              + Log First Hackathon
+            </Button>
+          </Card>
+        ) : (
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+            {hackathons.map((hk) => {
+              const deadline = hk.submissionDeadline || hk.registrationDeadline || hk.startDate;
+              return (
+                <Card key={hk.id} className="p-4 border-[#E2DACD] dark:border-[#332F2B] bg-[#F3EFE6] dark:bg-[#1C1A18] space-y-3">
+                  <div className="flex items-start justify-between">
+                    <div>
+                      <h4 className="font-bold text-sm text-gray-900 dark:text-white flex items-center space-x-1.5">
+                        <span>{hk.title}</span>
+                      </h4>
+                      {hk.organizer && <p className="text-xs text-gray-500">{hk.organizer}</p>}
+                    </div>
+                    <Badge variant={hk.status === 'won' ? 'success' : hk.status === 'submitted' ? 'info' : 'warning'}>
+                      {hk.status}
+                    </Badge>
+                  </div>
+
+                  {deadline && (
+                    <div className="flex items-center space-x-1.5 text-xs text-[#D85A2A] dark:text-[#E56B3A] font-medium">
+                      <Calendar className="w-3.5 h-3.5" />
+                      <span>Deadline: {deadline}</span>
+                    </div>
+                  )}
+
+                  {hk.prizePool && (
+                    <div className="text-xs text-[#8A9A86] dark:text-[#9DB098] font-bold">
+                      Prize Pool: {hk.prizePool}
+                    </div>
+                  )}
+
+                  <div className="flex items-center justify-between pt-2 border-t border-black/5 dark:border-white/5">
+                    <button
+                      onClick={() => { setSelectedHackathon(hk); setIsHackathonModalOpen(true); }}
+                      className="text-xs font-bold text-gray-500 hover:text-gray-900 dark:hover:text-white flex items-center space-x-1 cursor-pointer"
+                    >
+                      <Edit className="w-3.5 h-3.5" />
+                      <span>Edit</span>
+                    </button>
+                    <button
+                      onClick={() => deleteHackathon(hk.id)}
+                      className="text-xs font-bold text-[#D93829] hover:text-red-700 flex items-center space-x-1 cursor-pointer"
+                    >
+                      <Trash2 className="w-3.5 h-3.5" />
+                      <span>Delete</span>
+                    </button>
+                  </div>
+                </Card>
+              );
+            })}
+          </div>
+        )}
+      </div>
+
       {/* Research Papers & Certifications Grid */}
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
         {/* Research Papers */}
@@ -140,7 +224,11 @@ export const CareerDashboardView: React.FC = () => {
       </div>
 
       <InternshipModal isOpen={isInternshipModalOpen} onClose={() => setIsInternshipModalOpen(false)} />
-      <HackathonModal isOpen={isHackathonModalOpen} onClose={() => setIsHackathonModalOpen(false)} />
+      <HackathonModal
+        isOpen={isHackathonModalOpen}
+        initialHackathon={selectedHackathon}
+        onClose={() => { setIsHackathonModalOpen(false); setSelectedHackathon(undefined); }}
+      />
     </div>
   );
 };

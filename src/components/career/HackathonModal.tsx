@@ -78,16 +78,17 @@ export const HackathonModal: React.FC<HackathonModalProps> = ({ isOpen, onClose,
 
     const teamMembers = teamMembersInput.split(',').map((t) => t.trim()).filter(Boolean);
     const techStack = techStackInput.split(',').map((t) => t.trim()).filter(Boolean);
+    const effectiveStartDate = startDate || submissionDeadline || registrationDeadline || new Date().toISOString().split('T')[0];
 
     if (initialHackathon) {
       updateHackathon(initialHackathon.id, {
         title: title.trim(),
         theme: theme.trim(),
         organizer: organizer.trim(),
-        startDate,
+        startDate: effectiveStartDate,
         endDate,
-        registrationDeadline,
-        submissionDeadline,
+        registrationDeadline: registrationDeadline || submissionDeadline,
+        submissionDeadline: submissionDeadline || registrationDeadline,
         projectTitle: projectTitle.trim(),
         teamMembers,
         techStack,
@@ -101,10 +102,10 @@ export const HackathonModal: React.FC<HackathonModalProps> = ({ isOpen, onClose,
         title: title.trim(),
         theme: theme.trim(),
         organizer: organizer.trim(),
-        startDate,
+        startDate: effectiveStartDate,
         endDate,
-        registrationDeadline,
-        submissionDeadline,
+        registrationDeadline: registrationDeadline || submissionDeadline,
+        submissionDeadline: submissionDeadline || registrationDeadline,
         projectTitle: projectTitle.trim(),
         teamMembers,
         techStack,
