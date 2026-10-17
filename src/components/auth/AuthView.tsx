@@ -19,7 +19,7 @@ export const AuthView: React.FC = () => {
   const [error, setError] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState(false);
 
-  const { login, register } = useAuthStore();
+  const { login, register, loginAsGuest } = useAuthStore();
   const { updateSettings, syncUserProfile } = useMomentumStore();
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -235,6 +235,15 @@ export const AuthView: React.FC = () => {
                 <ArrowRight className="w-4 h-4" />
               </>
             )}
+          </button>
+
+          <button
+            type="button"
+            onClick={() => loginAsGuest()}
+            className="w-full mt-3 bg-white/10 hover:bg-white/15 text-slate-200 border border-white/10 font-bold py-2.5 px-4 rounded-2xl flex items-center justify-center gap-2 transition duration-200 cursor-pointer"
+          >
+            <span>🐱 Enter as Guest (Cozy Desk)</span>
+            <ArrowRight className="w-4 h-4" />
           </button>
         </form>
 

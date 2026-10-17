@@ -222,3 +222,13 @@ class SoundEngine {
 }
 
 export const soundEngine = new SoundEngine();
+
+export const playSound = (name: 'complete' | 'click' | 'bell' | 'milestone') => {
+  if (name === 'complete' || name === 'milestone') {
+    soundEngine.playComplete();
+  } else if (name === 'bell') {
+    soundEngine.playTimerBell();
+  } else {
+    soundEngine.playClick();
+  }
+};

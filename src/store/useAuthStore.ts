@@ -17,6 +17,7 @@ interface AuthState {
 
   register: (name: string, email: string, password: string, role?: string) => Promise<{ success: boolean; error?: string }>;
   login: (email: string, password: string) => Promise<{ success: boolean; error?: string }>;
+  loginAsGuest: () => void;
   logout: () => Promise<void>;
   updateProfile: (updates: Partial<AuthUser>) => void;
   initializeAuth: () => Promise<void>;
@@ -29,7 +30,14 @@ export const useAuthStore = create<AuthState>()((set, get) => ({
 
   initializeAuth: async () => {
     if (!isSupabaseConfigured) {
-      set({ isLoading: false });
+      const guestUser: AuthUser = {
+        id: 'user_local',
+        email: 'explorer@momentum.os',
+        name: 'Adventurer',
+        role: 'Systems Architect',
+        createdAt: new Date().toISOString(),
+      };
+      set({ currentUser: guestUser, isAuthenticated: true, isLoading: false });
       return;
     }
 
@@ -183,6 +191,17 @@ export const useAuthStore = create<AuthState>()((set, get) => ({
     } catch (err: any) {
       return { success: false, error: err.message || 'An error occurred during sign in.' };
     }
+  },
+
+  loginAsGuest: () => {
+    const guestUser: AuthUser = {
+      id: 'user_guest',
+      email: 'guest@momentum.os',
+      name: 'Guest User',
+      role: 'Systems Architect',
+      createdAt: new Date().toISOString(),
+    };
+    set({ currentUser: guestUser, isAuthenticated: true, isLoading: false });
   },
 
   logout: async () => {
