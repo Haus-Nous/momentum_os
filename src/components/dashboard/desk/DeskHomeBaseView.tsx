@@ -250,11 +250,12 @@ export const DeskHomeBaseView: React.FC<DeskHomeBaseViewProps> = ({
 
               <button
                 onClick={onReplayCatIntro}
-                className="desk-btn-icon text-xl hover:scale-110"
-                title="Replay Sparky the Cat Intro"
-                aria-label="Replay Cat Intro"
+                className="desk-stat-pill bg-white hover:bg-[#f7d55c] cursor-pointer flex items-center gap-1.5 text-lg font-bold"
+                title="Put Sparky back on keyboard (Sleeping Cat Scene)"
+                aria-label="Sleeping Cat on Keyboard"
               >
-                🐱
+                <span>🐱</span>
+                <span>Sleeping Cat</span>
               </button>
             </div>
 
@@ -332,9 +333,8 @@ export const DeskHomeBaseView: React.FC<DeskHomeBaseViewProps> = ({
                 y={280}
                 textAnchor="middle"
                 fill="#222"
-                fontFamily="Gaegu"
-                fontWeight="700"
-                fontSize="15"
+                fontFamily="VT323"
+                fontSize="18"
                 letterSpacing="1"
               >
                 {area.toUpperCase()}
@@ -667,10 +667,10 @@ export const DeskHomeBaseView: React.FC<DeskHomeBaseViewProps> = ({
           {/* 1. Sparky the Cat Asleep in Bed (Left) */}
           <button
             id="phoneObj"
-            onClick={() => setDialog({ type: 'sparky' })}
+            onClick={() => setDialog({ type: 'sparky', payload: { onReplayCatIntro } })}
             className="absolute z-10 cursor-pointer flex flex-col items-center hover:scale-102 transition-transform"
             style={{ left: 30, top: 482 }}
-            title="Sparky the Cat in Bed: Tap to chat"
+            title="Sparky the Cat in Bed: Tap to chat or put on keyboard"
           >
             {/* Thought Bubble with exclamation when risks or zero tasks */}
             {(openRisks.length > 0 || totalTasks === 0) && (

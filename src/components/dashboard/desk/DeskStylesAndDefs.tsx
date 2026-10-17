@@ -66,13 +66,22 @@ export const DeskStyles: React.FC = () => {
         --lines: repeating-linear-gradient(#fff 0 23px, #e1d8c5 23px 24px);
       }
 
-      .desk-root {
-        font-family: 'Gaegu', cursive, -apple-system, sans-serif;
-        font-weight: 700;
+      .desk-root, .desk-stage {
+        font-family: 'VT323', 'Courier New', monospace;
+        font-size: 20px;
+        line-height: 1.1;
+        letter-spacing: 0.5px;
         color: var(--ink);
-        background: #111;
+        background: #000;
         user-select: none;
         overflow: hidden;
+        -webkit-font-smoothing: none;
+      }
+
+      .desk-root button, .desk-root input, .desk-root select, .desk-root textarea,
+      .desk-stage button, .desk-stage input, .desk-stage select, .desk-stage textarea {
+        font-family: 'VT323', 'Courier New', monospace !important;
+        letter-spacing: 0.5px;
       }
 
       .desk-root.dark-lights {

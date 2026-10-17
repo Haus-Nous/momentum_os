@@ -217,7 +217,8 @@ export const CatKeyboardIntro: React.FC<CatKeyboardIntroProps> = ({ onEnterDesk 
           <button
             id="skipIntro"
             onClick={handleFinishIntro}
-            className="absolute top-4 right-4 z-40 bg-white border-3 border-[#222] rounded-xl px-4 py-1.5 text-lg font-bold shadow-[2px_2px_0_#222] hover:bg-[#f7d55c] transition-all cursor-pointer"
+            className="absolute top-4 right-4 z-40 bg-white text-[#222] border-3 border-[#222] rounded-xl px-4 py-1.5 text-2xl font-bold shadow-[2px_2px_0_#222] hover:bg-[#f7d55c] transition-all cursor-pointer"
+            style={{ fontFamily: "'VT323', 'Courier New', monospace" }}
           >
             SKIP →
           </button>
@@ -267,15 +268,15 @@ export const CatKeyboardIntro: React.FC<CatKeyboardIntroProps> = ({ onEnterDesk 
               {/* Stickers on monitor bezel */}
               {/* TO DO sticker */}
               <rect x="60" y="432" width="70" height="20" rx="2" fill="#f7d55c" stroke="#222" strokeWidth="2" />
-              <text x="95" y="446" textAnchor="middle" fill="#222" fontFamily="Gaegu" fontWeight="700" fontSize="16">TO DO</text>
+              <text x="95" y="446" textAnchor="middle" fill="#222" fontFamily="VT323" fontSize="18">TO DO</text>
 
               {/* Year sticker */}
               <rect x="144" y="432" width="54" height="20" rx="2" fill="#f7d55c" stroke="#222" strokeWidth="2" />
-              <text x="171" y="446" textAnchor="middle" fill="#222" fontFamily="Gaegu" fontWeight="700" fontSize="16">{currentYear}</text>
+              <text x="171" y="446" textAnchor="middle" fill="#222" fontFamily="VT323" fontSize="18">{currentYear}</text>
 
               {/* User initials sticker */}
               <rect x="710" y="432" width="50" height="20" rx="2" fill="#f7d55c" stroke="#222" strokeWidth="2" />
-              <text x="735" y="446" textAnchor="middle" fill="#222" fontFamily="Gaegu" fontWeight="700" fontSize="16">{userInitials}</text>
+              <text x="735" y="446" textAnchor="middle" fill="#222" fontFamily="VT323" fontSize="18">{userInitials}</text>
 
               {/* Sticky note on screen corner */}
               <g transform="translate(620, 60) rotate(3)">
@@ -289,13 +290,13 @@ export const CatKeyboardIntro: React.FC<CatKeyboardIntroProps> = ({ onEnterDesk 
               <g transform="translate(60, 60)">
                 <rect x="0" y="8" width="48" height="34" rx="4" fill="#6fa8dc" stroke="#fff" strokeWidth="2" />
                 <path d="M0 12l10-8h16l6 8" fill="#6fa8dc" stroke="#fff" strokeWidth="2" />
-                <text x="24" y="56" textAnchor="middle" fill="#fff" fontFamily="Gaegu" fontSize="14">Work</text>
+                <text x="24" y="56" textAnchor="middle" fill="#fff" fontFamily="VT323" fontSize="17">Work</text>
               </g>
 
               <g transform="translate(60, 130)">
                 <rect x="0" y="8" width="48" height="34" rx="4" fill="#ee7a5a" stroke="#fff" strokeWidth="2" />
                 <path d="M0 12l10-8h16l6 8" fill="#ee7a5a" stroke="#fff" strokeWidth="2" />
-                <text x="24" y="56" textAnchor="middle" fill="#fff" fontFamily="Gaegu" fontSize="14">Ideas</text>
+                <text x="24" y="56" textAnchor="middle" fill="#fff" fontFamily="VT323" fontSize="17">Ideas</text>
               </g>
             </g>
 
@@ -369,8 +370,8 @@ export const CatKeyboardIntro: React.FC<CatKeyboardIntroProps> = ({ onEnterDesk 
           >
             <div
               id="smText"
-              className="text-[#f7d55c] text-2xl font-bold tracking-wide uppercase max-w-lg"
-              style={{ textShadow: '0 0 4px rgba(247, 213, 92, 0.4)' }}
+              className="text-[#f7d55c] text-3xl font-bold tracking-wider uppercase max-w-lg"
+              style={{ fontFamily: "'VT323', 'Courier New', monospace", textShadow: '0 0 4px rgba(247, 213, 92, 0.4)' }}
             >
               {monitorText}
             </div>
@@ -378,7 +379,8 @@ export const CatKeyboardIntro: React.FC<CatKeyboardIntroProps> = ({ onEnterDesk 
             {typedText && (
               <div
                 id="typed"
-                className="mt-4 font-mono text-3xl text-emerald-400 bg-black/60 px-4 py-1.5 rounded-lg border-2 border-emerald-500/40"
+                className="mt-4 text-4xl text-emerald-400 bg-black/60 px-4 py-1.5 rounded-lg border-2 border-emerald-500/40"
+                style={{ fontFamily: "'VT323', 'Courier New', monospace" }}
               >
                 {typedText}
               </div>
@@ -425,7 +427,8 @@ export const CatKeyboardIntro: React.FC<CatKeyboardIntroProps> = ({ onEnterDesk 
             {/* Speech Bubble */}
             {showBubble && (
               <div
-                className="absolute -top-12 left-1/2 -translate-x-1/2 bg-white border-3 border-[#222] rounded-2xl px-4 py-1.5 text-lg font-bold shadow-[3px_3px_0_#222] whitespace-nowrap z-40 pointer-events-none"
+                className="absolute -top-14 left-1/2 -translate-x-1/2 bg-white text-[#222] border-3 border-[#222] rounded-2xl px-4 py-1.5 text-2xl font-bold shadow-[3px_3px_0_#222] whitespace-nowrap z-40 pointer-events-none"
+                style={{ fontFamily: "'VT323', 'Courier New', monospace" }}
               >
                 {bubbleText}
                 <div
@@ -435,10 +438,10 @@ export const CatKeyboardIntro: React.FC<CatKeyboardIntroProps> = ({ onEnterDesk 
             )}
 
             {/* ZZZ Floaters */}
-            <div className="absolute -top-10 right-24 pointer-events-none font-mono text-2xl font-bold text-[#222] zzz">
+            <div className="absolute -top-10 right-24 pointer-events-none text-3xl font-bold text-[#222] zzz" style={{ fontFamily: "'VT323', 'Courier New', monospace" }}>
               z
             </div>
-            <div className="absolute -top-16 right-16 pointer-events-none font-mono text-3xl font-bold text-[#222] zzz-delay">
+            <div className="absolute -top-16 right-16 pointer-events-none text-4xl font-bold text-[#222] zzz-delay" style={{ fontFamily: "'VT323', 'Courier New', monospace" }}>
               Z
             </div>
 
@@ -511,12 +514,13 @@ export const CatKeyboardIntro: React.FC<CatKeyboardIntroProps> = ({ onEnterDesk 
             }}
           >
             <div className="flex items-center justify-between border-b-2 border-[#222] pb-2 mb-3">
-              <span className="font-bold text-xl uppercase tracking-wider text-[#222]">TODAY I WILL…</span>
+              <span className="font-bold text-2xl uppercase tracking-wider text-[#222]" style={{ fontFamily: "'VT323', 'Courier New', monospace" }}>TODAY I WILL…</span>
               {catInBed && (
                 <button
                   id="goDesk"
                   onClick={handleFinishIntro}
-                  className="bg-[#f7d55c] hover:bg-[#ffe17d] border-2 border-[#222] rounded-lg px-3 py-1 font-bold text-base shadow-[2px_2px_0_#222] cursor-pointer"
+                  className="bg-[#f7d55c] hover:bg-[#ffe17d] border-2 border-[#222] rounded-lg px-4 py-1 font-bold text-2xl shadow-[2px_2px_0_#222] cursor-pointer"
+                  style={{ fontFamily: "'VT323', 'Courier New', monospace" }}
                 >
                   GO TO MY DESK →
                 </button>
@@ -532,13 +536,15 @@ export const CatKeyboardIntro: React.FC<CatKeyboardIntroProps> = ({ onEnterDesk 
                 value={taskInput}
                 onChange={(e) => setTaskInput(e.target.value)}
                 placeholder={catInBed ? "WRITE A MISSION FOR TODAY…" : "(MOVE SPARKY FIRST TO UNLOCK)"}
-                className="flex-1 bg-white/90 border-2 border-[#222] rounded-md px-3 py-1.5 text-lg font-bold placeholder:text-gray-400 focus:outline-none focus:ring-2 focus:ring-[#f7d55c] disabled:opacity-60 disabled:cursor-not-allowed"
+                className="flex-1 bg-white/90 border-2 border-[#222] rounded-md px-3 py-1.5 text-2xl font-bold placeholder:text-gray-400 focus:outline-none focus:ring-2 focus:ring-[#f7d55c] disabled:opacity-60 disabled:cursor-not-allowed"
+                style={{ fontFamily: "'VT323', 'Courier New', monospace" }}
               />
               <button
                 id="paperAdd"
                 type="submit"
                 disabled={!catInBed || !taskInput.trim()}
-                className="bg-[#ee7a5a] text-white border-2 border-[#222] rounded-md px-4 py-1.5 text-lg font-bold shadow-[2px_2px_0_#222] hover:bg-[#ff8f71] disabled:opacity-40 disabled:cursor-not-allowed cursor-pointer"
+                className="bg-[#ee7a5a] text-white border-2 border-[#222] rounded-md px-4 py-1.5 text-2xl font-bold shadow-[2px_2px_0_#222] hover:bg-[#ff8f71] disabled:opacity-40 disabled:cursor-not-allowed cursor-pointer"
+                style={{ fontFamily: "'VT323', 'Courier New', monospace" }}
               >
                 +
               </button>

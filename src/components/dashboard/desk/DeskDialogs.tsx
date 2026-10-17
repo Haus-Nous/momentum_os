@@ -412,6 +412,31 @@ export const DeskDialogs: React.FC<DeskDialogsProps> = ({
                   Send
                 </button>
               </form>
+
+              <div className="flex justify-between items-center pt-2 border-t-2 border-[#222]">
+                <button
+                  type="button"
+                  onClick={() => {
+                    onClose();
+                    if (dialog.payload?.onReplayCatIntro) {
+                      dialog.payload.onReplayCatIntro();
+                    } else if (typeof window !== 'undefined') {
+                      window.dispatchEvent(new CustomEvent('momentum:replay-cat-intro'));
+                    }
+                  }}
+                  className="desk-stat-pill bg-white hover:bg-[#f7d55c] cursor-pointer text-sm font-bold"
+                  title="Put Sparky back on keyboard"
+                >
+                  🐱 Put Sparky on Keyboard
+                </button>
+                <button
+                  type="button"
+                  onClick={onClose}
+                  className="desk-stat-pill bg-white hover:bg-gray-100 cursor-pointer text-sm font-bold"
+                >
+                  Close
+                </button>
+              </div>
             </div>
           )}
 

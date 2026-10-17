@@ -84,8 +84,17 @@ export default function Home() {
         setUiMode(detail);
       }
     };
+    const handleReplayCatIntro = () => {
+      setHasCompletedIntro(false);
+      setActiveDeskRoom('home');
+      setUiMode('desk');
+    };
     window.addEventListener('momentum:switch-mode', handleSwitchMode);
-    return () => window.removeEventListener('momentum:switch-mode', handleSwitchMode);
+    window.addEventListener('momentum:replay-cat-intro', handleReplayCatIntro);
+    return () => {
+      window.removeEventListener('momentum:switch-mode', handleSwitchMode);
+      window.removeEventListener('momentum:replay-cat-intro', handleReplayCatIntro);
+    };
   }, []);
 
   // Initialize Supabase Auth & Dexie state & check streak freeze

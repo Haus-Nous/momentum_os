@@ -23,21 +23,22 @@ interface AuthState {
   initializeAuth: () => Promise<void>;
 }
 
+const defaultGuestUser: AuthUser = {
+  id: 'user_local',
+  email: 'explorer@momentum.os',
+  name: 'Adventurer',
+  role: 'Systems Architect',
+  createdAt: new Date().toISOString(),
+};
+
 export const useAuthStore = create<AuthState>()((set, get) => ({
-  currentUser: null,
-  isAuthenticated: false,
-  isLoading: true,
+  currentUser: defaultGuestUser,
+  isAuthenticated: true,
+  isLoading: false,
 
   initializeAuth: async () => {
     if (!isSupabaseConfigured) {
-      const guestUser: AuthUser = {
-        id: 'user_local',
-        email: 'explorer@momentum.os',
-        name: 'Adventurer',
-        role: 'Systems Architect',
-        createdAt: new Date().toISOString(),
-      };
-      set({ currentUser: guestUser, isAuthenticated: true, isLoading: false });
+      set({ currentUser: defaultGuestUser, isAuthenticated: true, isLoading: false });
       return;
     }
 
