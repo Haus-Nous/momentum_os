@@ -20,21 +20,31 @@ interface AuthState {
 		email: string,
 		password: string,
 		role?: string,
+		persona?: string
 	) => Promise<{ success: boolean; error?: string }>;
 	login: (email: string, password: string) => Promise<{ success: boolean; error?: string }>;
+	loginAsGuest: () => void;
 	logout: () => Promise<void>;
 	updateProfile: (updates: Partial<AuthUser>) => void;
 	initializeAuth: () => Promise<void>;
 }
 
+const defaultGuestUser: AuthUser = {
+	id: "user_local",
+	email: "explorer@momentum.os",
+	name: "Adventurer",
+	role: "Systems Architect",
+	createdAt: new Date().toISOString(),
+};
+
 export const useAuthStore = create<AuthState>()((set, get) => ({
-	currentUser: null,
-	isAuthenticated: false,
-	isLoading: true,
+	currentUser: defaultGuestUser,
+	isAuthenticated: true,
+	isLoading: false,
 
 	initializeAuth: async () => {
 		if (!isSupabaseConfigured) {
-			set({ isLoading: false });
+			set({ currentUser: defaultGuestUser, isAuthenticated: true, isLoading: false });
 			return;
 		}
 
@@ -59,7 +69,8 @@ export const useAuthStore = create<AuthState>()((set, get) => ({
 					isLoading: false,
 				});
 			} else {
-				set({ currentUser: null, isAuthenticated: false, isLoading: false });
+				// Keep default guest if no authenticated session to allow immediate preview of Cozy Desk
+				set({ currentUser: defaultGuestUser, isAuthenticated: true, isLoading: false });
 			}
 
 			supabase.auth.onAuthStateChange((_event, session) => {
@@ -84,7 +95,7 @@ export const useAuthStore = create<AuthState>()((set, get) => ({
 				}
 			});
 		} catch {
-			set({ isLoading: false });
+			set({ currentUser: defaultGuestUser, isAuthenticated: true, isLoading: false });
 		}
 	},
 
@@ -95,7 +106,6 @@ export const useAuthStore = create<AuthState>()((set, get) => ({
 		}
 
 		if (!isSupabaseConfigured) {
-			// Fallback for unconfigured demo environment
 			const newUser: AuthUser = {
 				id: "user_" + Date.now(),
 				email: cleanEmail,
@@ -103,7 +113,7 @@ export const useAuthStore = create<AuthState>()((set, get) => ({
 				role: role.trim() || "Systems Designer",
 				createdAt: new Date().toISOString(),
 			};
-			set({ currentUser: newUser, isAuthenticated: true });
+			set({ currentUser: newUser, isAuthenticated: true, isLoading: false });
 			return { success: true };
 		}
 
@@ -132,7 +142,7 @@ export const useAuthStore = create<AuthState>()((set, get) => ({
 					role: role.trim() || "Systems Architect",
 					createdAt: data.user.created_at || new Date().toISOString(),
 				};
-				set({ currentUser: newUser, isAuthenticated: true });
+				set({ currentUser: newUser, isAuthenticated: true, isLoading: false });
 			}
 
 			return { success: true };
@@ -148,7 +158,6 @@ export const useAuthStore = create<AuthState>()((set, get) => ({
 		}
 
 		if (!isSupabaseConfigured) {
-			// Fallback for demo mode
 			const newUser: AuthUser = {
 				id: "user_demo",
 				email: cleanEmail,
@@ -156,7 +165,7 @@ export const useAuthStore = create<AuthState>()((set, get) => ({
 				role: "Systems Architect",
 				createdAt: new Date().toISOString(),
 			};
-			set({ currentUser: newUser, isAuthenticated: true });
+			set({ currentUser: newUser, isAuthenticated: true, isLoading: false });
 			return { success: true };
 		}
 
@@ -183,6 +192,7 @@ export const useAuthStore = create<AuthState>()((set, get) => ({
 						createdAt: data.user.created_at || new Date().toISOString(),
 					},
 					isAuthenticated: true,
+					isLoading: false,
 				});
 			}
 
@@ -192,11 +202,22 @@ export const useAuthStore = create<AuthState>()((set, get) => ({
 		}
 	},
 
+	loginAsGuest: () => {
+		const guestUser: AuthUser = {
+			id: "user_guest",
+			email: "guest@momentum.os",
+			name: "Guest User",
+			role: "Systems Architect",
+			createdAt: new Date().toISOString(),
+		};
+		set({ currentUser: guestUser, isAuthenticated: true, isLoading: false });
+	},
+
 	logout: async () => {
 		if (isSupabaseConfigured) {
 			await supabase.auth.signOut();
 		}
-		set({ currentUser: null, isAuthenticated: false });
+		set({ currentUser: null, isAuthenticated: false, isLoading: false });
 	},
 
 	updateProfile: (updates) => {

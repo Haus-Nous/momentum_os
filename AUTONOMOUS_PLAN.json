@@ -1,0 +1,55 @@
+{
+  "milestones": [
+    {
+      "id": "M1",
+      "title": "Fonts, SVG Filters (#rough, #rough2) & Cozy Marker CSS",
+      "status": "VERIFIED",
+      "targetFiles": [
+        "src/app/layout.tsx",
+        "src/components/dashboard/desk/DeskStylesAndDefs.tsx"
+      ]
+    },
+    {
+      "id": "M2",
+      "title": "'Sparky the Cat on the Keyboard' Interactive Intro Scene",
+      "status": "VERIFIED",
+      "targetFiles": [
+        "src/components/dashboard/desk/CatKeyboardIntro.tsx"
+      ]
+    },
+    {
+      "id": "M3",
+      "title": "Cozy Marker 'Home Base' Room (1200x800 Scaled Desk)",
+      "status": "VERIFIED",
+      "targetFiles": [
+        "src/components/dashboard/desk/DeskHomeBaseView.tsx"
+      ]
+    },
+    {
+      "id": "M4",
+      "title": "Module Room Sheet (Scarf Strip & Studio Bridge), Bottom Tray & Dialogs",
+      "status": "VERIFIED",
+      "targetFiles": [
+        "src/components/dashboard/desk/DeskModuleRoom.tsx",
+        "src/components/dashboard/desk/DeskDialogs.tsx"
+      ]
+    },
+    {
+      "id": "M5",
+      "title": "Main App Integration, Classic V2.5 Switcher & FAB Cleanup",
+      "status": "VERIFIED",
+      "targetFiles": [
+        "src/app/page.tsx",
+        "src/components/dashboard/NASAMissionControlView.tsx"
+      ]
+    },
+    {
+      "id": "M6",
+      "title": "Live Headless Browser Verification & Delivery Report",
+      "status": "VERIFIED",
+      "targetFiles": [
+        "FINAL_DELIVERY_REPORT.md"
+      ]
+    }
+  ]
+}

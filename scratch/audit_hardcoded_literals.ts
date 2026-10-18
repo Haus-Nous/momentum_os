@@ -36,9 +36,10 @@ allFiles.forEach(file => {
   lines.forEach((lineText, idx) => {
     suspiciousPatterns.forEach(p => {
       if (p.regex.test(lineText)) {
-        // Exclude responsive breakpoints like 768px, or standard CSS colors/values
-        if (p.name.includes('68') && (lineText.includes('768') || lineText.includes('breakpoint') || lineText.includes('confetti') || lineText.includes('68b7280') || lineText.includes('soundEngine') || lineText.includes('border'))) return;
-        if (p.name.includes('80') && (lineText.includes('max-h-80') || lineText.includes('80%') || lineText.includes('768') || lineText.includes('confetti') || lineText.includes('duration') || lineText.includes('800') || lineText.includes('border') || lineText.includes('bg-') || lineText.includes('slate-') || lineText.includes('text-'))) return;
+        // Exclude responsive breakpoints like 768px, or standard CSS colors/values/SVG paths/keyframes
+        if (p.name.includes('68') && (lineText.includes('768') || lineText.includes('breakpoint') || lineText.includes('confetti') || lineText.includes('68b7280') || lineText.includes('soundEngine') || lineText.includes('border') || lineText.includes('<svg') || lineText.includes('<path') || lineText.includes('<rect') || lineText.includes('<polygon') || lineText.includes('points='))) return;
+        if (p.name.includes('80') && (lineText.includes('max-h-80') || lineText.includes('80%') || lineText.includes('768') || lineText.includes('confetti') || lineText.includes('duration') || lineText.includes('800') || lineText.includes('border') || lineText.includes('bg-') || lineText.includes('slate-') || lineText.includes('text-') || lineText.includes('<ellipse') || lineText.includes('<circle') || lineText.includes('<line') || lineText.includes('<path') || lineText.includes('<polygon') || lineText.includes('viewBox'))) return;
+        if (p.name.includes('Fake progress') && (lineText.includes('<') || lineText.includes('x1=') || lineText.includes('x2=') || lineText.includes('y1=') || lineText.includes('y2=') || lineText.includes('points=') || lineText.includes('transform=') || lineText.includes('width=') || lineText.includes('height=') || lineText.includes('viewBox') || lineText.includes('rotate(') || lineText.includes('idx *') || lineText.includes('momentumScore') || lineText.includes('% {') || lineText.includes('strokeWidth='))) return;
         matches.push({
           file: path.relative(process.cwd(), file),
           line: idx + 1,

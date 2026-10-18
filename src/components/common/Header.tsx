@@ -59,6 +59,20 @@ export const Header: React.FC = () => {
           <span className="hidden sm:inline">AI Assistant</span>
         </button>
 
+        {/* Switch to Cozy Marker Desk Mode */}
+        <button
+          onClick={() => {
+            if (typeof window !== 'undefined') {
+              window.dispatchEvent(new CustomEvent('momentum:switch-mode', { detail: 'desk' }));
+            }
+          }}
+          className="flex items-center space-x-1.5 px-2.5 sm:px-3 py-1.5 rounded-xl bg-[#f7d55c] hover:bg-[#ffe17d] text-[#222] text-xs font-bold border border-[#222]/30 transition-all shadow-sm cursor-pointer"
+          title="Switch to Cozy Marker Desk OS"
+        >
+          <span>🐱</span>
+          <span className="hidden sm:inline">Cozy Desk</span>
+        </button>
+
         {/* Quick Sound Mixer Trigger */}
         <button
           onClick={() => toggleAmbientSound('rain')}
