@@ -657,42 +657,49 @@ export const DeskHomeBaseView: React.FC<DeskHomeBaseViewProps> = ({
             style={{ left: 30, top: 482 }}
             title="Sparky the Cat in Bed: Tap to chat or put on keyboard"
           >
-            {/* Thought Bubble with exclamation when risks or zero tasks */}
-            {(openRisks.length > 0 || totalTasks === 0) && (
-              <div
-                id="sparkyThought"
-                className="absolute -top-7 left-12 bg-white border-2 border-[#222] rounded-full px-2 py-0.5 text-xs font-black shadow-[2px_2px_0_#222] text-[#ee7a5a] animate-bounce"
-              >
-                !
-              </div>
-            )}
-
-            <svg width="300" height="174" viewBox="0 0 300 174" filter="url(#rough)">
-              {/* Coral and White Cat Bed */}
-              <ellipse cx="150" cy="116" rx="130" ry="50" fill="#ee7a5a" stroke="#222" strokeWidth="4" />
-              <ellipse cx="150" cy="112" rx="110" ry="38" fill="#fff" stroke="#222" strokeWidth="3" />
-
-              {/* Sparky Asleep Belly-Up inside Bed */}
-              {/* Stretched rear legs */}
-              <ellipse cx="205" cy="100" rx="20" ry="12" fill="#fff" stroke="#222" strokeWidth="2.5" />
-              <circle cx="218" cy="100" r="4" fill="#ee7a5a" />
-
-              {/* Belly */}
-              <ellipse cx="145" cy="100" rx="45" ry="26" fill="#fff" stroke="#222" strokeWidth="3" />
-              <path d="M130 84c10 4 18 14 14 20" fill="#222" />
-
-              {/* Dangling paw */}
-              <ellipse cx="105" cy="112" rx="14" ry="9" fill="#fff" stroke="#222" strokeWidth="2.5" />
-              <circle cx="98" cy="114" r="3" fill="#ee7a5a" />
-
-              {/* Head upside down */}
-              <circle cx="86" cy="95" r="22" fill="#fff" stroke="#222" strokeWidth="3" />
-              {/* Ears */}
-              <polygon points="68,80 62,60 82,75" fill="#fff" stroke="#222" strokeWidth="2.5" />
-              <polygon points="90,75 106,60 102,80" fill="#fff" stroke="#222" strokeWidth="2.5" />
-              {/* Closed Eyes */}
-              <path d="M74 98c4 3 8 3 12 0" fill="none" stroke="#222" strokeWidth="2" strokeLinecap="round" />
-              <path d="M88 98c4 3 8 3 12 0" fill="none" stroke="#222" strokeWidth="2" strokeLinecap="round" />
+            <svg width="300" height="174" viewBox="0 0 260 150" filter="url(#rough)" aria-hidden="true">
+              <path d="M6 104c0-40 54-62 124-62s124 22 124 62c0 30-54 42-124 42S6 134 6 104z" fill="#ee7a5a" stroke="#222" strokeWidth="2" />
+              <path d="M30 98c0-24 44-38 100-38s100 14 100 38c0 18-44 28-100 28S30 116 30 98z" fill="#fff" stroke="#222" strokeWidth="2" />
+              <g transform="translate(10 34) scale(.32)" stroke="#222" strokeWidth="6" strokeLinejoin="round" strokeLinecap="round">
+                {/* tail hanging off the right edge */}
+                <path d="M640 160c40 20 70 60 76 120" fill="none" strokeWidth="30" />
+                {/* hind leg stretched up and right */}
+                <path d="M584 96L676 26c16-12 36 4 24 22L626 128z" fill="#222" />
+                <path d="M660 36l16-10c16-12 36 4 24 22l-12 12c-12-2-24-12-28-24z" fill="#fff" />
+                {/* front leg reaching out to the left */}
+                <path d="M196 124L72 70c-22-8-34 14-18 28l132 50z" fill="#fff" />
+                <path d="M150 104l40 16-8 28-42-16z" fill="#222" stroke="none" />
+                <path d="M44 84c-4 14 6 24 20 24 12 0 22-8 22-20s-10-20-22-20-18 6-20 16z" fill="#fff" />
+                <path d="M50 96h8M54 106l6-6M62 78v8" fill="none" strokeWidth="3" />
+                {/* body: white belly with irregular black patches */}
+                <path d="M152 124c40-48 170-74 300-68 120 6 192 26 212 64 18 36-22 82-118 92-130 14-268 10-350-6-56-10-76-48-44-82z" fill="#fff" />
+                <path d="M232 76c80-26 232-30 330-14 70 12 104 34 102 66-2 26-28 42-60 38-30-20-62-6-96-16-40-12-62 6-104-10-34-14-50 2-86-12-36-14-56-18-86-52z" fill="#222" />
+                <path d="M430 190c40-6 96-8 140-22-20 26-70 40-140 22z" fill="#222" />
+                <path d="M300 146c20-6 36 0 40 10-14 8-30 6-40-10z" fill="#222" stroke="none" />
+                {/* dangling front paw */}
+                <path d="M300 200l-4 52c0 16 34 18 38 2l2-52z" fill="#fff" />
+                <path d="M306 254v-10M318 256v-10M328 252v-10" fill="none" strokeWidth="3" />
+                {/* upside-down head */}
+                <ellipse cx="126" cy="176" rx="84" ry="74" fill="#fff" />
+                <path d="M66 226l-14 54 52-34zM148 246l50 34-10-58z" fill="#222" />
+                <path d="M98 246c10 12 46 12 56 0-8-8-48-8-56 0z" fill="#222" />
+                <path d="M62 196c4-18 44-22 58-6 4 16-12 30-34 28-16-2-26-10-24-22z" fill="#222" />
+                <path d="M134 190c14-16 54-12 58 6 2 12-8 20-24 22-22 2-38-12-34-28z" fill="#222" />
+                <ellipse cx="92" cy="202" rx="12" ry="9" fill="#fff" strokeWidth="3" />
+                <ellipse cx="162" cy="202" rx="12" ry="9" fill="#fff" strokeWidth="3" />
+                <circle cx="94" cy="205" r="4" fill="#222" stroke="none" />
+                <circle cx="160" cy="205" r="4" fill="#222" stroke="none" />
+                <path d="M118 166h18l-9-11z" fill="#222" strokeWidth="3" />
+                <path d="M127 154q-8-10-18-4M127 154q8-10 18-4" fill="none" strokeWidth="4" />
+                <path d="M100 170l-60-6M100 180l-56 6M154 170l60-6M154 180l56 6" fill="none" strokeWidth="3" />
+                <path d="M110 118c10-10 24-10 34 0" fill="none" strokeWidth="4" />
+              </g>
+              {(openRisks.length > 0 || totalTasks === 0) && (
+                <g id="sparkyThought">
+                  <path d="M206 8h44c6 0 10 4 10 10v18c0 6-4 10-10 10h-26l-10 10v-10h-8c-6 0-10-4-10-10V18c0-6 4-10 10-10z" fill="#fff" stroke="#222" strokeWidth="2" />
+                  <text id="phoneLight" x="228" y="36" textAnchor="middle" fontSize="26" fill="#ee7a5a" fontWeight="bold">!</text>
+                </g>
+              )}
             </svg>
             <span className="font-bold text-sm tracking-wider uppercase -mt-4">SPARKY</span>
           </button>
