@@ -263,16 +263,15 @@ export const CatKeyboardIntro: React.FC<CatKeyboardIntroProps> = ({ onEnterDesk 
   const paperTasks = tasks.slice(0, 3);
 
   return (
-    <div style={{ position: 'fixed', inset: 0, display: 'flex', alignItems: 'center', justifyContent: 'center', background: 'linear-gradient(to bottom, #fbf3df 0%, #fbf3df 38.6%, #cfe5f1 38.6%, #cfe5f1 100%)', overflow: 'hidden' }}>
-      <div style={{ position: 'absolute', left: 0, right: 0, top: '38.6%', height: 4, background: '#222', pointerEvents: 'none', zIndex: 0 }} />
+    <div style={{ position: 'fixed', inset: 0, display: 'flex', alignItems: 'center', justifyContent: 'center', background: '#fbf3df', overflow: 'hidden' }}>
       <style jsx global>{`
         /* ===== Exact Intro Styles from momentumos-desk-v2.html ===== */
         .intro {
           position: absolute;
           inset: 0;
           z-index: 60;
-          overflow: hidden;
-          background: #cfe5f1;
+          overflow: visible;
+          background: transparent;
           color: #222;
           font-family: 'Gaegu', 'Comic Sans MS', cursive;
           font-weight: 700;
@@ -545,7 +544,7 @@ export const CatKeyboardIntro: React.FC<CatKeyboardIntroProps> = ({ onEnterDesk 
             height: 800,
             transform: `scale(${scale})`,
             transformOrigin: '0 0',
-            overflow: 'hidden',
+            overflow: 'visible',
           }}
         >
           {/* ===================== INTRO: CAT ON THE KEYBOARD ===================== */}
@@ -562,12 +561,12 @@ export const CatKeyboardIntro: React.FC<CatKeyboardIntroProps> = ({ onEnterDesk 
               height="800"
               viewBox="0 0 1200 800"
               aria-hidden="true"
-              style={{ shapeRendering: 'geometricPrecision' }}
+              style={{ shapeRendering: 'geometricPrecision', overflow: 'visible' }}
             >
               <g filter="url(#rough)" stroke="#222" strokeWidth="6" strokeLinejoin="round" strokeLinecap="round">
-                <rect x="-10" y="-10" width="1220" height="318" fill="#fbf3df" stroke="none" />
-                <rect x="-10" y="308" width="1220" height="510" fill="#cfe5f1" stroke="none" />
-                <path d="M-10 308H1220" fill="none" />
+                <rect x="-4000" y="-2000" width="9200" height="2308" fill="#fbf3df" stroke="none" />
+                <rect x="-4000" y="308" width="9200" height="5000" fill="#cfe5f1" stroke="none" />
+                <path d="M-4000 308H5200" fill="none" />
 
                 {/* monitor (cropped at top) */}
                 <rect x="532" y="420" width="136" height="110" fill="#cfd3d6" />

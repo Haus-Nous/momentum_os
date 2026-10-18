@@ -95,20 +95,8 @@ export const DeskStyles: React.FC = () => {
         display: flex;
         align-items: center;
         justify-content: center;
-        background: linear-gradient(to bottom, #fbf3df 0%, #fbf3df 59.5%, #cfe5f1 59.5%, #cfe5f1 100%);
+        background: var(--wall);
         overflow: hidden;
-      }
-
-      .desk-stage::before {
-        content: "";
-        position: absolute;
-        left: 0;
-        right: 0;
-        top: 59.5%;
-        height: 4px;
-        background: #222;
-        z-index: 1;
-        pointer-events: none;
       }
 
       .desk-frame {
@@ -124,7 +112,7 @@ export const DeskStyles: React.FC = () => {
         height: 800px;
         background: var(--wall);
         transform-origin: 0 0;
-        overflow: hidden;
+        overflow: visible;
       }
 
       /* Titlebar */
@@ -141,6 +129,18 @@ export const DeskStyles: React.FC = () => {
         justify-content: space-between;
         padding: 0 18px;
         z-index: 25;
+      }
+
+      .desk-titlebar::before {
+        content: "";
+        position: absolute;
+        left: -4000px;
+        right: -4000px;
+        top: 0;
+        bottom: 0;
+        background: var(--wall);
+        border-bottom: 4px solid var(--ink);
+        z-index: -1;
       }
 
       .desk-titlebar h1 {
@@ -378,6 +378,18 @@ export const DeskStyles: React.FC = () => {
         justify-content: space-around;
         padding: 0 8px;
         z-index: 20;
+      }
+
+      .desk-tray::before {
+        content: "";
+        position: absolute;
+        left: -4000px;
+        right: -4000px;
+        top: 0;
+        bottom: 0;
+        background: var(--wall);
+        border-top: 4px solid var(--ink);
+        z-index: -1;
       }
 
       .desk-ito {

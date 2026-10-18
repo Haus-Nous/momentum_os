@@ -287,11 +287,12 @@ export const DeskHomeBaseView: React.FC<DeskHomeBaseViewProps> = ({
             viewBox="0 0 1200 800"
             filter="url(#rough)"
             aria-hidden="true"
+            style={{ overflow: 'visible' }}
           >
-            {/* Wall (cream) & Desk Surface (sky blue) */}
-            <rect x="0" y="60" width="1200" height="416" fill="#fbf3df" />
-            <rect x="0" y="476" width="1200" height="230" fill="#cfe5f1" />
-            <line x1="0" y1="476" x2="1200" y2="476" stroke="#222" strokeWidth="4" />
+            {/* Wall (cream) & Desk Surface (sky blue) spanning full bleed */}
+            <rect x="-4000" y="-1000" width="9200" height="1476" fill="#fbf3df" />
+            <rect x="-4000" y="476" width="9200" height="3000" fill="#cfe5f1" />
+            <line x1="-4000" y1="476" x2="5200" y2="476" stroke="#222" strokeWidth="4" />
 
             {/* Sunny Window Frame (Top Left) */}
             <g transform="translate(30, 66)">
