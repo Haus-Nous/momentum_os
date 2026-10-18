@@ -9,173 +9,211 @@ interface CatKeyboardIntroProps {
   onEnterDesk: () => void;
 }
 
-const PROTEST_MESSAGES = [
-  "hey! I'm napping here",
-  "mrrrp. no.",
-  "*stretches* …no",
-  "the keyboard is warm"
-];
-
-const KEYMASH_CHARS = 'jjjjfff;;;;kkkkddddd';
-
 export const CatKeyboardIntro: React.FC<CatKeyboardIntroProps> = ({ onEnterDesk }) => {
   const { currentUser } = useAuthStore();
   const { profile, tasks, addTask } = useMomentumStore();
 
   const userInitials = getUserInitials(currentUser?.name || profile.name);
-  const currentYear = new Date().getFullYear();
 
-  // Scale stage to fit viewport
+  // Responsive scale to fit 1200x800 viewport
   const [scale, setScale] = useState(1);
-  const stageRef = useRef<HTMLDivElement>(null);
-
   useEffect(() => {
     const handleResize = () => {
-      const s = Math.min(window.innerWidth / 1204, window.innerHeight / 804);
-      setScale(Math.max(0.4, s));
+      const s = Math.min(window.innerWidth / 1200, window.innerHeight / 800);
+      setScale(s);
+      (window as unknown as { __sc?: number }).__sc = s;
     };
     handleResize();
     window.addEventListener('resize', handleResize);
     return () => window.removeEventListener('resize', handleResize);
   }, []);
 
-  // Cat State
-  const [catInBed, setCatInBed] = useState(false);
-  const [bubbleText, setBubbleText] = useState("mrrp… five more minutes");
-  const [showBubble, setShowBubble] = useState(true);
-  const [isWiggling, setIsWiggling] = useState(false);
-  const [nudgeCount, setNudgeCount] = useState(0);
-
-  // Monitor typing & speech
-  const [monitorText, setMonitorText] = useState("SPARKY IS SLEEPING ON YOUR KEYBOARD. NUDGE HIM OR DRAG HIM TO BED TO START WORK.");
-  const [typedText, setTypedText] = useState("");
-
-  // Leaving transition
+  // State
+  const [catGone, setCatGone] = useState(false);
   const [isLeaving, setIsLeaving] = useState(false);
-
-  // Dragging state
+  const [bubbleText, setBubbleText] = useState("mrrp… five more minutes");
+  const [bubbleHidden, setBubbleHidden] = useState(false);
+  const [monitorText, setMonitorText] = useState<React.ReactNode>(
+    <>SPARKY IS NAPPING ON YOUR KEYBOARD.<br />MOVE THE CAT TO START.</>
+  );
+  const [typedText, setTypedText] = useState("");
+  const [isWiggling, setIsWiggling] = useState(false);
   const [isDragging, setIsDragging] = useState(false);
-  const [dragOffset, setDragOffset] = useState({ x: 0, y: 0 });
-  const dragStartRef = useRef<{ clientX: number; clientY: number } | null>(null);
-
-  // New task input
+  const [isSettling, setIsSettling] = useState(false);
+  const [catPos, setCatPos] = useState({ left: 206, top: 418, transform: 'none' });
   const [taskInput, setTaskInput] = useState('');
 
-  // Keycap generation
-  const keycaps = React.useMemo(() => {
-    const caps = [];
-    const rows = 5;
-    const cols = 15;
-    for (let r = 0; r < rows; r++) {
-      for (let c = 0; c < cols; c++) {
-        caps.push({
-          x: 260 + c * 44,
-          y: 530 + r * 26,
-          w: c === 0 && r === 4 ? 60 : c === 6 && r === 4 ? 140 : 38,
-          h: 22
-        });
-      }
+  const bubbleTimerRef = useRef<NodeJS.Timeout | null>(null);
+  const nudgeRef = useRef(0);
+  const dragRef = useRef<{ x: number; y: number; dx: number; dy: number; moved: boolean } | null>(null);
+  const catRef = useRef<HTMLButtonElement | null>(null);
+  const inputRef = useRef<HTMLInputElement | null>(null);
+
+  const say = useCallback((text: string, ms?: number) => {
+    setBubbleText(text);
+    setBubbleHidden(false);
+    if (bubbleTimerRef.current) clearTimeout(bubbleTimerRef.current);
+    if (ms) {
+      bubbleTimerRef.current = setTimeout(() => {
+        setBubbleHidden(true);
+      }, ms);
     }
-    return caps;
   }, []);
 
-  const triggerBlocked = useCallback((customMsg?: string) => {
-    setIsWiggling(true);
-    const msg = customMsg || PROTEST_MESSAGES[Math.floor(Math.random() * PROTEST_MESSAGES.length)];
-    setBubbleText(msg);
-    setShowBubble(true);
-    setTimeout(() => {
-      setIsWiggling(false);
-    }, 450);
+  const triggerWiggle = useCallback(() => {
+    setIsWiggling(false);
+    requestAnimationFrame(() => {
+      setIsWiggling(true);
+      setTimeout(() => setIsWiggling(false), 450);
+    });
   }, []);
+
+  const triggerBlocked = useCallback(() => {
+    triggerWiggle();
+    const lines = [
+      'hey! I’m napping here',
+      'mrrrp. no.',
+      '*stretches* …no',
+      'the keyboard is warm'
+    ];
+    say(lines[nudgeRef.current++ % lines.length], 1800);
+  }, [say, triggerWiggle]);
 
   const catToBed = useCallback(() => {
-    setCatInBed(true);
-    setBubbleText("purr… warm bed is good too zzz");
-    setShowBubble(true);
-    setMonitorText("THANK YOU, SPARKY! NOW WRITE TODAY'S TASKS ON THE PAPER.");
-  }, []);
+    if (catGone) return;
+    setCatGone(true);
+    setIsDragging(false);
+    setIsSettling(true);
+    setCatPos({
+      left: 695,
+      top: 566,
+      transform: 'scale(.31)',
+    });
+    setBubbleHidden(true);
+    setMonitorText(
+      <>THANK YOU, SPARKY!<br />NOW WRITE TODAY’S TASKS ON THE PAPER.</>
+    );
+    setTypedText('');
+    setTimeout(() => {
+      inputRef.current?.focus();
+    }, 700);
+  }, [catGone]);
 
-  // Cat Click/Nudge Handler
-  const handleCatClick = () => {
-    if (catInBed) return;
-    if (nudgeCount === 0) {
-      setNudgeCount(1);
-      triggerBlocked("five more minutes…");
+  // Pointer drag events on cat
+  const handlePointerDown = (e: React.PointerEvent<HTMLButtonElement>) => {
+    if (catGone) return;
+    dragRef.current = { x: e.clientX, y: e.clientY, dx: 0, dy: 0, moved: false };
+    try {
+      e.currentTarget.setPointerCapture(e.pointerId);
+    } catch {
+      // Ignored
+    }
+    setIsDragging(true);
+  };
+
+  const handlePointerMove = (e: React.PointerEvent<HTMLButtonElement>) => {
+    if (!dragRef.current) return;
+    const s = scale || 1;
+    dragRef.current.dx = (e.clientX - dragRef.current.x) / s;
+    dragRef.current.dy = (e.clientY - dragRef.current.y) / s;
+    if (Math.abs(dragRef.current.dx) + Math.abs(dragRef.current.dy) > 6) {
+      dragRef.current.moved = true;
+    }
+    const rot = Math.max(-12, Math.min(12, dragRef.current.dx / 30));
+    setCatPos({
+      left: 206,
+      top: 418,
+      transform: `translate(${dragRef.current.dx}px,${dragRef.current.dy}px) rotate(${rot}deg)`,
+    });
+    if (dragRef.current.moved) {
+      say('mrow?!');
+    }
+  };
+
+  const handlePointerUp = (e: React.PointerEvent<HTMLButtonElement>) => {
+    if (!dragRef.current) return;
+    const d = dragRef.current;
+    dragRef.current = null;
+    setIsDragging(false);
+
+    try {
+      e.currentTarget.releasePointerCapture(e.pointerId);
+    } catch {
+      // Ignored
+    }
+
+    if (!d.moved) return;
+
+    if (Math.hypot(d.dx, d.dy) > 140) {
+      setCatPos({
+        left: 206 + d.dx,
+        top: 418 + d.dy,
+        transform: 'none',
+      });
+      requestAnimationFrame(() => {
+        requestAnimationFrame(catToBed);
+      });
     } else {
+      setIsSettling(true);
+      setCatPos({
+        left: 206,
+        top: 418,
+        transform: 'none',
+      });
+      say('…and back to sleep', 1500);
+      setTimeout(() => setIsSettling(false), 700);
+    }
+    if (catRef.current) {
+      catRef.current.dataset.dragged = '1';
+    }
+  };
+
+  const handleCatClick = () => {
+    if (catGone) return;
+    if (catRef.current?.dataset.dragged) {
+      delete catRef.current.dataset.dragged;
+      return;
+    }
+    nudgeRef.current++;
+    if (nudgeRef.current < 2) {
+      triggerWiggle();
+      say('five more minutes…', 1800);
+    } else {
+      setIsSettling(true);
       catToBed();
     }
   };
 
-  // Keyboard Event Listener for keymash
+  // Keyboard typing event when Sparky is on keyboard
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
-      if (catInBed || isLeaving) return;
-      if (['INPUT', 'TEXTAREA'].includes((e.target as HTMLElement)?.tagName)) return;
-
-      if (e.key.length === 1 && !e.metaKey && !e.ctrlKey && !e.altKey) {
+      if (catGone || isLeaving) return;
+      const target = e.target as HTMLElement;
+      if (['INPUT', 'SELECT', 'TEXTAREA'].includes(target.tagName) || (target.tagName === 'BUTTON' && (e.key === ' ' || e.key === 'Enter'))) {
+        return;
+      }
+      if (e.key.length === 1 && !e.metaKey && !e.ctrlKey) {
         e.preventDefault();
-        // Append 3 random characters from KEYMASH_CHARS
-        let mash = '';
-        for (let i = 0; i < 3; i++) {
-          mash += KEYMASH_CHARS[Math.floor(Math.random() * KEYMASH_CHARS.length)];
-        }
-        setTypedText((prev) => (prev + mash).slice(-36));
-
-        // 30% chance to trigger blocked protest
+        const pool = 'jjjjfff;;;;kkkkddddd';
+        const ch = pool.charAt(Math.floor(Math.random() * 20));
+        setTypedText((prev) => (prev + ch + ch + ch).slice(-60));
         if (Math.random() < 0.3) {
           triggerBlocked();
         }
       }
     };
-
     window.addEventListener('keydown', handleKeyDown);
     return () => window.removeEventListener('keydown', handleKeyDown);
-  }, [catInBed, isLeaving, triggerBlocked]);
+  }, [catGone, isLeaving, triggerBlocked]);
 
-  // Pointer Drag Handlers
-  const handlePointerDown = (e: React.PointerEvent) => {
-    if (catInBed) return;
-    (e.target as HTMLElement).setPointerCapture(e.pointerId);
-    dragStartRef.current = { clientX: e.clientX, clientY: e.clientY };
-    setIsDragging(true);
-    setBubbleText("mrow?!");
-    setShowBubble(true);
-  };
-
-  const handlePointerMove = (e: React.PointerEvent) => {
-    if (!isDragging || !dragStartRef.current) return;
-    const dx = (e.clientX - dragStartRef.current.clientX) / scale;
-    const dy = (e.clientY - dragStartRef.current.clientY) / scale;
-    setDragOffset({ x: dx, y: dy });
-  };
-
-  const handlePointerUp = (e: React.PointerEvent) => {
-    if (!isDragging) return;
-    setIsDragging(false);
-    try {
-      (e.target as HTMLElement).releasePointerCapture(e.pointerId);
-    } catch {
-      // Ignored
-    }
-
-    const dist = Math.hypot(dragOffset.x, dragOffset.y);
-    if (dist > 140) {
-      catToBed();
-    } else {
-      setDragOffset({ x: 0, y: 0 });
-      setBubbleText("…and back to sleep");
-      setShowBubble(true);
-    }
-  };
-
-  // Submit today's task
-  const handleTaskSubmit = (e: React.FormEvent) => {
+  // Paper form submission
+  const handlePaperSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    if (!taskInput.trim()) return;
+    const val = taskInput.trim();
+    if (!val || !catGone) return;
 
     addTask({
-      title: taskInput.trim(),
+      title: val,
       description: 'Added during morning desk setup',
       status: 'today',
       priority: 'high',
@@ -188,377 +226,575 @@ export const CatKeyboardIntro: React.FC<CatKeyboardIntroProps> = ({ onEnterDesk 
     setTaskInput('');
   };
 
-  const handleFinishIntro = () => {
+  const leaveIntro = () => {
+    if (isLeaving) return;
     setIsLeaving(true);
     setTimeout(() => {
       onEnterDesk();
-    }, 450);
+    }, 500);
   };
 
-  const todayTasksList = tasks.filter((t) => t.status === 'today' || t.status === 'doing').slice(0, 3);
+  // Generate exact keyboard keys from reference:
+  // rows=[[15,0],[14,18],[13,30],[12,44]] + spacebar row
+  const keysSvg = React.useMemo(() => {
+    const rows = [
+      [15, 0],
+      [14, 18],
+      [13, 30],
+      [12, 44],
+    ];
+    const rects: Array<{ x: number; y: number; width: number; height: number; rx: number }> = [];
+    rows.forEach(([n, offset], i) => {
+      const av = 644 - offset;
+      const w = (av - (n - 1) * 7) / n;
+      for (let j = 0; j < n; j++) {
+        rects.push({
+          x: parseFloat((268 + offset + j * (w + 7)).toFixed(1)),
+          y: 534 + i * 26,
+          width: parseFloat(w.toFixed(1)),
+          height: 20,
+          rx: 2,
+        });
+      }
+    });
+    return rects;
+  }, []);
+
+  const paperTasks = tasks.slice(0, 3);
 
   return (
-    <div className="desk-stage">
+    <div style={{ position: 'fixed', inset: 0, display: 'flex', alignItems: 'center', justifyContent: 'center', background: '#222' }}>
+      <style jsx global>{`
+        /* ===== Exact Intro Styles from momentumos-desk-v2.html ===== */
+        .intro {
+          position: absolute;
+          inset: 0;
+          z-index: 60;
+          overflow: hidden;
+          background: #cfe5f1;
+          color: #222;
+          font-family: 'Gaegu', 'Comic Sans MS', cursive;
+          font-weight: 700;
+          transition: opacity 0.5s, transform 0.5s;
+        }
+        .intro.leaving {
+          opacity: 0;
+          transform: scale(1.04);
+          pointer-events: none;
+        }
+        .intro svg.bg {
+          position: absolute;
+          left: 0;
+          top: 0;
+        }
+        .screenmsg {
+          position: absolute;
+          left: 334px;
+          top: 24px;
+          width: 500px;
+          height: 310px;
+          color: #fff;
+          display: flex;
+          flex-direction: column;
+          align-items: center;
+          justify-content: center;
+          gap: 16px;
+          text-align: center;
+          font-size: 34px;
+          line-height: 1.05;
+          letter-spacing: 1px;
+        }
+        .screenmsg .brand {
+          background: #f7d55c;
+          color: #222;
+          border: 4px solid #222;
+          padding: 0 12px 2px;
+          font-size: 28px;
+          transform: rotate(-2deg);
+        }
+        .screenmsg .typed {
+          font-family: 'VT323', monospace;
+          font-weight: 400;
+          font-size: 26px;
+          color: #6fa8dc;
+          min-height: 26px;
+          max-width: 460px;
+          overflow: hidden;
+          white-space: nowrap;
+        }
+        .gobtn {
+          font-family: 'Gaegu', cursive;
+          font-size: 32px;
+          font-weight: 700;
+          background: #f7d55c;
+          color: #222;
+          border: 5px solid #222;
+          border-radius: 4px;
+          padding: 2px 24px 6px;
+          transform: rotate(-1deg);
+          cursor: pointer;
+        }
+        .gobtn:hover {
+          background: #6fa8dc;
+        }
+        .gobtn:active {
+          transform: rotate(-1deg) translateY(3px);
+        }
+        .gobtn:focus-visible {
+          outline: 4px dashed #fff;
+          outline-offset: 4px;
+        }
+        .cat {
+          position: absolute;
+          left: 206px;
+          top: 418px;
+          width: 760px;
+          height: 290px;
+          background: none;
+          border: 0;
+          padding: 0;
+          cursor: grab;
+          touch-action: none;
+          transform-origin: 50% 50%;
+          z-index: 4;
+        }
+        .cat.dragging {
+          cursor: grabbing;
+          transition: none;
+        }
+        .cat.settle {
+          transition: left 0.7s cubic-bezier(0.3, 1.3, 0.5, 1), top 0.7s cubic-bezier(0.3, 1.3, 0.5, 1), transform 0.7s;
+        }
+        .cat.wiggle {
+          animation: wig 0.45s;
+        }
+        @keyframes wig {
+          0%, 100% { rotate: 0deg; }
+          25% { rotate: -2deg; }
+          75% { rotate: 2deg; }
+        }
+        .cat:focus-visible {
+          outline: 4px dashed #222;
+          outline-offset: 6px;
+        }
+        .zzz {
+          position: absolute;
+          font-size: 40px;
+          font-weight: 700;
+          color: #222;
+          pointer-events: none;
+          animation: float 2.4s infinite;
+          z-index: 5;
+          font-family: 'Gaegu', cursive;
+        }
+        @keyframes float {
+          0% { opacity: 0; transform: translate(0, 10px); }
+          30% { opacity: 1; }
+          100% { opacity: 0; transform: translate(16px, -30px); }
+        }
+        .bubble {
+          position: absolute;
+          background: #fff;
+          color: #222;
+          border: 5px solid #222;
+          border-radius: 28px 24px 30px 22px;
+          padding: 2px 18px 6px;
+          font-size: 30px;
+          font-weight: 700;
+          z-index: 6;
+          pointer-events: none;
+          white-space: nowrap;
+          font-family: 'Gaegu', cursive;
+        }
+        .bubble::after {
+          content: "";
+          position: absolute;
+          left: 34px;
+          bottom: -15px;
+          width: 20px;
+          height: 20px;
+          background: #fff;
+          border-right: 5px solid #222;
+          border-bottom: 5px solid #222;
+          transform: rotate(45deg);
+        }
+        .ipaper {
+          position: absolute;
+          left: 330px;
+          top: 684px;
+          width: 500px;
+          height: 150px;
+          background: #fff;
+          color: #222;
+          border: 6px solid #222;
+          transform: rotate(-1.5deg);
+          padding: 8px 26px 0;
+          z-index: 3;
+          font-family: 'Gaegu', cursive;
+        }
+        .ipaper h2 {
+          margin: 0;
+          font-size: 30px;
+          font-weight: 700;
+          line-height: 34px;
+          letter-spacing: 1px;
+          color: #222;
+        }
+        .ipaper ul {
+          list-style: none;
+          margin: 0;
+          padding: 0;
+          font-size: 26px;
+          line-height: 30px;
+          display: flex;
+          gap: 22px;
+          flex-wrap: wrap;
+          color: #222;
+        }
+        .ipaper li::before {
+          content: "□ ";
+        }
+        .ipaper li.done::before {
+          content: "☑ ";
+        }
+        .ipaper form {
+          display: flex;
+          gap: 8px;
+          align-items: center;
+          height: 34px;
+          border-bottom: 3px solid #222;
+        }
+        .ipaper input {
+          flex: 1;
+          min-width: 0;
+          width: 0;
+          border: 0;
+          background: transparent;
+          font-family: 'Gaegu', cursive;
+          font-weight: 700;
+          font-size: 27px;
+          outline: none;
+          padding: 0;
+          color: #222;
+        }
+        .ipaper input::placeholder {
+          color: #777;
+        }
+        .ipaper button {
+          font-family: 'Gaegu', cursive;
+          font-size: 22px;
+          font-weight: 700;
+          background: #f7d55c;
+          color: #222;
+          border: 4px solid #222;
+          padding: 0 10px;
+          line-height: 24px;
+          cursor: pointer;
+        }
+        .ipaper button:disabled {
+          background: #e6e6e6;
+          color: #777;
+          cursor: not-allowed;
+        }
+        .skip {
+          position: absolute;
+          left: 18px;
+          bottom: 14px;
+          font-family: 'Gaegu', cursive;
+          font-weight: 700;
+          font-size: 24px;
+          background: #fff;
+          color: #222;
+          border: 4px solid #222;
+          padding: 0 12px 2px;
+          z-index: 7;
+          cursor: pointer;
+        }
+        .skip:hover {
+          background: #f7d55c;
+        }
+        .kbhit {
+          position: absolute;
+          left: 250px;
+          top: 520px;
+          width: 680px;
+          height: 148px;
+          background: none;
+          border: 0;
+          padding: 0;
+          z-index: 2;
+          cursor: pointer;
+        }
+      `}</style>
+
+      {/* Scaled Frame */}
       <div
-        ref={stageRef}
-        className="desk-frame"
         style={{
-          width: 1204 * scale,
-          height: 804 * scale,
+          position: 'relative',
+          width: 1200 * scale,
+          height: 800 * scale,
         }}
       >
         <div
-          className={`desk-screen ${isLeaving ? 'transition-all duration-500 ease-out opacity-0 scale-105' : ''}`}
           style={{
+            position: 'absolute',
+            left: 0,
+            top: 0,
+            width: 1200,
+            height: 800,
             transform: `scale(${scale})`,
+            transformOrigin: '0 0',
+            overflow: 'hidden',
           }}
         >
-          {/* Skip Intro Button */}
-          <button
-            id="skipIntro"
-            onClick={handleFinishIntro}
-            className="absolute top-4 right-4 z-40 bg-white text-[#222] border-3 border-[#222] rounded-xl px-4 py-1.5 text-2xl font-bold shadow-[2px_2px_0_#222] hover:bg-[#f7d55c] transition-all cursor-pointer"
-            style={{ fontFamily: "'VT323', 'Courier New', monospace" }}
-          >
-            SKIP →
-          </button>
-
-          {/* Morning Desk Backdrop */}
-          <svg
-            className="absolute inset-0 pointer-events-none"
-            width="1200"
-            height="800"
-            viewBox="0 0 1200 800"
-            filter="url(#rough)"
-            aria-hidden="true"
-          >
-            {/* Wall (top) & Desk (bottom) */}
-            <rect x="0" y="0" width="1200" height="308" fill="#fbf3df" />
-            <rect x="0" y="308" width="1200" height="510" fill="#cfe5f1" />
-            <line x1="0" y1="308" x2="1200" y2="308" stroke="#222" strokeWidth="4" />
-
-            {/* Steaming Coffee Mug */}
-            <g transform="translate(56, 340)">
-              <rect x="0" y="20" width="64" height="74" rx="10" fill="#fff" stroke="#222" strokeWidth="3" />
-              <rect x="6" y="26" width="52" height="62" rx="6" fill="#6fa8dc" />
-              <path d="M64 36c14 0 20 8 20 18s-6 18-20 18" fill="none" stroke="#222" strokeWidth="3" />
-              {/* Steam waves */}
-              <path d="M18 12c-4-8 4-14 0-20" fill="none" stroke="#222" strokeWidth="2" strokeDasharray="3 3" />
-              <path d="M36 12c-4-8 4-14 0-20" fill="none" stroke="#222" strokeWidth="2" strokeDasharray="3 3" />
-            </g>
-
-            {/* Cactus in blue pot */}
-            <g transform="translate(58, 560)">
-              <polygon points="12,48 56,48 50,96 18,96" fill="#6fa8dc" stroke="#222" strokeWidth="3" />
-              <rect x="8" y="40" width="52" height="12" rx="4" fill="#fff" stroke="#222" strokeWidth="3" />
-              {/* Cactus body */}
-              <path d="M34 40V10c0-10-16-10-16 0v16M34 24h14c6 0 6-12 0-12h-4" fill="none" stroke="#8fcf9f" strokeWidth="12" strokeLinecap="round" />
-              <path d="M34 40V10c0-10-16-10-16 0v16M34 24h14c6 0 6-12 0-12h-4" fill="none" stroke="#222" strokeWidth="3" strokeLinecap="round" />
-            </g>
-
-            {/* Cropped Monitor */}
-            <g transform="translate(196, -30)">
-              {/* Outer monitor frame */}
-              <rect x="0" y="0" width="808" height="474" rx="16" fill="#fbf3df" stroke="#222" strokeWidth="4" />
-              {/* Monitor bezel */}
-              <rect x="14" y="14" width="780" height="446" rx="8" fill="#e8dac1" stroke="#222" strokeWidth="3" />
-              {/* Screen surface */}
-              <rect x="34" y="34" width="740" height="390" rx="4" fill="#222" />
-
-              {/* Stickers on monitor bezel */}
-              {/* TO DO sticker */}
-              <rect x="60" y="432" width="70" height="20" rx="2" fill="#f7d55c" stroke="#222" strokeWidth="2" />
-              <text x="95" y="446" textAnchor="middle" fill="#222" fontFamily="VT323" fontSize="18">TO DO</text>
-
-              {/* Year sticker */}
-              <rect x="144" y="432" width="54" height="20" rx="2" fill="#f7d55c" stroke="#222" strokeWidth="2" />
-              <text x="171" y="446" textAnchor="middle" fill="#222" fontFamily="VT323" fontSize="18">{currentYear}</text>
-
-              {/* User initials sticker */}
-              <rect x="710" y="432" width="50" height="20" rx="2" fill="#f7d55c" stroke="#222" strokeWidth="2" />
-              <text x="735" y="446" textAnchor="middle" fill="#222" fontFamily="VT323" fontSize="18">{userInitials}</text>
-
-              {/* Sticky note on screen corner */}
-              <g transform="translate(620, 60) rotate(3)">
-                <rect x="0" y="0" width="110" height="100" fill="#f7d55c" stroke="#222" strokeWidth="2" />
-                <line x1="12" y1="24" x2="98" y2="24" stroke="#222" strokeWidth="2" />
-                <line x1="12" y1="44" x2="88" y2="44" stroke="#222" strokeWidth="2" />
-                <line x1="12" y1="64" x2="94" y2="64" stroke="#222" strokeWidth="2" />
-              </g>
-
-              {/* Desktop folder icons */}
-              <g transform="translate(60, 60)">
-                <rect x="0" y="8" width="48" height="34" rx="4" fill="#6fa8dc" stroke="#fff" strokeWidth="2" />
-                <path d="M0 12l10-8h16l6 8" fill="#6fa8dc" stroke="#fff" strokeWidth="2" />
-                <text x="24" y="56" textAnchor="middle" fill="#fff" fontFamily="VT323" fontSize="17">Work</text>
-              </g>
-
-              <g transform="translate(60, 130)">
-                <rect x="0" y="8" width="48" height="34" rx="4" fill="#ee7a5a" stroke="#fff" strokeWidth="2" />
-                <path d="M0 12l10-8h16l6 8" fill="#ee7a5a" stroke="#fff" strokeWidth="2" />
-                <text x="24" y="56" textAnchor="middle" fill="#fff" fontFamily="VT323" fontSize="17">Ideas</text>
-              </g>
-            </g>
-
-            {/* Pencil Cup & Pencils */}
-            <g transform="translate(1040, 300)">
-              {/* Cup */}
-              <polygon points="10,40 70,40 64,110 16,110" fill="#fff" stroke="#222" strokeWidth="3" />
-              {/* Colored pencils */}
-              <line x1="26" y1="40" x2="16" y2="-10" stroke="#ee7a5a" strokeWidth="7" strokeLinecap="round" />
-              <line x1="36" y1="40" x2="34" y2="-18" stroke="#6fa8dc" strokeWidth="7" strokeLinecap="round" />
-              <line x1="46" y1="40" x2="52" y2="-12" stroke="#222" strokeWidth="7" strokeLinecap="round" />
-              <line x1="56" y1="40" x2="68" y2="-8" stroke="#8fcf9f" strokeWidth="7" strokeLinecap="round" />
-            </g>
-
-            {/* Yellow Eraser */}
-            <g transform="translate(150, 720) rotate(-12)">
-              <rect x="0" y="0" width="54" height="28" rx="4" fill="#f7d55c" stroke="#222" strokeWidth="3" />
-              <rect x="0" y="0" width="22" height="28" rx="4" fill="#ee7a5a" stroke="#222" strokeWidth="3" />
-            </g>
-
-            {/* Corded Mouse */}
-            <g transform="translate(1004, 598)">
-              <path d="M26 0C-10 -80 60 -120 20 -150" fill="none" stroke="#222" strokeWidth="2" />
-              <rect x="0" y="0" width="52" height="82" rx="26" fill="#fff" stroke="#222" strokeWidth="3" />
-              <line x1="26" y1="0" x2="26" y2="34" stroke="#222" strokeWidth="2" />
-              <rect x="22" y="16" width="8" height="14" rx="3" fill="#6fa8dc" />
-            </g>
-
-            {/* Keyboard Frame */}
-            <rect x="250" y="520" width="680" height="148" rx="14" fill="#fff" stroke="#222" strokeWidth="4" />
-            {/* Keycap grid */}
-            {keycaps.map((k, idx) => (
-              <rect
-                key={idx}
-                x={k.x}
-                y={k.y}
-                width={k.w}
-                height={k.h}
-                rx="4"
-                fill="#fbf3df"
-                stroke="#222"
-                strokeWidth="1.5"
-              />
-            ))}
-
-            {/* Coral and White Cat Bed */}
-            <g transform="translate(940, 710)">
-              {/* Outer cushion */}
-              <ellipse cx="70" cy="40" rx="84" ry="46" fill="#ee7a5a" stroke="#222" strokeWidth="4" />
-              {/* Inner fluffy bed */}
-              <ellipse cx="70" cy="38" rx="66" ry="34" fill="#fff" stroke="#222" strokeWidth="3" />
-              <path d="M24 38c10 8 30 12 50 10s38-8 44-12" fill="none" stroke="#ee7a5a" strokeWidth="2" strokeDasharray="4 4" />
-            </g>
-          </svg>
-
-          {/* Interactive Monitor Display Content */}
+          {/* ===================== INTRO: CAT ON THE KEYBOARD ===================== */}
           <div
-            className="absolute z-20 pointer-events-none"
-            style={{
-              left: 234,
-              top: 8,
-              width: 732,
-              height: 382,
-              display: 'flex',
-              flexDirection: 'column',
-              justifyContent: 'center',
-              alignItems: 'center',
-              padding: 24,
-              textAlign: 'center',
-            }}
+            className={`intro ${isLeaving ? 'leaving' : ''}`}
+            id="intro"
+            role="region"
+            aria-label="Morning desk. A cat is asleep on the keyboard."
           >
-            <div
-              id="smText"
-              className="text-[#f7d55c] text-3xl font-bold tracking-wider uppercase max-w-lg"
-              style={{ fontFamily: "'VT323', 'Courier New', monospace", textShadow: '0 0 4px rgba(247, 213, 92, 0.4)' }}
-            >
-              {monitorText}
-            </div>
-
-            {typedText && (
-              <div
-                id="typed"
-                className="mt-4 text-4xl text-emerald-400 bg-black/60 px-4 py-1.5 rounded-lg border-2 border-emerald-500/40"
-                style={{ fontFamily: "'VT323', 'Courier New', monospace" }}
-              >
-                {typedText}
-              </div>
-            )}
-          </div>
-
-          {/* Clickable Keyboard Hit Area to trigger protest if cat is on keyboard */}
-          {!catInBed && (
-            <div
-              id="kbHit"
-              onClick={() => triggerBlocked()}
-              className="absolute z-20 cursor-pointer"
-              style={{ left: 250, top: 520, width: 680, height: 148 }}
-              title="Sparky is on the keyboard!"
-            />
-          )}
-
-          {/* Sparky the Cat Asleep Belly-Up (Interactive Sprite) */}
-          <div
-            id="sparkyCat"
-            onClick={handleCatClick}
-            onPointerDown={handlePointerDown}
-            onPointerMove={handlePointerMove}
-            onPointerUp={handlePointerUp}
-            className={`absolute z-30 transition-all ${
-              catInBed
-                ? 'duration-700 ease-in-out cursor-pointer'
-                : isDragging
-                ? 'cursor-grabbing'
-                : 'cursor-grab'
-            } ${isWiggling ? 'cat-wiggle' : ''}`}
-            style={{
-              left: catInBed ? 920 : 206 + dragOffset.x,
-              top: catInBed ? 660 : 418 + dragOffset.y,
-              transform: catInBed
-                ? 'scale(0.32)'
-                : isDragging
-                ? `rotate(${dragOffset.x * 0.08}deg)`
-                : 'scale(1)',
-              transformOrigin: 'center center',
-              touchAction: 'none',
-            }}
-          >
-            {/* Speech Bubble */}
-            {showBubble && (
-              <div
-                className="absolute -top-14 left-1/2 -translate-x-1/2 bg-white text-[#222] border-3 border-[#222] rounded-2xl px-4 py-1.5 text-2xl font-bold shadow-[3px_3px_0_#222] whitespace-nowrap z-40 pointer-events-none"
-                style={{ fontFamily: "'VT323', 'Courier New', monospace" }}
-              >
-                {bubbleText}
-                <div
-                  className="absolute -bottom-2.5 left-1/2 -translate-x-1/2 w-4 h-4 bg-white border-r-3 border-b-3 border-[#222] rotate-45"
-                />
-              </div>
-            )}
-
-            {/* ZZZ Floaters */}
-            <div className="absolute -top-10 right-24 pointer-events-none text-3xl font-bold text-[#222] zzz" style={{ fontFamily: "'VT323', 'Courier New', monospace" }}>
-              z
-            </div>
-            <div className="absolute -top-16 right-16 pointer-events-none text-4xl font-bold text-[#222] zzz-delay" style={{ fontFamily: "'VT323', 'Courier New', monospace" }}>
-              Z
-            </div>
-
-            {/* Sparky SVG illustration */}
+            {/* SVG Background */}
             <svg
-              width="760"
-              height="290"
-              viewBox="0 0 760 290"
-              className="overflow-visible"
-              filter="url(#rough)"
+              className="bg"
+              width="1200"
+              height="800"
+              viewBox="0 0 1200 800"
+              aria-hidden="true"
+              style={{ shapeRendering: 'geometricPrecision' }}
             >
-              {/* Stretched Hind Legs */}
-              <path d="M540 180c40 30 110 50 140 20s-10-60-50-60" fill="#fff" stroke="#222" strokeWidth="4" />
-              <circle cx="670" cy="190" r="14" fill="#ee7a5a" stroke="#222" strokeWidth="2" /> {/* Paw pad */}
-              <circle cx="660" cy="174" r="5" fill="#ee7a5a" />
-              <circle cx="675" cy="172" r="5" fill="#ee7a5a" />
+              <g filter="url(#rough)" stroke="#222" strokeWidth="6" strokeLinejoin="round" strokeLinecap="round">
+                <rect x="-10" y="-10" width="1220" height="318" fill="#fbf3df" stroke="none" />
+                <rect x="-10" y="308" width="1220" height="510" fill="#cfe5f1" stroke="none" />
+                <path d="M-10 308H1220" fill="none" />
 
-              {/* Cat Tail Curling */}
-              <path d="M600 130c50-40 80-10 60 40s-40 20-30 40" fill="none" stroke="#222" strokeWidth="16" strokeLinecap="round" />
-              <path d="M600 130c50-40 80-10 60 40s-40 20-30 40" fill="none" stroke="#fff" strokeWidth="8" strokeLinecap="round" />
+                {/* monitor (cropped at top) */}
+                <rect x="532" y="420" width="136" height="110" fill="#cfd3d6" />
+                <rect x="196" y="-30" width="808" height="474" rx="8" fill="#cfd3d6" />
+                <rect x="196" y="-30" width="808" height="378" fill="#222" />
 
-              {/* Cat Belly (Upside down, round) */}
-              <ellipse cx="430" cy="150" rx="150" ry="85" fill="#fff" stroke="#222" strokeWidth="4" />
-              {/* Black patches on fur */}
-              <path d="M370 85c30 10 50 40 40 60s-40 20-50 10" fill="#222" />
-              <path d="M490 95c30 20 40 50 20 70s-40-10-30-40" fill="#222" />
+                {/* note window on screen */}
+                <rect x="232" y="-8" width="92" height="138" fill="#f7d55c" strokeWidth="5" />
+                <g fill="#222" stroke="none">
+                  <rect x="248" y="18" width="10" height="8" />
+                  <rect x="264" y="18" width="10" height="8" />
+                  <rect x="280" y="18" width="10" height="8" />
+                  <rect x="296" y="18" width="10" height="8" />
+                  <rect x="248" y="34" width="58" height="6" />
+                  <rect x="248" y="62" width="10" height="8" />
+                  <rect x="264" y="62" width="10" height="8" />
+                  <rect x="280" y="62" width="10" height="8" />
+                  <rect x="248" y="80" width="58" height="6" />
+                  <rect x="248" y="104" width="40" height="6" />
+                </g>
 
-              {/* Dangling Front Paw */}
-              <path d="M320 180c-20 40-50 70-80 50s0-60 40-70" fill="#fff" stroke="#222" strokeWidth="4" />
-              <circle cx="250" cy="225" r="12" fill="#ee7a5a" stroke="#222" strokeWidth="2" /> {/* Toe bean */}
-              <circle cx="238" cy="214" r="4" fill="#ee7a5a" />
-              <circle cx="250" cy="210" r="4" fill="#ee7a5a" />
-              <circle cx="262" cy="214" r="4" fill="#ee7a5a" />
+                {/* folders */}
+                <g fill="#6fa8dc" stroke="none">
+                  <path d="M906 12h18l6 7h22v32h-46z" />
+                  <path d="M906 76h18l6 7h22v32h-46z" />
+                  <path d="M906 140h18l6 7h22v32h-46z" />
+                  <path d="M840 200h18l6 7h22v32h-46z" />
+                </g>
 
-              {/* Upside Down Cat Head */}
-              <circle cx="230" cy="120" r="65" fill="#fff" stroke="#222" strokeWidth="4" />
-              {/* Cat Ears */}
-              <polygon points="175,70 160,10 215,55" fill="#fff" stroke="#222" strokeWidth="4" />
-              <polygon points="176,64 168,26 204,56" fill="#ee7a5a" />
+                {/* label-tape stickers on chin */}
+                <g strokeWidth="5">
+                  <rect x="236" y="380" width="84" height="32" fill="#f7d55c" />
+                  <rect x="338" y="382" width="84" height="32" fill="#f7d55c" />
+                  <rect x="860" y="380" width="104" height="32" fill="#f7d55c" />
+                </g>
+                <g fontFamily="Gaegu" fontWeight="700" fontSize="24" fill="#222" stroke="none" textAnchor="middle">
+                  <text x="278" y="404">TO DO</text>
+                  <text x="380" y="406">{new Date().getFullYear()}</text>
+                  <text x="912" y="404">{userInitials}</text>
+                </g>
+                <circle cx="600" cy="398" r="11" fill="#222" stroke="none" />
 
-              <polygon points="265,60 305,15 290,75" fill="#fff" stroke="#222" strokeWidth="4" />
-              <polygon points="272,62 298,28 288,70" fill="#ee7a5a" />
+                {/* pencil cup + pencils */}
+                <path d="M1068 230l-12 90M1096 214v104M1122 226l14 92M1148 244l-8 74" fill="none" strokeWidth="18" />
+                <path d="M1068 230l-12 90" stroke="#ee7a5a" strokeWidth="9" fill="none" />
+                <path d="M1096 214v104" stroke="#6fa8dc" strokeWidth="9" fill="none" />
+                <path d="M1122 226l14 92" stroke="#ee7a5a" strokeWidth="9" fill="none" />
+                <path d="M1148 244l-8 74" stroke="#222" strokeWidth="9" fill="none" />
+                <path d="M1040 300h124l-10 130h-104z" fill="#fff" />
 
-              {/* Sleeping Eyes (curved lines) */}
-              <path d="M190 135c10 8 20 8 30 0" fill="none" stroke="#222" strokeWidth="3" strokeLinecap="round" />
-              <path d="M240 135c10 8 20 8 30 0" fill="none" stroke="#222" strokeWidth="3" strokeLinecap="round" />
+                {/* mug */}
+                <path d="M78 330c-10-14 10-24 0-40M108 326c-10-14 10-24 0-40" fill="none" strokeWidth="5" />
+                <path d="M168 360c40 0 40 56 0 56" fill="none" strokeWidth="16" />
+                <path d="M168 360c40 0 40 56 0 56" fill="none" stroke="#fff" strokeWidth="5" />
+                <path d="M56 340h116v100c0 10-8 18-18 18H74c-10 0-18-8-18-18z" fill="#fff" />
+                <path d="M56 344c0-8 116-8 116 0" fill="#222" stroke="none" />
+                <path d="M58 392h112" stroke="#6fa8dc" strokeWidth="14" fill="none" />
 
-              {/* Pink Nose & Mouth */}
-              <polygon points="225,148 235,148 230,156" fill="#ee7a5a" stroke="#222" strokeWidth="1.5" />
-              <path d="M222 164c4-4 8-4 8-8s4 4 8 8" fill="none" stroke="#222" strokeWidth="2" />
+                {/* cactus in a blue pot */}
+                <path d="M92 560v-80c0-16 30-16 30 0v80" fill="#8fcf9f" />
+                <path d="M92 520h-14c-8 0-12-6-12-12v-22c0-10 18-10 18 0v12" fill="#8fcf9f" />
+                <path d="M122 530h14c8 0 12-6 12-12v-16c0-10-18-10-18 0" fill="#8fcf9f" />
+                <path d="M100 494v10M114 508v10M104 532v10" strokeWidth="4" fill="none" />
+                <path d="M58 560h98l-12 80H70z" fill="#6fa8dc" />
 
-              {/* Whiskers */}
-              <line x1="180" y1="145" x2="140" y2="135" stroke="#222" strokeWidth="2" />
-              <line x1="180" y1="155" x2="135" y2="160" stroke="#222" strokeWidth="2" />
-              <line x1="275" y1="145" x2="315" y2="135" stroke="#222" strokeWidth="2" />
-              <line x1="275" y1="155" x2="320" y2="160" stroke="#222" strokeWidth="2" />
+                {/* keyboard */}
+                <rect x="250" y="520" width="680" height="148" rx="12" fill="#cfd3d6" />
+                <g id="keys" fill="#fff" strokeWidth="4">
+                  {keysSvg.map((k, idx) => (
+                    <rect key={idx} x={k.x} y={k.y} width={k.width} height={k.height} rx={k.rx} />
+                  ))}
+                  <rect x="268" y="638" width="110" height="20" rx="2" />
+                  <rect x="388" y="638" width="380" height="20" rx="2" />
+                  <rect x="778" y="638" width="134" height="20" rx="2" />
+                </g>
+
+                {/* mouse + cord */}
+                <path d="M1004 610c30-50 70-30 60-80-8-36 40-40 40-80" fill="none" strokeWidth="5" />
+                <path d="M1004 598c-40 0-50 40-50 70s14 52 50 52 46-22 46-52-10-70-46-70z" fill="#fff" />
+                <path d="M1004 600v40" fill="none" strokeWidth="5" />
+
+                {/* eraser */}
+                <path d="M150 720l84-26 14 40-84 26z" fill="#f7d55c" />
+                <path d="M150 720l-6 2 14 40 6-2" fill="#f7d55c" />
+
+                {/* cat bed */}
+                <path d="M940 730c0-50 60-76 130-76s140 26 140 76c0 40-60 70-140 70s-130-30-130-70z" fill="#ee7a5a" />
+                <path d="M970 724c0-30 46-46 100-46s110 16 110 46c0 22-50 38-110 38s-100-16-100-38z" fill="#fff" />
+              </g>
             </svg>
-          </div>
 
-          {/* "TODAY I WILL..." Angled Notepad Paper */}
-          <div
-            id="paper"
-            className="absolute z-20 bg-white border-3 border-[#222] shadow-[6px_6px_0_rgba(0,0,0,0.3)] p-4 rounded-md transition-all"
-            style={{
-              left: 330,
-              top: 660,
-              width: 520,
-              transform: 'rotate(-1.5deg)',
-              background: 'repeating-linear-gradient(#fff 0 24px, #f2ece0 24px 25px)',
-            }}
-          >
-            <div className="flex items-center justify-between border-b-2 border-[#222] pb-2 mb-3">
-              <span className="font-bold text-2xl uppercase tracking-wider text-[#222]" style={{ fontFamily: "'VT323', 'Courier New', monospace" }}>TODAY I WILL…</span>
-              {catInBed && (
-                <button
-                  id="goDesk"
-                  onClick={handleFinishIntro}
-                  className="bg-[#f7d55c] hover:bg-[#ffe17d] border-2 border-[#222] rounded-lg px-4 py-1 font-bold text-2xl shadow-[2px_2px_0_#222] cursor-pointer"
-                  style={{ fontFamily: "'VT323', 'Courier New', monospace" }}
-                >
+            {/* Monitor screen message overlay */}
+            <div className="screenmsg" id="screenMsg">
+              <div className="brand">MOMENTUM·OS</div>
+              <div id="smText">{monitorText}</div>
+              <div className="typed" id="typed" aria-hidden="true">{typedText}</div>
+              {catGone && (
+                <button className="gobtn" id="goDesk" onClick={leaveIntro}>
                   GO TO MY DESK →
                 </button>
               )}
             </div>
 
-            {/* Task input form */}
-            <form onSubmit={handleTaskSubmit} className="flex gap-2">
-              <input
-                id="paperIn"
-                type="text"
-                disabled={!catInBed}
-                value={taskInput}
-                onChange={(e) => setTaskInput(e.target.value)}
-                placeholder={catInBed ? "WRITE A MISSION FOR TODAY…" : "(MOVE SPARKY FIRST TO UNLOCK)"}
-                className="flex-1 bg-white/90 border-2 border-[#222] rounded-md px-3 py-1.5 text-2xl font-bold placeholder:text-gray-400 focus:outline-none focus:ring-2 focus:ring-[#f7d55c] disabled:opacity-60 disabled:cursor-not-allowed"
-                style={{ fontFamily: "'VT323', 'Courier New', monospace" }}
-              />
-              <button
-                id="paperAdd"
-                type="submit"
-                disabled={!catInBed || !taskInput.trim()}
-                className="bg-[#ee7a5a] text-white border-2 border-[#222] rounded-md px-4 py-1.5 text-2xl font-bold shadow-[2px_2px_0_#222] hover:bg-[#ff8f71] disabled:opacity-40 disabled:cursor-not-allowed cursor-pointer"
-                style={{ fontFamily: "'VT323', 'Courier New', monospace" }}
-              >
-                +
-              </button>
-            </form>
+            {/* Invisible Hitbox over Keyboard */}
+            <button
+              className="kbhit"
+              id="kbHit"
+              aria-label="Keyboard"
+              tabIndex={-1}
+              onClick={() => {
+                if (catGone) inputRef.current?.focus();
+                else triggerBlocked();
+              }}
+            />
 
-            {/* Rendered today's tasks on paper */}
-            <div id="paperList" className="mt-3 space-y-1">
-              {todayTasksList.map((t) => (
-                <div key={t.id} className="flex items-center gap-2 text-base font-bold text-gray-800">
-                  <span className="text-sm">{t.status === 'completed' ? '☑' : '□'}</span>
-                  <span className={t.status === 'completed' ? 'line-through text-gray-400' : ''}>{t.title}</span>
-                </div>
-              ))}
+            {/* "TODAY I WILL..." Notepad */}
+            <div
+              className="ipaper"
+              id="paper"
+              onClick={(e) => {
+                if (!catGone && (e.target as HTMLElement).closest('#paper')) {
+                  triggerBlocked();
+                }
+              }}
+            >
+              <h2>TODAY I WILL…</h2>
+              <form id="paperForm" autoComplete="off" onSubmit={handlePaperSubmit}>
+                <label htmlFor="paperIn" style={{ position: 'absolute', left: -9999 }}>New task</label>
+                <input
+                  id="paperIn"
+                  ref={inputRef}
+                  value={taskInput}
+                  onChange={(e) => setTaskInput(e.target.value)}
+                  placeholder={catGone ? "write a task, press enter" : "(move the cat first)"}
+                  disabled={!catGone}
+                  maxLength={80}
+                />
+                <button type="submit" id="paperAdd" disabled={!catGone || !taskInput.trim()}>
+                  ADD
+                </button>
+              </form>
+              <ul id="paperList">
+                {paperTasks.map((t) => (
+                  <li key={t.id} className={t.status === 'completed' ? 'done' : ''}>
+                    {t.title}
+                  </li>
+                ))}
+              </ul>
             </div>
+
+            {/* The Cat on the Keyboard */}
+            <button
+              ref={catRef}
+              className={`cat ${isDragging ? 'dragging' : ''} ${isSettling ? 'settle' : ''} ${isWiggling ? 'wiggle' : ''}`}
+              id="cat"
+              aria-label={catGone ? "Sparky, now asleep in the bed" : "Sparky the cat, asleep belly-up on the keyboard. Drag it to its bed, or press to nudge it."}
+              tabIndex={catGone ? -1 : 0}
+              style={{
+                left: catPos.left,
+                top: catPos.top,
+                transform: catPos.transform,
+              }}
+              onClick={handleCatClick}
+              onPointerDown={handlePointerDown}
+              onPointerMove={handlePointerMove}
+              onPointerUp={handlePointerUp}
+            >
+              <svg
+                width="760"
+                height="290"
+                viewBox="0 0 760 290"
+                aria-hidden="true"
+                style={{ shapeRendering: 'geometricPrecision', overflow: 'visible' }}
+              >
+                <g filter="url(#rough)" stroke="#222" strokeWidth="6" strokeLinejoin="round" strokeLinecap="round">
+                  {/* tail hanging off the right edge */}
+                  <path d="M640 160c40 20 70 60 76 120" fill="none" strokeWidth="30" />
+                  {/* hind leg stretched up and right */}
+                  <path d="M584 96L676 26c16-12 36 4 24 22L626 128z" fill="#222" />
+                  <path d="M660 36l16-10c16-12 36 4 24 22l-12 12c-12-2-24-12-28-24z" fill="#fff" />
+                  {/* front leg reaching out to the left */}
+                  <path d="M196 124L72 70c-22-8-34 14-18 28l132 50z" fill="#fff" />
+                  <path d="M150 104l40 16-8 28-42-16z" fill="#222" stroke="none" />
+                  <path d="M44 84c-4 14 6 24 20 24 12 0 22-8 22-20s-10-20-22-20-18 6-20 16z" fill="#fff" />
+                  <path d="M50 96h8M54 106l6-6M62 78v8" fill="none" strokeWidth="3" />
+                  {/* body: white belly with irregular black patches */}
+                  <path d="M152 124c40-48 170-74 300-68 120 6 192 26 212 64 18 36-22 82-118 92-130 14-268 10-350-6-56-10-76-48-44-82z" fill="#fff" />
+                  <path d="M232 76c80-26 232-30 330-14 70 12 104 34 102 66-2 26-28 42-60 38-30-20-62-6-96-16-40-12-62 6-104-10-34-14-50 2-86-12-36-14-56-18-86-52z" fill="#222" />
+                  <path d="M430 190c40-6 96-8 140-22-20 26-70 40-140 22z" fill="#222" />
+                  <path d="M300 146c20-6 36 0 40 10-14 8-30 6-40-10z" fill="#222" stroke="none" />
+                  {/* dangling front paw */}
+                  <path d="M300 200l-4 52c0 16 34 18 38 2l2-52z" fill="#fff" />
+                  <path d="M306 254v-10M318 256v-10M328 252v-10" fill="none" strokeWidth="3" />
+                  {/* upside-down head */}
+                  <ellipse cx="126" cy="176" rx="84" ry="74" fill="#fff" />
+                  <path d="M66 226l-14 54 52-34zM148 246l50 34-10-58z" fill="#222" />
+                  <path d="M98 246c10 12 46 12 56 0-8-8-48-8-56 0z" fill="#222" />
+                  <path d="M62 196c4-18 44-22 58-6 4 16-12 30-34 28-16-2-26-10-24-22z" fill="#222" />
+                  <path d="M134 190c14-16 54-12 58 6 2 12-8 20-24 22-22 2-38-12-34-28z" fill="#222" />
+                  <ellipse cx="92" cy="202" rx="12" ry="9" fill="#fff" strokeWidth="3" />
+                  <ellipse cx="162" cy="202" rx="12" ry="9" fill="#fff" strokeWidth="3" />
+                  <circle cx="94" cy="205" r="4" fill="#222" stroke="none" />
+                  <circle cx="160" cy="205" r="4" fill="#222" stroke="none" />
+                  <path d="M118 166h18l-9-11z" fill="#222" strokeWidth="3" />
+                  <path d="M127 154q-8-10-18-4M127 154q8-10 18-4" fill="none" strokeWidth="4" />
+                  <path d="M100 170l-60-6M100 180l-56 6M154 170l60-6M154 180l56 6" fill="none" strokeWidth="3" />
+                  <path d="M110 118c10-10 24-10 34 0" fill="none" strokeWidth="4" />
+                </g>
+              </svg>
+              {!catGone && (
+                <>
+                  <span className="zzz" style={{ left: 226, top: 40 }}>z</span>
+                  <span className="zzz" style={{ left: 258, top: 6, animationDelay: '.8s', fontSize: 54 }}>Z</span>
+                </>
+              )}
+            </button>
+
+            {/* Bubble */}
+            {!bubbleHidden && (
+              <div className="bubble" id="bubble" style={{ left: 420, top: 398 }}>
+                {bubbleText}
+              </div>
+            )}
+
+            {/* Skip Button */}
+            <button className="skip" id="skipIntro" onClick={leaveIntro}>
+              SKIP
+            </button>
           </div>
         </div>
       </div>
