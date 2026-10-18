@@ -95,7 +95,7 @@ export const DeskStyles: React.FC = () => {
         display: flex;
         align-items: center;
         justify-content: center;
-        background: #191816;
+        background: #222;
         overflow: hidden;
       }
 
@@ -113,8 +113,7 @@ export const DeskStyles: React.FC = () => {
         background: var(--wall);
         transform-origin: 0 0;
         overflow: hidden;
-        border: 4px solid var(--ink);
-        box-shadow: 0 25px 60px rgba(0, 0, 0, 0.45);
+        border: 2px solid var(--ink);
       }
 
       /* Titlebar */

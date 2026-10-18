@@ -231,6 +231,16 @@ export default function Home() {
 
               <div className="flex items-center gap-3">
                 <button
+                  onClick={() => {
+                    useMomentumStore.getState().setAIAssistantOpen(true);
+                  }}
+                  className="desk-stat-pill bg-[#ee7a5a] text-white hover:bg-[#ff8f71] cursor-pointer flex items-center gap-1.5"
+                  title="Open Global AI Assistant (Voice & Chat)"
+                >
+                  <span>✨</span>
+                  <span>AI Assistant</span>
+                </button>
+                <button
                   onClick={() => setUiMode('classic')}
                   className="desk-stat-pill bg-white hover:bg-[#f7d55c] cursor-pointer"
                   title="Switch to Classic V2.5 Sidebar OS"
@@ -291,6 +301,7 @@ export default function Home() {
             </nav>
           </div>
         </div>
+        <AIAssistantDrawer />
       </div>
     );
   }

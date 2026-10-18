@@ -6,6 +6,7 @@ import { useAuthStore } from '../../../store/useAuthStore';
 import { DeskDialogs, DialogState } from './DeskDialogs';
 import { DeskDefs, DeskStyles } from './DeskStylesAndDefs';
 import { playSound } from '../../../utils/soundEngine';
+import { AIAssistantDrawer } from '../../ai/AIAssistantDrawer';
 
 interface DeskHomeBaseViewProps {
   onReplayCatIntro: () => void;
@@ -278,6 +279,18 @@ export const DeskHomeBaseView: React.FC<DeskHomeBaseViewProps> = ({
                 >
                   2
                 </span>
+              </button>
+
+              {/* Global AI Assistant Trigger */}
+              <button
+                onClick={() => {
+                  useMomentumStore.getState().setAIAssistantOpen(true);
+                }}
+                className="desk-stat-pill bg-[#ee7a5a] text-white hover:bg-[#ff8f71] cursor-pointer flex items-center gap-1.5"
+                title="Open Global AI Assistant (Voice & Chat)"
+              >
+                <span>✨</span>
+                <span>AI Assistant</span>
               </button>
 
               <span id="streakBtn" className="desk-stat-pill blue">
@@ -918,6 +931,7 @@ export const DeskHomeBaseView: React.FC<DeskHomeBaseViewProps> = ({
           />
         </div>
       </div>
+      <AIAssistantDrawer />
     </div>
   );
 };
