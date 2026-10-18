@@ -191,116 +191,103 @@ export default function Home() {
       );
     }
 
-    // Stage 3: Module Room Sheet with Scarf Strip & Full Studio Bridge
+    // Stage 3: Module Room Sheet with Scarf Strip & Full Studio Bridge (Full Viewport)
     return (
-      <div className="desk-root desk-stage">
+      <div className="desk-root fixed inset-0 flex flex-col bg-[#fbf3df] overflow-hidden">
         <DeskDefs />
         <DeskStyles />
 
-        <div
-          className="desk-frame"
-          style={{
-            width: 1204 * deskScale,
-            height: 804 * deskScale,
-          }}
-        >
-          <div
-            className="desk-screen"
-            style={{
-              transform: `scale(${deskScale})`,
-            }}
-          >
-            {/* Title Bar */}
-            <header className="desk-titlebar titlebar-main">
-              <div className="flex items-center gap-3">
-                <button
-                  id="outBtn"
-                  onClick={() => setActiveDeskRoom('home')}
-                  className="desk-btn-icon"
-                  title="Back to Home Base"
-                  aria-label="Back to Home Base"
-                >
-                  «
-                </button>
-                <span className="desk-stat-pill yellow">
-                  L{profile.level || 1} · {profile.xp || 0} XP
-                </span>
-              </div>
-
-              <h1 className="font-black">{activeDeskRoom.toUpperCase()}</h1>
-
-              <div className="flex items-center gap-3">
-                <button
-                  onClick={() => {
-                    useMomentumStore.getState().setAIAssistantOpen(true);
-                  }}
-                  className="desk-stat-pill bg-[#ee7a5a] text-white hover:bg-[#ff8f71] cursor-pointer flex items-center gap-1.5"
-                  title="Open Global AI Assistant (Voice & Chat)"
-                >
-                  <span>✨</span>
-                  <span>AI Assistant</span>
-                </button>
-                <button
-                  onClick={() => setUiMode('classic')}
-                  className="desk-stat-pill bg-white hover:bg-[#f7d55c] cursor-pointer"
-                  title="Switch to Classic V2.5 Sidebar OS"
-                >
-                  🖥 Classic V2.5
-                </button>
-                <button
-                  id="backBtn"
-                  onClick={() => setActiveDeskRoom('home')}
-                  className="desk-btn-icon"
-                  title="Back to Home Base"
-                  aria-label="Back to Home Base"
-                >
-                  ↩
-                </button>
-              </div>
-            </header>
-
-            {/* Module Room View */}
-            <DeskModuleRoom
-              activeRoom={activeDeskRoom}
-              onNavigateHome={() => setActiveDeskRoom('home')}
-              onNavigateRoom={(room) => setActiveDeskRoom(room)}
-              onToggleClassicMode={() => setUiMode('classic')}
-              onOpenTaskModal={() => {
-                setActiveDeskRoom('tasks');
-              }}
-              onToast={(msg) => {
-                // Toast notification
-              }}
-            />
-
-            {/* Bottom 12-Icon Room Tray */}
-            <nav id="tray" className="desk-tray">
-              {[
-                { id: 'dashboard', name: 'Overview', icon: '📋' },
-                { id: 'tasks', name: 'Tasks', icon: '📝' },
-                { id: 'habits', name: 'Habits', icon: '🧶' },
-                { id: 'calendar', name: 'Calendar', icon: '📅' },
-                { id: 'focus', name: 'Focus', icon: '⏳' },
-                { id: 'brain', name: 'Notes', icon: '💡' },
-                { id: 'analytics', name: 'Charts', icon: '📊' },
-                { id: 'goals', name: 'Goals', icon: '🎯' },
-                { id: 'achievements', name: 'Awards', icon: '🏆' },
-                { id: 'settings', name: 'Settings', icon: '⚙' },
-                { id: 'home', name: 'Home', icon: '🏠' },
-              ].map((tab) => (
-                <button
-                  key={tab.id}
-                  onClick={() => setActiveDeskRoom(tab.id)}
-                  className={`desk-ito ${tab.id === activeDeskRoom ? 'on' : ''}`}
-                  title={tab.name}
-                >
-                  <span className="text-2xl leading-none">{tab.icon}</span>
-                  <span className="cap">{tab.name}</span>
-                </button>
-              ))}
-            </nav>
+        {/* Title Bar (Full width across top) */}
+        <header className="desk-titlebar titlebar-main !relative !w-full !left-auto !top-auto flex-shrink-0">
+          <div className="flex items-center gap-3">
+            <button
+              id="outBtn"
+              onClick={() => setActiveDeskRoom('home')}
+              className="desk-btn-icon"
+              title="Back to Home Base"
+              aria-label="Back to Home Base"
+            >
+              «
+            </button>
+            <span className="desk-stat-pill yellow">
+              L{profile.level || 1} · {profile.xp || 0} XP
+            </span>
           </div>
+
+          <h1 className="font-black">{activeDeskRoom.toUpperCase()}</h1>
+
+          <div className="flex items-center gap-3">
+            <button
+              onClick={() => {
+                useMomentumStore.getState().setAIAssistantOpen(true);
+              }}
+              className="desk-stat-pill bg-[#ee7a5a] text-white hover:bg-[#ff8f71] cursor-pointer flex items-center gap-1.5"
+              title="Open Global AI Assistant (Voice & Chat)"
+            >
+              <span>✨</span>
+              <span>AI Assistant</span>
+            </button>
+            <button
+              onClick={() => setUiMode('classic')}
+              className="desk-stat-pill bg-white hover:bg-[#f7d55c] cursor-pointer"
+              title="Switch to Classic V2.5 Sidebar OS"
+            >
+              🖥 Classic V2.5
+            </button>
+            <button
+              id="backBtn"
+              onClick={() => setActiveDeskRoom('home')}
+              className="desk-btn-icon"
+              title="Back to Home Base"
+              aria-label="Back to Home Base"
+            >
+              ↩
+            </button>
+          </div>
+        </header>
+
+        {/* Module Room View (Flexible Full Height) */}
+        <div className="flex-1 w-full overflow-hidden relative">
+          <DeskModuleRoom
+            activeRoom={activeDeskRoom}
+            onNavigateHome={() => setActiveDeskRoom('home')}
+            onNavigateRoom={(room) => setActiveDeskRoom(room)}
+            onToggleClassicMode={() => setUiMode('classic')}
+            onOpenTaskModal={() => {
+              setActiveDeskRoom('tasks');
+            }}
+            onToast={(msg) => {
+              // Toast notification
+            }}
+          />
         </div>
+
+        {/* Bottom 12-Icon Room Tray (Full width across bottom) */}
+        <nav id="tray" className="desk-tray !relative !w-full !left-auto !top-auto flex-shrink-0">
+          {[
+            { id: 'dashboard', name: 'Overview', icon: '📋' },
+            { id: 'tasks', name: 'Tasks', icon: '📝' },
+            { id: 'habits', name: 'Habits', icon: '🧶' },
+            { id: 'calendar', name: 'Calendar', icon: '📅' },
+            { id: 'focus', name: 'Focus', icon: '⏳' },
+            { id: 'brain', name: 'Notes', icon: '💡' },
+            { id: 'analytics', name: 'Charts', icon: '📊' },
+            { id: 'goals', name: 'Goals', icon: '🎯' },
+            { id: 'achievements', name: 'Awards', icon: '🏆' },
+            { id: 'settings', name: 'Settings', icon: '⚙' },
+            { id: 'home', name: 'Home', icon: '🏠' },
+          ].map((tab) => (
+            <button
+              key={tab.id}
+              onClick={() => setActiveDeskRoom(tab.id)}
+              className={`desk-ito ${tab.id === activeDeskRoom ? 'on' : ''}`}
+              title={tab.name}
+            >
+              <span className="text-2xl leading-none">{tab.icon}</span>
+              <span className="cap">{tab.name}</span>
+            </button>
+          ))}
+        </nav>
         <AIAssistantDrawer />
       </div>
     );

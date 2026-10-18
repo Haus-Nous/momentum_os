@@ -95,8 +95,20 @@ export const DeskStyles: React.FC = () => {
         display: flex;
         align-items: center;
         justify-content: center;
-        background: #222;
+        background: linear-gradient(to bottom, #fbf3df 0%, #fbf3df 59.5%, #cfe5f1 59.5%, #cfe5f1 100%);
         overflow: hidden;
+      }
+
+      .desk-stage::before {
+        content: "";
+        position: absolute;
+        left: 0;
+        right: 0;
+        top: 59.5%;
+        height: 4px;
+        background: #222;
+        z-index: 1;
+        pointer-events: none;
       }
 
       .desk-frame {
@@ -113,7 +125,6 @@ export const DeskStyles: React.FC = () => {
         background: var(--wall);
         transform-origin: 0 0;
         overflow: hidden;
-        border: 2px solid var(--ink);
       }
 
       /* Titlebar */
@@ -411,18 +422,19 @@ export const DeskStyles: React.FC = () => {
       /* Module Room Sheet */
       .desk-room {
         position: absolute;
-        left: 0;
-        top: 60px;
-        width: 1200px;
-        height: 646px;
+        inset: 0;
+        width: 100%;
+        height: 100%;
         background: var(--wall);
-        padding: 16px 36px;
+        padding: 12px 24px;
         z-index: 15;
       }
 
       .desk-sheet {
         position: relative;
         height: 100%;
+        max-width: 1240px;
+        margin: 0 auto;
         background: #fff;
         border: 4px solid var(--ink);
         box-shadow: 10px 10px 0 rgba(0, 0, 0, 0.25);

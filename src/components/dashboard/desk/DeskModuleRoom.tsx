@@ -19,6 +19,7 @@ import { CareerDashboardView } from '../../career/CareerDashboardView';
 import { GoalsView } from '../../goals/GoalsView';
 import { AchievementCenterView } from '../../achievements/AchievementCenterView';
 import { SettingsView } from '../../settings/SettingsView';
+import { DeskDialogs, DialogState } from './DeskDialogs';
 
 interface DeskModuleRoomProps {
   activeRoom: string;
@@ -58,9 +59,11 @@ export const DeskModuleRoom: React.FC<DeskModuleRoomProps> = ({
   const { currentUser } = useAuthStore();
   const {
     tasks,
+    addTask,
     updateTask,
     deleteTask,
     habits,
+    addHabit,
     toggleHabitCheckIn,
     notes,
     addNote,
@@ -72,12 +75,29 @@ export const DeskModuleRoom: React.FC<DeskModuleRoomProps> = ({
     profile,
     addXP,
     focusTimer,
+    startFocusTimer,
+    pauseFocusTimer,
+    resetFocusTimer,
+    setFocusMode,
+    focusSessions,
   } = useMomentumStore();
 
   const displayName = getUserDisplayName(currentUser?.name || profile.name);
 
   // View Mode: Cozy Sheet (tactile marker) vs Full Studio View (rich React views)
   const [isStudioView, setIsStudioView] = useState(false);
+
+  // Dialog State
+  const [dialog, setDialog] = useState<DialogState>({ type: 'none' });
+
+  // Quick Inline Inputs
+  const [quickTaskInput, setQuickTaskInput] = useState('');
+  const [quickHabitInput, setQuickHabitInput] = useState('');
+
+  // Focus Timer Calculations
+  const focusMinutes = Math.floor(focusTimer.timeRemaining / 60);
+  const focusSecs = focusTimer.timeRemaining % 60;
+  const focusDisplay = `${focusMinutes < 10 ? '0' : ''}${focusMinutes}:${focusSecs < 10 ? '0' : ''}${focusSecs}`;
 
   // Local state for Quick Note in Brain
   const [noteInput, setNoteInput] = useState('');
@@ -154,9 +174,9 @@ export const DeskModuleRoom: React.FC<DeskModuleRoomProps> = ({
               {/* 1. TASKS ROOM */}
               {activeRoom === 'tasks' && (
                 <div className="space-y-4">
-                  <div className="flex items-center gap-3">
+                  <div className="flex flex-wrap items-center gap-3">
                     <button
-                      onClick={() => onOpenTaskModal()}
+                      onClick={() => setDialog({ type: 'task' })}
                       className="desk-rivet yellow"
                     >
                       + New Task
@@ -173,6 +193,37 @@ export const DeskModuleRoom: React.FC<DeskModuleRoomProps> = ({
                       Clear Done
                     </button>
                   </div>
+
+                  {/* Quick Inline Add Form */}
+                  <form
+                    onSubmit={(e) => {
+                      e.preventDefault();
+                      if (!quickTaskInput.trim()) return;
+                      addTask({
+                        title: quickTaskInput.trim(),
+                        category: 'Career',
+                        status: 'today',
+                        priority: 'medium',
+                        dueDate: new Date().toISOString().split('T')[0],
+                        estimatedMinutes: 30,
+                        tags: ['career'],
+                      });
+                      setQuickTaskInput('');
+                      onToast('Task added to list!');
+                    }}
+                    className="flex items-center gap-2"
+                  >
+                    <input
+                      type="text"
+                      placeholder="Quick add: write a task and press enter..."
+                      value={quickTaskInput}
+                      onChange={(e) => setQuickTaskInput(e.target.value)}
+                      className="flex-1 border-3 border-[#222] rounded-md px-3 py-2 bg-[#fbf3df] font-bold text-lg focus:outline-none placeholder:text-gray-500 uppercase"
+                    />
+                    <button type="submit" className="desk-rivet yellow">
+                      + Add
+                    </button>
+                  </form>
 
                   <ul className="space-y-2">
                     {tasks.map((task) => {
@@ -272,7 +323,43 @@ export const DeskModuleRoom: React.FC<DeskModuleRoomProps> = ({
                   <div className="space-y-3">
                     <div className="flex justify-between items-center">
                       <span className="font-bold text-lg uppercase tracking-wider">DAILY HABITS</span>
+                      <button
+                        onClick={() => setDialog({ type: 'habit' })}
+                        className="desk-rivet yellow text-sm py-1 px-3"
+                      >
+                        + New Habit
+                      </button>
                     </div>
+
+                    {/* Quick Inline Add Habit Form */}
+                    <form
+                      onSubmit={(e) => {
+                        e.preventDefault();
+                        if (!quickHabitInput.trim()) return;
+                        addHabit({
+                          title: quickHabitInput.trim(),
+                          frequency: 'daily',
+                          targetDaysPerWeek: 7,
+                          category: 'Health',
+                          completedDates: [],
+                        });
+                        setQuickHabitInput('');
+                        addXP(10, 'Created new habit');
+                        onToast('Habit added! Knitted scarf updated');
+                      }}
+                      className="flex items-center gap-2"
+                    >
+                      <input
+                        type="text"
+                        placeholder="Quick add habit (e.g. 20m Morning Jog, Read 10 pages)..."
+                        value={quickHabitInput}
+                        onChange={(e) => setQuickHabitInput(e.target.value)}
+                        className="flex-1 border-3 border-[#222] rounded-md px-3 py-2 bg-[#fbf3df] font-bold text-lg focus:outline-none placeholder:text-gray-500 uppercase"
+                      />
+                      <button type="submit" className="desk-rivet yellow">
+                        + Add
+                      </button>
+                    </form>
 
                     <ul className="space-y-2">
                       {habits.map((habit) => {
@@ -570,23 +657,106 @@ export const DeskModuleRoom: React.FC<DeskModuleRoomProps> = ({
                 </div>
               )}
 
-              {/* 9. FOCUS ROOM */}
+              {/* 9. FOCUS ROOM WITH TACTILE RETRO TIMER */}
               {activeRoom === 'focus' && (
-                <div className="text-center py-10 space-y-4">
-                  <p className="font-mono text-7xl font-black text-[#ee7a5a]">50:00</p>
-                  <p className="font-bold text-xl uppercase">DESK FOCUS SANCTUARY</p>
-                  <p className="text-sm text-gray-600 max-w-sm mx-auto">
-                    Use the physical LCD clock on your desk surface to run 50-minute sprints.
-                  </p>
-                  <button onClick={onNavigateHome} className="desk-rivet yellow">
-                    Return to Desk Clock
-                  </button>
+                <div className="text-center py-6 space-y-6 max-w-lg mx-auto">
+                  <div className="p-6 bg-[#fbf3df] border-4 border-[#222] rounded-2xl shadow-[6px_6px_0_#222] space-y-4">
+                    <span className="font-bold text-sm tracking-wider uppercase text-gray-600 block">
+                      {focusTimer.taskTitle || 'Deep Work Sprint'}
+                    </span>
+                    <div className="desk-lcd !text-7xl !py-4 !bg-[#f7d55c] !font-mono font-bold tracking-wider">
+                      {focusDisplay}
+                    </div>
+                    <div className="flex gap-3 justify-center">
+                      <button
+                        onClick={() => {
+                          if (focusTimer.isRunning) {
+                            pauseFocusTimer();
+                            onToast('Focus paused');
+                          } else {
+                            startFocusTimer(focusTimer.taskTitle || 'Deep Work Sprint', 50);
+                            onToast('Focus sprint started · 50 min');
+                          }
+                        }}
+                        className={`flex-1 py-2 text-xl font-black border-3 border-[#222] rounded-lg shadow-[0_3px_0_#222] active:translate-y-0.5 active:shadow-none cursor-pointer ${
+                          focusTimer.isRunning ? 'bg-[#ee7a5a] text-white' : 'bg-[#8fcf9f] text-[#222] hover:bg-[#a6e6b6]'
+                        }`}
+                      >
+                        {focusTimer.isRunning ? '⏸ PAUSE' : '▶ START'}
+                      </button>
+                      <button
+                        onClick={() => {
+                          resetFocusTimer();
+                          onToast('Timer reset to 50:00');
+                        }}
+                        className="flex-1 py-2 text-xl font-black bg-white border-3 border-[#222] rounded-lg shadow-[0_3px_0_#222] hover:bg-gray-100 active:translate-y-0.5 active:shadow-none cursor-pointer"
+                      >
+                        ↺ RESET
+                      </button>
+                    </div>
+                    {/* Mode Selector */}
+                    <div className="flex gap-2 pt-2">
+                      <button
+                        onClick={() => {
+                          setFocusMode('pomodoro');
+                          onToast('Mode: 50m Deep Work');
+                        }}
+                        className={`flex-1 text-sm py-1 font-bold border-2 border-[#222] rounded cursor-pointer ${
+                          focusTimer.mode === 'pomodoro' ? 'bg-[#222] text-white' : 'bg-white hover:bg-[#f7d55c]'
+                        }`}
+                      >
+                        50m Work
+                      </button>
+                      <button
+                        onClick={() => {
+                          setFocusMode('short_break');
+                          onToast('Mode: 10m Short Break');
+                        }}
+                        className={`flex-1 text-sm py-1 font-bold border-2 border-[#222] rounded cursor-pointer ${
+                          focusTimer.mode === 'short_break' ? 'bg-[#222] text-white' : 'bg-white hover:bg-[#f7d55c]'
+                        }`}
+                      >
+                        10m Break
+                      </button>
+                      <button
+                        onClick={() => {
+                          setFocusMode('long_break');
+                          onToast('Mode: 30m Long Rest');
+                        }}
+                        className={`flex-1 text-sm py-1 font-bold border-2 border-[#222] rounded cursor-pointer ${
+                          focusTimer.mode === 'long_break' ? 'bg-[#222] text-white' : 'bg-white hover:bg-[#f7d55c]'
+                        }`}
+                      >
+                        30m Rest
+                      </button>
+                    </div>
+                  </div>
+
+                  {/* Focus Sprint Stats */}
+                  <div className="grid grid-cols-2 gap-3">
+                    <div className="p-3 bg-white border-3 border-[#222] rounded-lg shadow-[3px_3px_0_#222]">
+                      <span className="text-xs font-mono font-bold text-gray-500 block">TOTAL LOGGED</span>
+                      <span className="text-2xl font-black">{focusTimer?.totalFocusMinutes || 0} MINS</span>
+                    </div>
+                    <div className="p-3 bg-white border-3 border-[#222] rounded-lg shadow-[3px_3px_0_#222]">
+                      <span className="text-xs font-mono font-bold text-gray-500 block">CYBER TREES</span>
+                      <span className="text-2xl font-black">{focusSessions?.length || 0} 🌲</span>
+                    </div>
+                  </div>
                 </div>
               )}
             </div>
           )}
         </div>
       </div>
+
+      {/* Interactive Cozy Marker Dialogs */}
+      <DeskDialogs
+        dialog={dialog}
+        onClose={() => setDialog({ type: 'none' })}
+        onNavigate={(room) => onNavigateRoom(room)}
+        onToast={(msg) => onToast(msg)}
+      />
     </div>
   );
 };

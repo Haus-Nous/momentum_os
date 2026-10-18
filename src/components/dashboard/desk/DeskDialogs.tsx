@@ -7,7 +7,7 @@ import { Task } from '../../../types';
 import { getUserDisplayName } from '../../../utils/personaHelpers';
 
 export interface DialogState {
-  type: 'none' | 'task' | 'plant' | 'risk' | 'deadline' | 'interview' | 'sparky' | 'mail' | 'search' | 'signout' | 'gauge';
+  type: 'none' | 'task' | 'habit' | 'plant' | 'risk' | 'deadline' | 'interview' | 'sparky' | 'mail' | 'search' | 'signout' | 'gauge';
   payload?: any;
 }
 
@@ -34,6 +34,7 @@ export const DeskDialogs: React.FC<DeskDialogsProps> = ({
     resolveRisk,
     addRiskPrepTasks,
     habits,
+    addHabit,
     profile,
     addXP,
   } = useMomentumStore();
@@ -44,6 +45,10 @@ export const DeskDialogs: React.FC<DeskDialogsProps> = ({
   const [taskTitle, setTaskTitle] = useState('');
   const [taskArea, setTaskArea] = useState<Task['category']>('Career');
   const [taskDue, setTaskDue] = useState('');
+
+  // New habit form state
+  const [habitTitle, setHabitTitle] = useState('');
+  const [habitArea, setHabitArea] = useState<Task['category']>('Health');
 
   // Sparky AI chat state
   const [chatMessages, setChatMessages] = useState<Array<{ sender: 'cat' | 'user'; text: string }>>([
@@ -68,6 +73,10 @@ export const DeskDialogs: React.FC<DeskDialogsProps> = ({
       } else {
         setTaskArea('Career');
       }
+    }
+    if (dialog.type === 'habit') {
+      setHabitTitle('');
+      setHabitArea(dialog.payload?.area || 'Health');
     }
   }, [dialog]);
 
@@ -132,6 +141,7 @@ export const DeskDialogs: React.FC<DeskDialogsProps> = ({
         <div className="desk-dialog-title">
           <h3>
             {dialog.type === 'task' && 'New Task'}
+            {dialog.type === 'habit' && 'New Habit Yarn Spool'}
             {dialog.type === 'plant' && `${dialog.payload?.area || 'Life Area'} Plant`}
             {dialog.type === 'risk' && 'Deadline Risk'}
             {dialog.type === 'deadline' && 'Pinned Deadline'}
@@ -212,6 +222,64 @@ export const DeskDialogs: React.FC<DeskDialogsProps> = ({
               <div className="grid grid-cols-2 gap-3 pt-2">
                 <button type="submit" className="desk-rivet yellow justify-center">
                   Add Task
+                </button>
+                <button type="button" onClick={onClose} className="desk-rivet justify-center">
+                  Cancel
+                </button>
+              </div>
+            </form>
+          )}
+
+          {/* New Habit Dialog */}
+          {dialog.type === 'habit' && (
+            <form
+              onSubmit={(e) => {
+                e.preventDefault();
+                if (!habitTitle.trim()) return;
+                addHabit({
+                  title: habitTitle.trim(),
+                  frequency: 'daily',
+                  targetDaysPerWeek: 7,
+                  category: habitArea,
+                  completedDates: [],
+                });
+                addXP(10, 'Created new habit');
+                onToast('New habit yarn spool added!');
+                onClose();
+              }}
+              className="space-y-4"
+            >
+              <div>
+                <label className="block text-sm uppercase tracking-wider mb-1">Habit Title</label>
+                <input
+                  type="text"
+                  required
+                  placeholder="e.g. 20m Morning Run, Read 10 Pages..."
+                  value={habitTitle}
+                  onChange={(e) => setHabitTitle(e.target.value)}
+                  className="w-full border-3 border-[#222] rounded-md p-2 bg-[#fbf3df] font-bold text-xl focus:outline-none focus:ring-2 focus:ring-[#f7d55c]"
+                  autoFocus
+                />
+              </div>
+
+              <div>
+                <label className="block text-sm uppercase tracking-wider mb-1">Life Area</label>
+                <select
+                  value={habitArea}
+                  onChange={(e) => setHabitArea(e.target.value as Task['category'])}
+                  className="w-full border-3 border-[#222] rounded-md p-2 bg-white font-bold text-lg focus:outline-none"
+                >
+                  <option value="Health">Health</option>
+                  <option value="Career">Career</option>
+                  <option value="Academic">Academic</option>
+                  <option value="Finance">Finance</option>
+                  <option value="Creative">Creative</option>
+                </select>
+              </div>
+
+              <div className="grid grid-cols-2 gap-3 pt-2">
+                <button type="submit" className="desk-rivet yellow justify-center">
+                  Add Habit
                 </button>
                 <button type="button" onClick={onClose} className="desk-rivet justify-center">
                   Cancel

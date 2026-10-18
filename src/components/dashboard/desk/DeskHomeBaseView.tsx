@@ -43,6 +43,10 @@ export const DeskHomeBaseView: React.FC<DeskHomeBaseViewProps> = ({
     profile,
     addXP,
     settings,
+    focusTimer,
+    startFocusTimer,
+    pauseFocusTimer,
+    resetFocusTimer,
   } = useMomentumStore();
 
   // Screen Auto-scaling
@@ -111,42 +115,9 @@ export const DeskHomeBaseView: React.FC<DeskHomeBaseViewProps> = ({
   const currentDayNum = todayDate.getDate();
   const currentDayOfWeek = todayDate.toLocaleString('en', { weekday: 'long' }).toUpperCase();
 
-  // Focus Clock Local State
-  const [focusSeconds, setFocusSeconds] = useState(3000); // 50 mins
-  const [isFocusRunning, setIsFocusRunning] = useState(false);
-  const focusIntervalRef = useRef<NodeJS.Timeout | null>(null);
-
-  useEffect(() => {
-    if (isFocusRunning) {
-      focusIntervalRef.current = setInterval(() => {
-        setFocusSeconds((prev) => {
-          if (prev <= 1) {
-            setIsFocusRunning(false);
-            addXP(25, 'Completed 50-minute focus sprint');
-            showToast('Sprint complete! +25 XP');
-            try {
-              playSound('milestone');
-            } catch {
-              // Sound engine fallback
-            }
-            return 3000;
-          }
-          if (prev % 60 === 0) {
-            addXP(2, 'Logged focus minute');
-          }
-          return prev - 1;
-        });
-      }, 1000);
-    } else {
-      if (focusIntervalRef.current) clearInterval(focusIntervalRef.current);
-    }
-    return () => {
-      if (focusIntervalRef.current) clearInterval(focusIntervalRef.current);
-    };
-  }, [isFocusRunning, addXP, showToast]);
-
-  const clockMinutes = Math.floor(focusSeconds / 60);
-  const clockSecs = focusSeconds % 60;
+  // Focus Clock State from Global Store
+  const clockMinutes = Math.floor(focusTimer.timeRemaining / 60);
+  const clockSecs = focusTimer.timeRemaining % 60;
   const clockDisplay = `${clockMinutes < 10 ? '0' : ''}${clockMinutes}:${clockSecs < 10 ? '0' : ''}${clockSecs}`;
 
   // Brown Noise Audio Generator
@@ -804,17 +775,25 @@ export const DeskHomeBaseView: React.FC<DeskHomeBaseViewProps> = ({
               <div className="desk-lcd">{clockDisplay}</div>
               <div className="flex gap-2">
                 <button
-                  onClick={() => setIsFocusRunning(!isFocusRunning)}
+                  onClick={() => {
+                    if (focusTimer.isRunning) {
+                      pauseFocusTimer();
+                      showToast('Focus sprint paused');
+                    } else {
+                      startFocusTimer('Deep Work Sprint', 50);
+                      showToast('Focus sprint started · 50 min');
+                    }
+                  }}
                   className={`flex-1 py-1 text-sm font-black border-2 border-[#222] rounded shadow-[0_2px_0_#222] active:translate-y-0.5 active:shadow-none cursor-pointer ${
-                    isFocusRunning ? 'bg-[#ee7a5a] text-white' : 'bg-white text-[#222] hover:bg-[#f7d55c]'
+                    focusTimer.isRunning ? 'bg-[#ee7a5a] text-white' : 'bg-white text-[#222] hover:bg-[#f7d55c]'
                   }`}
                 >
-                  {isFocusRunning ? 'PAUSE' : 'START'}
+                  {focusTimer.isRunning ? 'PAUSE' : 'START'}
                 </button>
                 <button
                   onClick={() => {
-                    setIsFocusRunning(false);
-                    setFocusSeconds(3000);
+                    resetFocusTimer();
+                    showToast('Focus reset to 50:00');
                   }}
                   className="flex-1 py-1 text-sm font-black bg-white border-2 border-[#222] rounded shadow-[0_2px_0_#222] hover:bg-gray-100 active:translate-y-0.5 active:shadow-none cursor-pointer"
                 >

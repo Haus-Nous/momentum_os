@@ -263,7 +263,8 @@ export const CatKeyboardIntro: React.FC<CatKeyboardIntroProps> = ({ onEnterDesk 
   const paperTasks = tasks.slice(0, 3);
 
   return (
-    <div style={{ position: 'fixed', inset: 0, display: 'flex', alignItems: 'center', justifyContent: 'center', background: '#222' }}>
+    <div style={{ position: 'fixed', inset: 0, display: 'flex', alignItems: 'center', justifyContent: 'center', background: 'linear-gradient(to bottom, #fbf3df 0%, #fbf3df 38.6%, #cfe5f1 38.6%, #cfe5f1 100%)', overflow: 'hidden' }}>
+      <div style={{ position: 'absolute', left: 0, right: 0, top: '38.6%', height: 4, background: '#222', pointerEvents: 'none', zIndex: 0 }} />
       <style jsx global>{`
         /* ===== Exact Intro Styles from momentumos-desk-v2.html ===== */
         .intro {
